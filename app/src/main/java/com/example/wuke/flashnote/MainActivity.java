@@ -9,8 +9,13 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
@@ -37,7 +42,7 @@ import java.util.LinkedHashMap;
  * Created by francisfeng on 21/03/2018.
  */
 
-public class MainActivity extends Activity implements View.OnClickListener {
+public class MainActivity extends Activity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
 
     private static String TAG = MainActivity.class.getSimpleName();
     // 语音听写对象
@@ -51,11 +56,19 @@ public class MainActivity extends Activity implements View.OnClickListener {
     // 引擎类型
     private String mEngineType = SpeechConstant.TYPE_CLOUD;
 
+    private DrawerLayout drawerLayout;
+
     @SuppressLint("ShowToast")
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
+
+        // 侧滑菜单
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        // 侧滑菜单功能
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         requestPermissions();
 
@@ -99,7 +112,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
      */
     private void initLayout() {
         findViewById(R.id.speak).setOnClickListener(MainActivity.this);
-        findViewById(R.id.image_iat_set).setOnClickListener(MainActivity.this);
         findViewById(R.id.stop).setOnClickListener(MainActivity.this);
     }
 
@@ -113,11 +125,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
 
         switch (view.getId()) {
-            // 进入参数设置页面
-            case R.id.image_iat_set:
-                Intent intents = new Intent(MainActivity.this, Setting.class);
-                startActivity(intents);
-                break;
             // 开始听写
             // 如何判断一次听写结束：OnResult isLast=true 或者 onError
             case R.id.speak:
@@ -301,5 +308,20 @@ public class MainActivity extends Activity implements View.OnClickListener {
         FlowerCollector.onPageEnd(TAG);
         FlowerCollector.onPause(MainActivity.this);
         super.onPause();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.setting) {
+            Intent intents = new Intent(MainActivity.this, Setting.class);
+            startActivity(intents);
+        } else if (item.getItemId() == R.id.log_out) {
+            Intent intents = new Intent(MainActivity.this, Login.class);
+            startActivity(intents);
+            finish();
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 }
