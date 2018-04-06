@@ -67,6 +67,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 Activity.MODE_PRIVATE);
 
         mToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+//        Log.e("mark","mark");
         mResultText = ((EditText) findViewById(R.id.text));
     }
 
@@ -125,6 +126,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 FlowerCollector.onEvent(MainActivity.this, "iat_recognize");
 
                 mResultText.setText(null);// 清空显示内容
+//                Log.println(1,"mark","mark1");
                 mIatResults.clear();
                 // 设置参数
                 setParam();
@@ -147,6 +149,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 mIat.stopListening();
                 showTip("停止听写");
                 break;
+
+
             default:
                 break;
         }
@@ -209,6 +213,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private void printResult(RecognizerResult results) {
         String text = JsonParser.parseIatResult(results.getResultString());
+//        System.out.println("mark3");
+        Datatransformer.Datatransform(text);
 
         String sn = null;
         try {
