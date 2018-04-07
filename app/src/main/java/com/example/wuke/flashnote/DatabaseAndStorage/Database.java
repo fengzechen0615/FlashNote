@@ -27,7 +27,7 @@ public class Database extends SQLiteOpenHelper{
             +Initial.user_capacity_words+" INTEGER, "
             +Initial.user_capacity_voice+" INTEGER, "
             +Initial.user_Lastlogin+" TEXT, "
-            +Initial.user_list+" TEXT ) ";
+            +Initial.user_list+" TEXT) ";
     sqLiteDatabase.execSQL(sql1);
 
 
