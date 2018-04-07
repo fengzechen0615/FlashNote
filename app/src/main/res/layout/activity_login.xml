@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <AutoCompleteTextView
+                <EditText
                     android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -60,14 +60,26 @@
             </android.support.design.widget.TextInputLayout>
 
             <Button
-                android:id="@+id/sign_in_button"
+                android:id="@+id/login_button"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="sign in"
+                android:text="login"
                 android:textStyle="bold" />
 
+            <Button
+                android:id="@+id/sign_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="sign up" />
+
+            <TextView
+                android:id="@+id/result"
+                android:layout_width="match_parent"
+                android:layout_height="179dp" />
+
         </LinearLayout>
+
     </ScrollView>
 </LinearLayout>
