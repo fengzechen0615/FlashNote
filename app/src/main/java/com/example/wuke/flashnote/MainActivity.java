@@ -21,6 +21,7 @@ import android.view.Window;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.wuke.flashnote.DatabaseAndStorage.DatabaseOperator;
 import com.example.wuke.flashnote.setting.Setting;
 import com.example.wuke.flashnote.util.JsonParser;
 import com.iflytek.cloud.ErrorCode;
@@ -63,7 +64,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Navi
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-
+        DatabaseOperator dbo=new DatabaseOperator(this);
         // 侧滑菜单
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         // 侧滑菜单功能
@@ -218,10 +219,52 @@ public class MainActivity extends Activity implements View.OnClickListener, Navi
         }
     };
 
+    private void Datatransform(String command) {
+        // TODO Auto-generated constructor stub
+        MessageVector messageVector = new MessageVector();
+        System.out.println(command);
+//		messageVector.printvector();
+
+        //日历类
+        if (command.contains("日历")||command.contains("calendar")||command.contains("Calendar")) {
+            messageVector.set_value_a();
+
+            if (command.contains("打开")||command.contains("Open")||command.contains("open")) {
+                messageVector.set_value_1();
+                messageVector.printvector();
+                startActivity(Calendar.stratCalendar(messageVector));
+            }
+
+            else if (command.contains("创建")||command.contains("新建")||command.contains("Create")||command.contains("create")) {
+                messageVector.set_value_2();
+                messageVector.setItem(command);
+                messageVector.printvector();
+                startActivity(Calendar.insertCalendar(messageVector));
+            }
+            else {
+                messageVector.set_value_a();
+                startActivity(Calendar.stratCalendar(messageVector));
+//				Interface_calender.operation_calender(messageVector);
+            }
+        }
+
+        //微信类
+        else if (command.contains("微信")||command.contains("wechat")) {
+            messageVector.set_value_b();
+            startActivity(Wechat.startWechat(messageVector));
+        }
+
+        //淘宝类
+        else if (command.contains("�Ա�")) {
+            messageVector.set_value_c();
+        }
+    }
+
     private void printResult(RecognizerResult results) {
         String text = JsonParser.parseIatResult(results.getResultString());
 //        System.out.println("mark3");
-        Datatransformer.Datatransform(text);
+        Datatransform(text);
+
 
         String sn = null;
         try {
