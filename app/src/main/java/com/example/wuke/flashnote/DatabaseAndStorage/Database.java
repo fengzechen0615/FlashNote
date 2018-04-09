@@ -10,11 +10,11 @@ public class Database extends SQLiteOpenHelper{
     private static final String DBNAME = "flashnote.db";
     private static final String sql1="Create table if not exists "+Initial.table_user+" ( "
             +Initial.user_id+" integer primary key autoincrement, "
-            +Initial.username+ " VARCHAR(255), "
+            +Initial.username+ " VARCHAR(255) UNIQUE, "
             +Initial.user_password+ " VARCHAR(255), "
             +Initial.user_capacity_words+" INTEGER, "
             +Initial.user_capacity_voice+" INTEGER, "
-            +Initial.user_Lastlogin+" DATETIME) ";
+            +Initial.user_Lastlogin+" TEXT) ";
     //+Initial.user_list+" TEXT) ";
 
 
@@ -23,7 +23,7 @@ public class Database extends SQLiteOpenHelper{
             +Initial.note_user+ " VARCHAR(255), "
             +Initial.note_words+ " TEXT, "
             +Initial.note_color+" INTEGER, "
-            +Initial.note_timestamp+" DATETIME, "
+            +Initial.note_timestamp+" TEXT, "
             +Initial.note_priority+" INTEGER) ";
 
 
@@ -32,7 +32,7 @@ public class Database extends SQLiteOpenHelper{
             +Initial.voice_users+ " INTEGER, "
             +Initial.voice_url+ " VARCHAR(255), "
             +Initial.voice_color+" INTEGER, "
-            +Initial.voice_timestamp+" DATETIME, "
+            +Initial.voice_timestamp+" TEXT, "
             +Initial.voice_priority+" INTEGER) ";
 
 
