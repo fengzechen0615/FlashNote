@@ -1,4 +1,4 @@
-package com.example.wuke.flashnote.DatabaseAndStorage;
+package com.example.wuke.flashnote.database_storage;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

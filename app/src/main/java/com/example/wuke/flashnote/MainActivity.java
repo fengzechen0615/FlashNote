@@ -3,12 +3,16 @@ package com.example.wuke.flashnote;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -19,11 +23,18 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.wuke.flashnote.DatabaseAndStorage.DatabaseOperator;
+import com.example.wuke.flashnote.database_storage.DatabaseOperator;
+import com.example.wuke.flashnote.database_storage.Note;
+import com.example.wuke.flashnote.function.Calendar_a;
+import com.example.wuke.flashnote.function.MessageVector;
+import com.example.wuke.flashnote.function.Wechat;
 import com.example.wuke.flashnote.setting.Setting;
 import com.example.wuke.flashnote.util.JsonParser;
 import com.iflytek.cloud.ErrorCode;
@@ -38,8 +49,12 @@ import com.iflytek.sunflower.FlowerCollector;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by francisfeng on 21/03/2018.
@@ -52,23 +67,23 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
     private SpeechRecognizer mIat;
     // 用HashMap存储听写结果
     private HashMap<String, String> mIatResults = new LinkedHashMap<String, String>();
-
+    private ListView mListView;
     private EditText mResultText;
     private Toast mToast;
     private SharedPreferences mSharedPreferences;
     // 引擎类型
     private String mEngineType = SpeechConstant.TYPE_CLOUD;
-
+    private DatabaseOperator dbo;
     private DrawerLayout drawerLayout;
 
     int ret = 0;
 
-    @SuppressLint("ShowToast")
+    @SuppressLint({"ShowToast", "ClickableViewAccessibility"})
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-        DatabaseOperator dbo=new DatabaseOperator(this);
+
         // 侧滑菜单
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         // 侧滑菜单功能
@@ -84,7 +99,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                 Activity.MODE_PRIVATE);
 
         mToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
-//        Log.e("mark","mark");
+//      Log.e("mark","mark");
         mResultText = ((EditText) findViewById(R.id.text));
 
         Button speak = (Button) findViewById(R.id.speak);
@@ -93,29 +108,10 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
             public boolean onTouch(View v, MotionEvent event) {
                 switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        FlowerCollector.onEvent(MainActivity.this, "iat_recognize");
-
-                        mResultText.setText(null);// 清空显示内容
-//                      Log.println(1,"mark","mark1");
-                        mIatResults.clear();
-                        // 设置参数
-                        setParam();
-                        boolean isShowDialog = mSharedPreferences.getBoolean(getString(R.string.pref_key_iat_show), false);
-                        if (isShowDialog) {
-                            showTip(getString(R.string.text_begin));
-                        } else {
-                            // 不显示听写对话框
-                            ret = mIat.startListening(mRecognizerListener);
-                            if (ret != ErrorCode.SUCCESS) {
-                                showTip("听写失败,错误码：" + ret);
-                            } else {
-                                showTip(getString(R.string.text_begin));
-                            }
-                        }
+                        start_speak();
                         break;
                     case MotionEvent.ACTION_UP:
-                        mIat.stopListening();
-                        showTip("停止听写");
+                        stop_speak();
                         break;
                     default:
                         break;
@@ -123,6 +119,44 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                 return false;
             }
         });
+
+        //select test
+        dbo=new DatabaseOperator(this);
+        List list=new ArrayList();
+        list=dbo.getAllNote();
+        Log.d("list",list.get(0).toString());
+        mListView=findViewById(R.id.list);
+        Adapter myAdapter=new TestAdapter(this,list,R.layout.item);
+        mListView.setAdapter((ListAdapter) myAdapter);
+        //select finish
+
+    }
+
+    private void start_speak() {
+        FlowerCollector.onEvent(MainActivity.this, "iat_recognize");
+
+        mResultText.setText(null);// 清空显示内容
+//      Log.println(1,"mark","mark1");
+        mIatResults.clear();
+        // 设置参数
+        setParam();
+        boolean isShowDialog = mSharedPreferences.getBoolean(getString(R.string.pref_key_iat_show), false);
+        if (isShowDialog) {
+            showTip(getString(R.string.text_begin));
+        } else {
+            // 不显示听写对话框
+            ret = mIat.startListening(mRecognizerListener);
+            if (ret != ErrorCode.SUCCESS) {
+                showTip("听写失败,错误码：" + ret);
+            } else {
+                showTip(getString(R.string.text_begin));
+            }
+        }
+    }
+
+    private void stop_speak() {
+        mIat.stopListening();
+        showTip("停止听写");
     }
 
     private void requestPermissions() {
@@ -135,7 +169,8 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                             {Manifest.permission.WRITE_EXTERNAL_STORAGE,
                                     Manifest.permission.LOCATION_HARDWARE,Manifest.permission.READ_PHONE_STATE,
                                     Manifest.permission.WRITE_SETTINGS,Manifest.permission.READ_EXTERNAL_STORAGE,
-                                    Manifest.permission.RECORD_AUDIO,Manifest.permission.READ_CONTACTS},0x0010);
+                                    Manifest.permission.RECORD_AUDIO,Manifest.permission.READ_CONTACTS,
+                                    Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR},0x0010);
                 }
 
                 if(permission != PackageManager.PERMISSION_GRANTED) {
@@ -217,18 +252,39 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
             if (command.contains("打开")||command.contains("Open")||command.contains("open")) {
                 messageVector.set_value_1();
                 messageVector.printvector();
-                startActivity(Calendar.stratCalendar(messageVector));
+                startActivity(Calendar_a.stratCalendar(messageVector));
             }
 
             else if (command.contains("创建")||command.contains("新建")||command.contains("Create")||command.contains("create")) {
                 messageVector.set_value_2();
                 messageVector.setItem(command);
                 messageVector.printvector();
-                startActivity(Calendar.insertCalendar(messageVector));
+
+                long id = 1;
+
+                ContentValues event = new ContentValues();
+                Calendar mCalendar = Calendar.getInstance();
+                mCalendar.set(Calendar.HOUR_OF_DAY, 11);
+                mCalendar.set(Calendar.MINUTE, 45);
+                long start = mCalendar.getTime().getTime();
+                mCalendar.set(Calendar.HOUR_OF_DAY, 12);
+                long end = mCalendar.getTime().getTime();
+
+                event.put("dtstart", start);
+                event.put("dtend", end);
+                event.put("hasAlarm", 1);
+                event.put("calendar_id", id);
+                event.put("title","New Event");
+                event.put("description",command);
+                event.put("eventLocation", "China");
+                event.put(CalendarContract.Events.EVENT_TIMEZONE, "Asia/Shanghai");
+                Uri eventsUri = Uri.parse("content://com.android.calendar/events");
+                Uri url = getContentResolver().insert(eventsUri, event);
+                startActivity(Calendar_a.insertCalendar(messageVector));
             }
             else {
                 messageVector.set_value_a();
-                startActivity(Calendar.stratCalendar(messageVector));
+                startActivity(Calendar_a.stratCalendar(messageVector));
 //				Interface_calender.operation_calender(messageVector);
             }
         }
@@ -249,6 +305,12 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         String text = JsonParser.parseIatResult(results.getResultString());
 //        System.out.println("mark3");
         Datatransform(text);
+        DatabaseOperator dbo=new DatabaseOperator(this);
+        Timestamp timestamp=new Timestamp(System.currentTimeMillis());
+        Note newnote =new Note(1,text, Color.CYAN,timestamp,0);
+        dbo.InsertNote(newnote);
+
+
 
 
         String sn = null;

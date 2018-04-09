@@ -1,4 +1,4 @@
-package com.example.wuke.flashnote;
+package com.example.wuke.flashnote.function;
 
 import android.content.Intent;
 import android.net.Uri;

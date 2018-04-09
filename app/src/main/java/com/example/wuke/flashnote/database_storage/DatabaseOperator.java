@@ -1,9 +1,10 @@
-package com.example.wuke.flashnote.DatabaseAndStorage;
+package com.example.wuke.flashnote.database_storage;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,6 +62,7 @@ public class DatabaseOperator {
         cValue.put(Initial.note_timestamp,note.getTimestamp());
         cValue.put(Initial.note_priority,note.getPriority());
         long NID=wdb.insert(Initial.table_note,null,cValue);
+        Log.d("database","Insert successfully");
         return (int)NID;
     }
 
@@ -100,6 +102,7 @@ public class DatabaseOperator {
         }
         cursor.close();
         rdb.close();
+        Log.d("database","load");
         return result;
     }
 

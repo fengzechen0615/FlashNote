@@ -1,4 +1,4 @@
-package com.example.wuke.flashnote;
+package com.example.wuke.flashnote.function;
 
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
-public class Calendar {
+public class Calendar_a {
 		@SuppressWarnings("deprecation")
 		public static Intent stratCalendar(MessageVector messageVector){
 			try {  
@@ -37,11 +37,7 @@ public class Calendar {
 	                cn = new ComponentName("com.google.android.calendar","com.android.calendar.LaunchActivity");  
 	            }
 //              Insert the event into the calendar(have uri bugs)
-//	            ContentValues event = new ContentValues();
-//	            event.put(command.getText().toString(),"title");
-//	            Uri eventsUri = Uri.parse("content://calendar/events");   
-//	            Uri url = getContentResolver().insert(eventsUri, event);
-//	            System.out.println(event);
+	            System.out.println("event");
 	            i.setComponent(cn);  
 	            return i; 
 	        } catch (ActivityNotFoundException e) {  

@@ -1,7 +1,5 @@
-package com.example.wuke.flashnote.DatabaseAndStorage;
+package com.example.wuke.flashnote.database_storage;
 
-import java.sql.Date;
-import java.sql.Time;
 import java.sql.Timestamp;
 
 /**

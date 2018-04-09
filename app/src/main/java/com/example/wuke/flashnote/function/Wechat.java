@@ -1,4 +1,4 @@
-package com.example.wuke.flashnote;
+package com.example.wuke.flashnote.function;
 
 import android.content.ComponentName;
 import android.content.Intent;

@@ -22,6 +22,10 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!-- 定位信息 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- 日历读写 -->
+    <uses-permission android:name="android.permission.READ_CALENDAR"/>
+    <!-- 日历读写 -->
+    <uses-permission android:name="android.permission.WRITE_CALENDAR"/>
 
     <application
         android:name=".Speech"
