@@ -18,18 +18,19 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"/>
 
-        <Button
-            android:id="@+id/speak"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="speak" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="bottom"
+            android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/stop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="stop"/>
+                <Button
+                    android:id="@+id/speak"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="长按说话" />
 
+        </LinearLayout>
     </LinearLayout>
 
     <android.support.design.widget.NavigationView

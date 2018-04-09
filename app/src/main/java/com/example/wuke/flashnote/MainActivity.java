@@ -16,8 +16,10 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -43,7 +45,7 @@ import java.util.LinkedHashMap;
  * Created by francisfeng on 21/03/2018.
  */
 
-public class MainActivity extends Activity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends Activity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static String TAG = MainActivity.class.getSimpleName();
     // 语音听写对象
@@ -59,6 +61,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Navi
 
     private DrawerLayout drawerLayout;
 
+    int ret = 0;
+
     @SuppressLint("ShowToast")
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +77,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Navi
 
         requestPermissions();
 
-        initLayout();
         // 初始化识别无UI识别对象
         mIat = SpeechRecognizer.createRecognizer(MainActivity.this, mInitListener);
 
@@ -83,6 +86,43 @@ public class MainActivity extends Activity implements View.OnClickListener, Navi
         mToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 //        Log.e("mark","mark");
         mResultText = ((EditText) findViewById(R.id.text));
+
+        Button speak = (Button) findViewById(R.id.speak);
+        speak.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        FlowerCollector.onEvent(MainActivity.this, "iat_recognize");
+
+                        mResultText.setText(null);// 清空显示内容
+//                      Log.println(1,"mark","mark1");
+                        mIatResults.clear();
+                        // 设置参数
+                        setParam();
+                        boolean isShowDialog = mSharedPreferences.getBoolean(getString(R.string.pref_key_iat_show), false);
+                        if (isShowDialog) {
+                            showTip(getString(R.string.text_begin));
+                        } else {
+                            // 不显示听写对话框
+                            ret = mIat.startListening(mRecognizerListener);
+                            if (ret != ErrorCode.SUCCESS) {
+                                showTip("听写失败,错误码：" + ret);
+                            } else {
+                                showTip(getString(R.string.text_begin));
+                            }
+                        }
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        mIat.stopListening();
+                        showTip("停止听写");
+                        break;
+                    default:
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     private void requestPermissions() {
@@ -106,61 +146,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Navi
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    /**
-     * 初始化Layout。
-     */
-    private void initLayout() {
-        findViewById(R.id.speak).setOnClickListener(MainActivity.this);
-        findViewById(R.id.stop).setOnClickListener(MainActivity.this);
-    }
-
-    int ret = 0; // 函数调用返回值
-
-    @Override
-    public void onClick(View view) {
-        if( null == mIat ){
-            this.showTip( "创建对象失败，请确认 libmsc.so 放置正确，且有调用 createUtility 进行初始化" );
-            return;
-        }
-
-        switch (view.getId()) {
-            // 开始听写
-            // 如何判断一次听写结束：OnResult isLast=true 或者 onError
-            case R.id.speak:
-                // 移动数据分析，收集开始听写事件
-                FlowerCollector.onEvent(MainActivity.this, "iat_recognize");
-
-                mResultText.setText(null);// 清空显示内容
-//                Log.println(1,"mark","mark1");
-                mIatResults.clear();
-                // 设置参数
-                setParam();
-                boolean isShowDialog = mSharedPreferences.getBoolean(
-                        getString(R.string.pref_key_iat_show), false);
-                if (isShowDialog) {
-                    showTip(getString(R.string.text_begin));
-                } else {
-                    // 不显示听写对话框
-                    ret = mIat.startListening(mRecognizerListener);
-                    if (ret != ErrorCode.SUCCESS) {
-                        showTip("听写失败,错误码：" + ret);
-                    } else {
-                        showTip(getString(R.string.text_begin));
-                    }
-                }
-                break;
-//             停止听写
-            case R.id.stop:
-                mIat.stopListening();
-                showTip("停止听写");
-                break;
-
-
-            default:
-                break;
         }
     }
 
