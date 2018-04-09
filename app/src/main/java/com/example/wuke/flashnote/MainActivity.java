@@ -3,7 +3,9 @@ package com.example.wuke.flashnote;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -18,7 +20,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -77,6 +78,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
     private DrawerLayout drawerLayout;
 
     int ret = 0;
+    int count = 1;
 
     @SuppressLint({"ShowToast", "ClickableViewAccessibility"})
     public void onCreate(Bundle savedInstanceState) {
@@ -102,7 +104,34 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 //      Log.e("mark","mark");
         mResultText = ((EditText) findViewById(R.id.text));
 
-        Button speak = (Button) findViewById(R.id.speak);
+        final Button speak = (Button) findViewById(R.id.speak);
+        final Button create = (Button) findViewById(R.id.create);
+        speak.setVisibility(View.VISIBLE);
+        create.setVisibility(View.GONE);
+        mResultText.setFocusable(false);
+        mResultText.setFocusableInTouchMode(false);
+
+        final Button change = (Button) findViewById(R.id.change);
+        change.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                count += 1;
+                if (count % 2 != 0) {
+                    speak.setVisibility(View.VISIBLE);
+                    create.setVisibility(View.GONE);
+                    mResultText.setFocusable(false);
+                    mResultText.setFocusableInTouchMode(false);
+                } else {
+                    speak.setVisibility(View.GONE);
+                    create.setVisibility(View.VISIBLE);
+                    mResultText.setFocusable(true);
+                    mResultText.setFocusableInTouchMode(true);
+                    mResultText.requestFocus();
+                }
+            }
+        });
+
+
         speak.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -112,6 +141,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                         break;
                     case MotionEvent.ACTION_UP:
                         stop_speak();
+                        alertDialog();
                         break;
                     default:
                         break;
@@ -120,13 +150,20 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
             }
         });
 
+        create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog();
+            }
+        });
+
         //select test
-        dbo=new DatabaseOperator(this);
-        List list=new ArrayList();
-        list=dbo.getAllNote();
-        Log.d("list",list.get(0).toString());
-        mListView=findViewById(R.id.list);
-        Adapter myAdapter=new TestAdapter(this,list,R.layout.item);
+        dbo = new DatabaseOperator(this);
+        List list = new ArrayList();
+        list = dbo.getAllNote();
+//        Log.d("list",list.get(0).toString());
+        mListView = findViewById(R.id.list);
+        Adapter myAdapter = new NoteAdapter(this, list, R.layout.item);
         mListView.setAdapter((ListAdapter) myAdapter);
         //select finish
 
@@ -134,8 +171,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
     private void start_speak() {
         FlowerCollector.onEvent(MainActivity.this, "iat_recognize");
-
-        mResultText.setText(null);// 清空显示内容
+//        mResultText.setText(null);// 清空显示内容
 //      Log.println(1,"mark","mark1");
         mIatResults.clear();
         // 设置参数
@@ -156,7 +192,44 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
     private void stop_speak() {
         mIat.stopListening();
+//        DatabaseOperator dbo=new DatabaseOperator(this);
+//        Timestamp timestamp=new Timestamp(System.currentTimeMillis());
+//        Note newnote =new Note(1,mResultText.getText().toString(), Color.CYAN,timestamp,0);
+//        dbo.InsertNote(newnote);
         showTip("停止听写");
+    }
+
+    private void alertDialog() {
+        new AlertDialog.Builder(MainActivity.this)
+            .setTitle("Create Confirm")
+            .setMessage("Are you confirm to create this?")
+            .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+//                    Datatransform(mResultText.getText().toString());
+                    DatabaseOperator dbo=new DatabaseOperator(MainActivity.this);
+                    Timestamp timestamp=new Timestamp(System.currentTimeMillis());
+                    Note newnote =new Note(1,mResultText.getText().toString(), Color.CYAN,timestamp,0);
+                    dbo.InsertNote(newnote);
+                    mResultText.setText(null);
+
+                    List list = new ArrayList();
+                    list = dbo.getAllNote();
+//        Log.d("list",list.get(0).toString());
+                    mListView = findViewById(R.id.list);
+                    Adapter myAdapter = new NoteAdapter(MainActivity.this, list, R.layout.item);
+                    mListView.setAdapter((ListAdapter) myAdapter);
+//                    finish();
+//                    Intent intent = new Intent(getBaseContext(), MainActivity.class);
+//                    startActivity(intent);
+                }
+            })
+            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    mResultText.setText(null);
+                }
+            }).show();
     }
 
     private void requestPermissions() {
@@ -191,7 +264,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
         @Override
         public void onInit(int code) {
-            Log.d(TAG, "SpeechRecognizer init() code = " + code);
+//            Log.d(TAG, "SpeechRecognizer init() code = " + code);
             if (code != ErrorCode.SUCCESS) {
                 showTip("初始化失败，错误码：" + code);
             }
@@ -220,7 +293,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
         @Override
         public void onResult(RecognizerResult results, boolean isLast) {
-            Log.d(TAG, results.getResultString());
+//            Log.d(TAG, results.getResultString());
             printResult(results);
 
             if (isLast) {
@@ -231,7 +304,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         @Override
         public void onVolumeChanged(int volume, byte[] data) {
             showTip("当前正在说话，音量大小：" + volume);
-            Log.d(TAG, "返回音频数据："+data.length);
+//            Log.d(TAG, "返回音频数据："+data.length);
         }
 
         @Override
@@ -242,7 +315,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
     private void Datatransform(String command) {
         // TODO Auto-generated constructor stub
         MessageVector messageVector = new MessageVector();
-        System.out.println(command);
+//        System.out.println(command);
 //		messageVector.printvector();
 
         //日历类
@@ -305,13 +378,6 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         String text = JsonParser.parseIatResult(results.getResultString());
 //        System.out.println("mark3");
         Datatransform(text);
-        DatabaseOperator dbo=new DatabaseOperator(this);
-        Timestamp timestamp=new Timestamp(System.currentTimeMillis());
-        Note newnote =new Note(1,text, Color.CYAN,timestamp,0);
-        dbo.InsertNote(newnote);
-
-
-
 
         String sn = null;
         try {
@@ -366,10 +432,10 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         }
 
         // 设置语音前端点:静音超时时间，即用户多长时间不说话则当做超时处理
-        mIat.setParameter(SpeechConstant.VAD_BOS, mSharedPreferences.getString("iat_vadbos_preference", "4000"));
+        mIat.setParameter(SpeechConstant.VAD_BOS, mSharedPreferences.getString("iat_vadbos_preference", "5000"));
 
         // 设置语音后端点:后端点静音检测时间，即用户停止说话多长时间内即认为不再输入， 自动停止录音
-        mIat.setParameter(SpeechConstant.VAD_EOS, mSharedPreferences.getString("iat_vadeos_preference", "1000"));
+        mIat.setParameter(SpeechConstant.VAD_EOS, mSharedPreferences.getString("iat_vadeos_preference", "10000"));
 
         // 设置标点符号,设置为"0"返回结果无标点,设置为"1"返回结果有标点
         mIat.setParameter(SpeechConstant.ASR_PTT, mSharedPreferences.getString("iat_punc_preference", "1"));

@@ -37,6 +37,15 @@ public class Login extends AppCompatActivity {
         password = (EditText) findViewById(R.id.password);
         result = (TextView) findViewById(R.id.result);
 
+
+        Locallogin l = new Locallogin();
+        if(l.check() == true) {
+            String[] x = l.getaccount();
+            account.setText(x[0]);
+            password.setText(x[1]);
+            access(x[0], x[1], "login");
+        }
+        
         login = (Button) findViewById(R.id.login_button);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +125,10 @@ public class Login extends AppCompatActivity {
 
         protected void onPostExecute(String s){
             if(s.contains("resCode=201")){
+                Locallogin l = new Locallogin();
+                String a = account.getText().toString();
+                String p = password.getText().toString();
+                l.save(a,p);
                 Intent intent= new Intent (Login.this, MainActivity.class);
                 startActivity(intent);
                 finish();
