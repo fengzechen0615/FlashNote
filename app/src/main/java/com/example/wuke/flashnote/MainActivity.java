@@ -35,6 +35,7 @@ import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Note;
 import com.example.wuke.flashnote.function.Calendar_a;
 import com.example.wuke.flashnote.function.MessageVector;
+import com.example.wuke.flashnote.function.Taobao;
 import com.example.wuke.flashnote.function.Wechat;
 import com.example.wuke.flashnote.setting.Setting;
 import com.example.wuke.flashnote.util.JsonParser;
@@ -206,7 +207,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
             .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-//                    Datatransform(mResultText.getText().toString());
+                    Datatransform(mResultText.getText().toString());
                     DatabaseOperator dbo=new DatabaseOperator(MainActivity.this);
                     Timestamp timestamp=new Timestamp(System.currentTimeMillis());
                     Note newnote =new Note(1,mResultText.getText().toString(), Color.CYAN,timestamp,0);
@@ -369,15 +370,15 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         }
 
         //淘宝类
-        else if (command.contains("�Ա�")) {
+        else if (command.contains("淘宝")) {
             messageVector.set_value_c();
+            startActivity(Taobao.startTaobao(messageVector));
         }
     }
 
     private void printResult(RecognizerResult results) {
         String text = JsonParser.parseIatResult(results.getResultString());
-//        System.out.println("mark3");
-        Datatransform(text);
+//        System.out.println("mark3")
 
         String sn = null;
         try {
@@ -478,6 +479,8 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
             Intent intents = new Intent(MainActivity.this, Setting.class);
             startActivity(intents);
         } else if (item.getItemId() == R.id.log_out) {
+            Locallogin in = new Locallogin();
+            in.delete();
             Intent intents = new Intent(MainActivity.this, Login.class);
             startActivity(intents);
             finish();

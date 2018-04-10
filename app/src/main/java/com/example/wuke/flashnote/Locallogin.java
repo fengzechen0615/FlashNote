@@ -79,4 +79,15 @@ public class Locallogin {
             return false;
         }
     }
+
+    public static void delete(){
+        File account = Environment.getDataDirectory();
+        File newFile = new File(account, "/data/com.example.wuke.flashnote/account.txt");
+        if(check()==true){
+            newFile.delete();
+        }
+        else {
+            return;
+        }
+    }
 }
