@@ -20,6 +20,8 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -70,6 +72,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
     // 用HashMap存储听写结果
     private HashMap<String, String> mIatResults = new LinkedHashMap<String, String>();
     private ListView mListView;
+    private RecyclerView mRecyclerView;
     private EditText mResultText;
     private Toast mToast;
     private SharedPreferences mSharedPreferences;
@@ -77,6 +80,9 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
     private String mEngineType = SpeechConstant.TYPE_CLOUD;
     private DatabaseOperator dbo;
     private DrawerLayout drawerLayout;
+
+    private NoteAdapter myAdapter;
+    private List<Note> list;
 
     int ret = 0;
     int count = 1;
@@ -160,20 +166,20 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
         //select test
         dbo = new DatabaseOperator(this);
-        List list = new ArrayList();
+        list = new ArrayList();
         list = dbo.getAllNote();
 //        Log.d("list",list.get(0).toString());
-        mListView = findViewById(R.id.list);
-        Adapter myAdapter = new NoteAdapter(this, list, R.layout.item);
-        mListView.setAdapter((ListAdapter) myAdapter);
-        //select finish
+        // 事件气泡
+        mRecyclerView = (RecyclerView) findViewById(R.id.note_recycler_view);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(layoutManager);
+        myAdapter = new NoteAdapter(list);
+        mRecyclerView.setAdapter(myAdapter);
 
     }
 
     private void start_speak() {
         FlowerCollector.onEvent(MainActivity.this, "iat_recognize");
-//        mResultText.setText(null);// 清空显示内容
-//      Log.println(1,"mark","mark1");
         mIatResults.clear();
         // 设置参数
         setParam();
@@ -193,10 +199,6 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
     private void stop_speak() {
         mIat.stopListening();
-//        DatabaseOperator dbo=new DatabaseOperator(this);
-//        Timestamp timestamp=new Timestamp(System.currentTimeMillis());
-//        Note newnote =new Note(1,mResultText.getText().toString(), Color.CYAN,timestamp,0);
-//        dbo.InsertNote(newnote);
         showTip("停止听写");
     }
 
@@ -209,20 +211,17 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                 public void onClick(DialogInterface dialog, int which) {
                     Datatransform(mResultText.getText().toString());
                     DatabaseOperator dbo=new DatabaseOperator(MainActivity.this);
-                    Timestamp timestamp=new Timestamp(System.currentTimeMillis());
-                    Note newnote =new Note(1,mResultText.getText().toString(), Color.CYAN,timestamp,0);
-                    dbo.InsertNote(newnote);
-                    mResultText.setText(null);
+                    String content = mResultText.getText().toString();
+                    if (!"".equals(content)) {
+                        Timestamp timestamp=new Timestamp(System.currentTimeMillis());
+                        Note newnote =new Note(1, mResultText.getText().toString(), Color.CYAN,timestamp,0);
+                        dbo.InsertNote(newnote);
+                        list.add(newnote);
+                        myAdapter.notifyItemInserted(list.size() - 1);
+                        mRecyclerView.scrollToPosition(list.size() - 1);
+                        mResultText.setText(null);
+                    }
 
-                    List list = new ArrayList();
-                    list = dbo.getAllNote();
-//        Log.d("list",list.get(0).toString());
-                    mListView = findViewById(R.id.list);
-                    Adapter myAdapter = new NoteAdapter(MainActivity.this, list, R.layout.item);
-                    mListView.setAdapter((ListAdapter) myAdapter);
-//                    finish();
-//                    Intent intent = new Intent(getBaseContext(), MainActivity.class);
-//                    startActivity(intent);
                 }
             })
             .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

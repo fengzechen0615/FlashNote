@@ -38,6 +38,7 @@ public class Note {
     {
         return noteID;
     }
+
     public int getUserID()
     {
         return userID;
