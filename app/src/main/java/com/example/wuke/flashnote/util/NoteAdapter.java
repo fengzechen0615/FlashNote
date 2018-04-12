@@ -1,19 +1,16 @@
-package com.example.wuke.flashnote;
+package com.example.wuke.flashnote.util;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.view.ContextMenu;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.wuke.flashnote.R;
 import com.example.wuke.flashnote.database_storage.Note;
-import com.example.wuke.flashnote.database_storage.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,9 +48,30 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(NoteAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final NoteAdapter.ViewHolder holder, int position) {
         holder.note_content.setText(mList.get(position).getWords());
         holder.note_time.setText(mList.get(position).getTimestamp());
+
+        holder.note_content.setEllipsize(TextUtils.TruncateAt.END);
+        holder.note_content.setSingleLine(true);
+        holder.note_content.setOnClickListener(new View.OnClickListener() {
+
+            Boolean flag = true;
+
+            @Override
+            public void onClick(View view) {
+                if (flag) {
+                    flag = false;
+                    holder.note_content.setEllipsize(null);
+                    holder.note_content.setSingleLine(flag);
+                }
+                else {
+                    flag = true;
+                    holder.note_content.setEllipsize(TextUtils.TruncateAt.END);
+                    holder.note_content.setSingleLine(flag);
+                }
+            }
+        });
     }
 
     @Override

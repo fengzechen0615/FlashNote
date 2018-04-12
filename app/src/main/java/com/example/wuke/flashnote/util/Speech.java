@@ -1,7 +1,8 @@
-package com.example.wuke.flashnote;
+package com.example.wuke.flashnote.util;
 
 import android.app.Application;
 
+import com.example.wuke.flashnote.R;
 import com.iflytek.cloud.Setting;
 import com.iflytek.cloud.SpeechUtility;
 

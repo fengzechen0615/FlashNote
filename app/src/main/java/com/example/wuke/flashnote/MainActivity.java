@@ -22,15 +22,15 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
-import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.wuke.flashnote.database_storage.DatabaseOperator;
@@ -39,8 +39,11 @@ import com.example.wuke.flashnote.function.Calendar_a;
 import com.example.wuke.flashnote.function.MessageVector;
 import com.example.wuke.flashnote.function.Taobao;
 import com.example.wuke.flashnote.function.Wechat;
+import com.example.wuke.flashnote.login.Locallogin;
+import com.example.wuke.flashnote.login.Login;
 import com.example.wuke.flashnote.setting.Setting;
 import com.example.wuke.flashnote.util.JsonParser;
+import com.example.wuke.flashnote.util.NoteAdapter;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
 import com.iflytek.cloud.RecognizerListener;
@@ -83,6 +86,8 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
     private NoteAdapter myAdapter;
     private List<Note> list;
+
+    private TextView username;
 
     int ret = 0;
     int count = 1;
@@ -174,6 +179,9 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
         myAdapter = new NoteAdapter(list);
+        if (list.size() != 0) {
+            mRecyclerView.smoothScrollToPosition(list.size() - 1);
+        }
         mRecyclerView.setAdapter(myAdapter);
 
     }
@@ -480,9 +488,11 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         } else if (item.getItemId() == R.id.log_out) {
             Locallogin in = new Locallogin();
             in.delete();
-            Intent intents = new Intent(MainActivity.this, Login.class);
-            startActivity(intents);
-            finish();
+        } else if (item.getItemId() == R.id.log_in) {
+            Intent intent = new Intent(MainActivity.this, Login.class);
+            startActivity(intent);
+        } else if (item.getItemId() == R.id.update) {
+
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
