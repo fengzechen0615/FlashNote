@@ -23,6 +23,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -105,6 +106,18 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         navigationView.setNavigationItemSelectedListener(this);
 
         requestPermissions();
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView username = (TextView) headerView.findViewById(R.id.username);
+
+        Locallogin locallogin = new Locallogin();
+
+        if(locallogin.check() == true) {
+            String[] user = locallogin.getaccount();
+            username.setText(user[0]);
+        } else {
+            username.setText("FlashNote");
+        }
 
         // 初始化识别无UI识别对象
         mIat = SpeechRecognizer.createRecognizer(MainActivity.this, mInitListener);
@@ -487,6 +500,8 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
             startActivity(intents);
         } else if (item.getItemId() == R.id.log_out) {
             Locallogin in = new Locallogin();
+            Intent intent = new Intent(MainActivity.this, MainActivity.class);
+            startActivity(intent);
             in.delete();
         } else if (item.getItemId() == R.id.log_in) {
             Intent intent = new Intent(MainActivity.this, Login.class);
