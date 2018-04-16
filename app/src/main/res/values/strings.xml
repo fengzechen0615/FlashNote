@@ -6,9 +6,9 @@
     <string name="pref_key_iat_show">iat_show</string>
     <!-- 语言 -->
     <string-array name="language_entries">
-        <item>普通话</item>
-        <item>粤语</item>
-        <item>英语</item>
+        <item>Mandarin</item>
+        <item>Cantonese</item>
+        <item>English</item>
     </string-array>
     <string-array name="language_values">
         <item>mandarin</item>
@@ -17,8 +17,8 @@
     </string-array>
     <!-- 标点符号 -->
     <string-array name="punc_entries">
-        <item>有标点</item>
-        <item>无标点</item>
+        <item>Punctuation</item>
+        <item>No Punctuation</item>
     </string-array>
     <string-array name="punc_values">
         <item>1</item>

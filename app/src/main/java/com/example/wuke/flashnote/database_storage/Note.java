@@ -24,7 +24,7 @@ public class Note {
         this.priority=priority;
     }
 
-    public Note(int userID, String words, int color, Timestamp timestamp,int priority)
+    public Note(int userID, String words, int color, String timestamp,int priority)
     {
         this.userID=userID;
         this.words=words;

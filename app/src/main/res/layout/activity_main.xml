@@ -42,21 +42,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toLeftOf="@+id/change"
-                    android:text="长按说话" />
+                    android:text="Speaking" />
 
                 <Button
                     android:id="@+id/create"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_toLeftOf="@+id/change"
-                    android:text="创建" />
+                    android:text="Create" />
 
                 <Button
                     android:id="@+id/change"
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:layout_alignParentRight="true"
-                    android:text="转" />
+                    android:scaleType="center"
+                    android:background="@drawable/ic_menu" />
 
             </RelativeLayout>
         </LinearLayout>
