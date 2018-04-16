@@ -4,17 +4,14 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -22,7 +19,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -35,10 +31,7 @@ import android.widget.Toast;
 
 import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Note;
-import com.example.wuke.flashnote.function.Calendar_a;
-import com.example.wuke.flashnote.function.MessageVector;
-import com.example.wuke.flashnote.function.Taobao;
-import com.example.wuke.flashnote.function.Wechat;
+import com.example.wuke.flashnote.function.Datatransformer;
 import com.example.wuke.flashnote.login.Locallogin;
 import com.example.wuke.flashnote.login.Login;
 import com.example.wuke.flashnote.setting.Setting;
@@ -57,10 +50,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -105,6 +98,18 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         navigationView.setNavigationItemSelectedListener(this);
 
         requestPermissions();
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView username = (TextView) headerView.findViewById(R.id.username);
+
+        Locallogin locallogin = new Locallogin();
+
+        if(locallogin.check() == true) {
+            String[] user = locallogin.getaccount();
+            username.setText(user[0]);
+        } else {
+            username.setText("FlashNote");
+        }
 
         // 初始化识别无UI识别对象
         mIat = SpeechRecognizer.createRecognizer(MainActivity.this, mInitListener);
@@ -217,12 +222,16 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
             .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Datatransform(mResultText.getText().toString());
+                    Datatransformer datatransformer = new Datatransformer();
+                    datatransformer.Datatransform(mResultText.getText().toString());
+//                    Datatransform(mResultText.getText().toString());
                     DatabaseOperator dbo=new DatabaseOperator(MainActivity.this);
                     String content = mResultText.getText().toString();
                     if (!"".equals(content)) {
                         Timestamp timestamp=new Timestamp(System.currentTimeMillis());
-                        Note newnote =new Note(1, mResultText.getText().toString(), Color.CYAN,timestamp,0);
+                        SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm");
+                        String time = formatter.format(timestamp);
+                        Note newnote =new Note(1, mResultText.getText().toString(), Color.CYAN, time,0);
                         dbo.InsertNote(newnote);
                         list.add(newnote);
                         myAdapter.notifyItemInserted(list.size() - 1);
@@ -286,7 +295,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
         @Override
         public void onBeginOfSpeech() {
-            showTip("开始说话");
+            showTip("Start speaking");
         }
 
         @Override
@@ -296,7 +305,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
         @Override
         public void onEndOfSpeech() {
-            showTip("结束说话");
+            showTip("End the talk");
         }
 
         @Override
@@ -311,7 +320,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
         @Override
         public void onVolumeChanged(int volume, byte[] data) {
-            showTip("当前正在说话，音量大小：" + volume);
+            showTip("Speaking, volume: " + volume);
 //            Log.d(TAG, "返回音频数据："+data.length);
         }
 
@@ -319,69 +328,6 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         public void onEvent(int eventType, int arg1, int arg2, Bundle obj) {
         }
     };
-
-    private void Datatransform(String command) {
-        // TODO Auto-generated constructor stub
-        MessageVector messageVector = new MessageVector();
-//        System.out.println(command);
-//		messageVector.printvector();
-
-        //日历类
-        if (command.contains("日历")||command.contains("calendar")||command.contains("Calendar")) {
-            messageVector.set_value_a();
-
-            if (command.contains("打开")||command.contains("Open")||command.contains("open")) {
-                messageVector.set_value_1();
-                messageVector.printvector();
-                startActivity(Calendar_a.stratCalendar(messageVector));
-            }
-
-            else if (command.contains("创建")||command.contains("新建")||command.contains("Create")||command.contains("create")) {
-                messageVector.set_value_2();
-                messageVector.setItem(command);
-                messageVector.printvector();
-
-                long id = 1;
-
-                ContentValues event = new ContentValues();
-                Calendar mCalendar = Calendar.getInstance();
-                mCalendar.set(Calendar.HOUR_OF_DAY, 11);
-                mCalendar.set(Calendar.MINUTE, 45);
-                long start = mCalendar.getTime().getTime();
-                mCalendar.set(Calendar.HOUR_OF_DAY, 12);
-                long end = mCalendar.getTime().getTime();
-
-                event.put("dtstart", start);
-                event.put("dtend", end);
-                event.put("hasAlarm", 1);
-                event.put("calendar_id", id);
-                event.put("title","New Event");
-                event.put("description",command);
-                event.put("eventLocation", "China");
-                event.put(CalendarContract.Events.EVENT_TIMEZONE, "Asia/Shanghai");
-                Uri eventsUri = Uri.parse("content://com.android.calendar/events");
-                Uri url = getContentResolver().insert(eventsUri, event);
-                startActivity(Calendar_a.insertCalendar(messageVector));
-            }
-            else {
-                messageVector.set_value_a();
-                startActivity(Calendar_a.stratCalendar(messageVector));
-//				Interface_calender.operation_calender(messageVector);
-            }
-        }
-
-        //微信类
-        else if (command.contains("微信")||command.contains("wechat")) {
-            messageVector.set_value_b();
-            startActivity(Wechat.startWechat(messageVector));
-        }
-
-        //淘宝类
-        else if (command.contains("淘宝")) {
-            messageVector.set_value_c();
-            startActivity(Taobao.startTaobao(messageVector));
-        }
-    }
 
     private void printResult(RecognizerResult results) {
         String text = JsonParser.parseIatResult(results.getResultString());
@@ -487,6 +433,8 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
             startActivity(intents);
         } else if (item.getItemId() == R.id.log_out) {
             Locallogin in = new Locallogin();
+            Intent intent = new Intent(MainActivity.this, MainActivity.class);
+            startActivity(intent);
             in.delete();
         } else if (item.getItemId() == R.id.log_in) {
             Intent intent = new Intent(MainActivity.this, Login.class);
