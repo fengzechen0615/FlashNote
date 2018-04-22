@@ -45,12 +45,15 @@
         <activity android:name=".setting.Setting" />
         <activity
             android:name=".login.Login"
-            android:theme="@style/Theme.AppCompat.Light.Dialog"></activity>
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
 
         <meta-data
             android:name="IFLYTEK_APPKEY"
             android:value="&apos;5aa758dc&apos;" />
 
+        <activity
+            android:name=".util.AddNote"
+            android:theme="@style/dialogstyle"></activity>
     </application>
 
 </manifest>
