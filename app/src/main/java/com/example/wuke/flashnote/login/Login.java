@@ -42,7 +42,6 @@ public class Login extends AppCompatActivity {
         password = (EditText) findViewById(R.id.password);
         result = (TextView) findViewById(R.id.result);
 
-
         Locallogin l = new Locallogin();
         if(l.check() == true) {
             String[] x = l.getaccount();

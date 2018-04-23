@@ -103,6 +103,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
             }
         });
 
+
         //select test
         dbo = new DatabaseOperator(this);
         list = new ArrayList();

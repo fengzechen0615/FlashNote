@@ -63,8 +63,6 @@ public class Database extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL(sql4);
         sqLiteDatabase.execSQL(sql5);
 
-
-
     }
 
     @Override
