@@ -1,10 +1,9 @@
-package com.example.wuke.flashnote;
+package com.example.wuke.flashnote.util;
 
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Note;
 import com.example.wuke.flashnote.database_storage.Voice;
 
@@ -22,7 +21,7 @@ import java.util.ArrayList;
  * Created by kumbaya on 2018/4/22.
  */
 
-public class uploading {
+public class Uploading {
 
     private String note = "http://39.106.205.176:8080/artifacts/upnote";
     private String voice = "http://39.106.205.176:8080/artifacts/upvoice";
@@ -34,13 +33,13 @@ public class uploading {
     public void upnote(String id, String content, String user, String time, String color, String priority){
         String s = note + "?ID="+ id + "&content=" + content +"&user=" + user + "&time=" + time + "&color="
                 + color + "&priority=" + priority;
-        new uploading.MyAsyncTask(result).execute(s);
+        new Uploading.MyAsyncTask(result).execute(s);
     }//单条上传的方法
 
     public void upvoice(String id, String content, String user, String time, String color, String priority){
         String s = voice + "?ID="+ id + "&content=" + content +"&user=" + user + "&time=" + time + "&color="
                 + color + "&priority=" + priority;
-        new uploading.MyAsyncTask(result).execute(s);
+        new Uploading.MyAsyncTask(result).execute(s);
     }//单条上传的方法
 
     public void uploadnote(ArrayList<Note> a){

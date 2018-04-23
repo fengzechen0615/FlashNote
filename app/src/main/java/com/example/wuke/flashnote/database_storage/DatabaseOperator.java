@@ -90,7 +90,7 @@ public class DatabaseOperator {
 
     public boolean deleteNote(int id){
         SQLiteDatabase wdb=WriteDatabase;
-        wdb.delete(Initial.table_note,"id=?",new String[]{String.valueOf(id)});
+        wdb.delete(Initial.table_note,"note_id=?",new String[]{String.valueOf(id)});
         return false;
     }
 

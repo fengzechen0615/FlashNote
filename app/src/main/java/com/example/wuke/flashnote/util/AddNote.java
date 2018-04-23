@@ -156,7 +156,7 @@ public class AddNote extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         Datatransformer datatransformer = new Datatransformer();
                         datatransformer.Datatransform(mResultText.getText().toString());
-                        DatabaseOperator dbo=new DatabaseOperator(AddNote.this);
+                        DatabaseOperator dbo = new DatabaseOperator(AddNote.this);
                         finish();
                         String content = mResultText.getText().toString();
                         if (!"".equals(content)) {
