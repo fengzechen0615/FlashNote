@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.RequiresPermission;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -78,6 +79,21 @@ public class DatabaseOperator {
         long VID=wdb.insert(Initial.table_voice,null,cValue);
         return (int)VID;
     }
+
+    public List SearchNote ()
+    {
+        ArrayList<Note> result= new ArrayList<>();
+       SQLiteDatabase rdb= ReadDatabase;
+
+        return result;
+    }
+
+    public boolean deleteNote(int id){
+        SQLiteDatabase wdb=WriteDatabase;
+        wdb.delete(Initial.table_note,"id=?",new String[]{String.valueOf(id)});
+        return false;
+    }
+
 
     public List getAllNote() //Later,priority order
     {

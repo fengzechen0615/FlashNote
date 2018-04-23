@@ -26,7 +26,7 @@ public class Initial {
     public static final String note_id = "Note_id";
     public static final String note_user="User_id";
     public static final String note_words="Words";
-    public static final String note_color="Note_olor";
+    public static final String note_color="Note_color";
     public static final String note_timestamp="Note_timestamp";
     public static final String note_priority="Note_priority";
     //voice table

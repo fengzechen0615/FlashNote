@@ -161,9 +161,10 @@ public class AddNote extends AppCompatActivity {
                         String content = mResultText.getText().toString();
                         if (!"".equals(content)) {
                             Timestamp timestamp=new Timestamp(System.currentTimeMillis());
+                            SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                             SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm");
-                            String time = formatter.format(timestamp);
-                            Note newnote =new Note(1, mResultText.getText().toString(), Color.CYAN, time,0);
+                            String time = form.format(timestamp);
+                            Note newnote =new Note(1, mResultText.getText().toString(), Color.CYAN, time.toString(),0);
                             dbo.InsertNote(newnote);
                         }
 

@@ -15,6 +15,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -22,13 +23,20 @@ import android.widget.TextView;
 
 import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Note;
+import com.example.wuke.flashnote.database_storage.Sync;
 import com.example.wuke.flashnote.login.Locallogin;
 import com.example.wuke.flashnote.login.Login;
 import com.example.wuke.flashnote.setting.Setting;
 import com.example.wuke.flashnote.util.AddNote;
 import com.example.wuke.flashnote.util.NoteAdapter;
 
+import java.sql.Array;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -43,7 +51,8 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
     private DatabaseOperator dbo;
     private DrawerLayout drawerLayout;
-
+    private String time=null;
+    private String username=null;
     private NoteAdapter myAdapter;
     private List<Note> list;
 
@@ -52,7 +61,19 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-
+        if(time!=null &&username!=null) {
+            Intent intent = getIntent();
+            Bundle bundle = intent.getBundleExtra("Bundle");
+            time = bundle.getString("time");
+            username = bundle.getString("username");
+        }
+        else
+        {
+            Timestamp nowTime=new Timestamp(System.currentTimeMillis());//Login Time
+            SimpleDateFormat form=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            time=form.format(nowTime);
+            username="administrator";
+        }
         // 侧滑菜单
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         // 侧滑菜单功能
@@ -154,6 +175,14 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
             Intent intent = new Intent(MainActivity.this, Login.class);
             startActivity(intent);
         } else if (item.getItemId() == R.id.update) {
+            if (time!=null) {
+                //Log.e("sync", time);
+                HashMap map = Sync.CompareTimestamp(time, list);
+                ArrayList before = (ArrayList<Note>) map.get("Before");//verify
+                ArrayList After = (ArrayList<Note>) map.get("After");//new content
+            }
+            else
+                Log.e("sync", "Empty");
 
         }
 

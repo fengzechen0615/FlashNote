@@ -29,7 +29,7 @@ public class Note {
         this.userID=userID;
         this.words=words;
         this.color=color;
-        this.Timestamp=timestamp.toString();
+        this.Timestamp=timestamp;
         this.priority=priority;
     }
 

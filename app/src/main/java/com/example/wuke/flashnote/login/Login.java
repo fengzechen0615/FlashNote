@@ -21,6 +21,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 public class Login extends AppCompatActivity {
 
@@ -132,8 +134,19 @@ public class Login extends AppCompatActivity {
                 String a = account.getText().toString();
                 String p = password.getText().toString();
                 l.save(a,p);
+                Log.e("post",a+" "+p);
+                Timestamp nowTime=new Timestamp(System.currentTimeMillis());//Login Time
+                SimpleDateFormat form=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String time=form.format(nowTime);
+                Bundle bundle=new Bundle();
+                bundle.putString("time",time);
+                bundle.putString("username",a);
+                Log.e("post",time+" "+a);
                 Intent intent= new Intent (Login.this, MainActivity.class);
+                intent.putExtra("Bundle",bundle);
                 startActivity(intent);
+
+
                 finish();
             }
             else{
