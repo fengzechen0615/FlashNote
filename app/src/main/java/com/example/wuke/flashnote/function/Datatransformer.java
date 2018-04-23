@@ -6,11 +6,6 @@ import android.net.Uri;
 import android.provider.CalendarContract;
 import android.util.Log;
 
-import com.example.wuke.flashnote.function.Calendar_a;
-import com.example.wuke.flashnote.function.MessageVector;
-import com.example.wuke.flashnote.function.Taobao;
-import com.example.wuke.flashnote.function.Wechat;
-
 import java.util.Calendar;
 
 public class Datatransformer extends Activity{

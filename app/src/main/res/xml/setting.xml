@@ -17,4 +17,7 @@
         android:summary="Default value: punctuation"
         android:defaultValue="1"  />
 
+    <SwitchPreference
+        android:key="contact"
+        android:title="Upload contact" />
 </PreferenceScreen>
