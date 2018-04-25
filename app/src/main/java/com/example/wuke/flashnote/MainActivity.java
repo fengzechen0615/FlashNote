@@ -15,12 +15,14 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 
+import com.example.wuke.flashnote.recycleview.RecycleItemTouchHelper;
 import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Note;
 import com.example.wuke.flashnote.database_storage.Sync;
@@ -28,15 +30,12 @@ import com.example.wuke.flashnote.login.Locallogin;
 import com.example.wuke.flashnote.login.Login;
 import com.example.wuke.flashnote.setting.Setting;
 import com.example.wuke.flashnote.util.AddNote;
-import com.example.wuke.flashnote.util.NoteAdapter;
+import com.example.wuke.flashnote.recycleview.NoteAdapter;
 
-import java.sql.Array;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -51,17 +50,17 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
     private DatabaseOperator dbo;
     private DrawerLayout drawerLayout;
-    private String time=null;
-    private String username=null;
+    private String time = null;
+    private String username = null;
     private NoteAdapter myAdapter;
-    private List<Note> list;
+    private List<Note> list = new ArrayList<>();
 
     @SuppressLint({"ShowToast", "ClickableViewAccessibility"})
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-        if(time!=null &&username!=null) {
+        if(time!=null && username!=null) {
             Intent intent = getIntent();
             Bundle bundle = intent.getBundleExtra("Bundle");
             time = bundle.getString("time");
@@ -69,8 +68,8 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         }
         else
         {
-            Timestamp nowTime=new Timestamp(System.currentTimeMillis());//Login Time
-            SimpleDateFormat form=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Timestamp nowTime = new Timestamp(System.currentTimeMillis());//Login Time
+            SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             time=form.format(nowTime);
             username="administrator";
         }
@@ -108,33 +107,46 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         dbo = new DatabaseOperator(this);
         list = new ArrayList();
         list = dbo.getAllNote();
-        // 事件气泡
+
         mRecyclerView = (RecyclerView) findViewById(R.id.note_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
-        myAdapter = new NoteAdapter(list);
+        myAdapter = new NoteAdapter(this, list);
+        mRecyclerView.setAdapter(myAdapter);
         if (list.size() != 0) {
             mRecyclerView.smoothScrollToPosition(list.size() - 1);
         }
-        mRecyclerView.setAdapter(myAdapter);
+
+//        myAdapter.notifyItemInserted(list.size() - 1);
+//        mRecyclerView.scrollToPosition(list.size() - 1);
+
+//        ItemTouchHelper.Callback callback = new RecycleItemTouchHelper(myAdapter);
+//        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);  //用Callback构造ItemtouchHelper
+//        touchHelper.attachToRecyclerView(mRecyclerView);
 
     }
 
     @Override
     public void onResume() {
-
         super.onResume();
 
+        list.clear();
         dbo = new DatabaseOperator(this);
+//        list = new ArrayList();
         list = dbo.getAllNote();
         // 事件气泡
         mRecyclerView = (RecyclerView) findViewById(R.id.note_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
-        myAdapter = new NoteAdapter(list);
-        myAdapter.notifyItemInserted(list.size() - 1);
-        mRecyclerView.scrollToPosition(list.size() - 1);
+        myAdapter = new NoteAdapter(this, list);
         mRecyclerView.setAdapter(myAdapter);
+//        myAdapter.notifyItemInserted(list.size() - 1);
+        mRecyclerView.scrollToPosition(list.size() - 1);
+
+        // 拖动移动
+        ItemTouchHelper.Callback callback = new RecycleItemTouchHelper(myAdapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);  //用Callback构造ItemtouchHelper
+        touchHelper.attachToRecyclerView(mRecyclerView);
     }
 
     private void requestPermissions() {

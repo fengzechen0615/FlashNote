@@ -1,4 +1,4 @@
-package com.example.wuke.flashnote.util;
+package com.example.wuke.flashnote.recycleview;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -7,28 +7,26 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.wuke.flashnote.R;
 import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Note;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by recur on 2018/4/9.
  */
 
-public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> implements View.OnClickListener {
+public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> implements View.OnClickListener, ItemTouchHelperAdapter{
 
     private List<Note> mList;
+    private Context mContext;
 
-//    private Context context;
-
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         LinearLayout linearLayout;
 
@@ -36,41 +34,24 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
 
         TextView note_time;
 
-//        Button button;
-
         public ViewHolder(View view) {
             super(view);
             linearLayout = (LinearLayout) view.findViewById(R.id.recycle_note);
             note_content = (TextView) view.findViewById(R.id.note_content);
             note_time = (TextView) view.findViewById(R.id.note_time);
 
-            View button = view.findViewById(R.id.delete);
-            button.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View view) {
-            switch (view.getId()) {
-                case R.id.delete:
-                    Log.d("position", String.valueOf(view.getVerticalScrollbarPosition()));
-                    Log.d("note_id", String.valueOf(mList.get(view.getVerticalScrollbarPosition()).getNoteID()));
-                    DatabaseOperator databaseOperator = new DatabaseOperator(view.getContext());
-                    databaseOperator.deleteNote(mList.get(view.getVerticalScrollbarPosition()).getNoteID());
-                    mList.remove(view.getVerticalScrollbarPosition());
-                    notifyItemRemoved(view.getVerticalScrollbarPosition());
-                    Log.d("Delete", "Delete");
-                    break;
-            }
-        }
     }
 
-    public NoteAdapter(List<Note> mDatas) {
+    public NoteAdapter(Context mContext, List<Note> mDatas) {
+        this.mContext = mContext;
         this.mList = mDatas;
     }
 
     @Override
     public NoteAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.recycler_view, parent, false);
         return new ViewHolder(view);
     }
 
@@ -105,12 +86,52 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
 
     @Override
     public int getItemCount() {
-        return mList.size();
+//        return mList.size();
+        return null == mList ? 1 : mList.size();
     }
 
     @Override
     public void onClick(View view) {
 
     }
+
+    @Override
+    public void onItemMove(RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {
+        int fromPosition = source.getAdapterPosition();
+        int toPosition = target.getAdapterPosition();
+        if (fromPosition < mList.size() && toPosition < mList.size()) {
+            //交换数据位置
+            Collections.swap(mList, fromPosition, toPosition);
+            //刷新位置交换
+            notifyItemMoved(fromPosition, toPosition);
+        }
+        //移动过程中移除view的放大效果
+        onItemClear(source);
+    }
+
+    @Override
+    public void onItemDissmiss(RecyclerView.ViewHolder source) {
+        int position = source.getAdapterPosition();
+
+        DatabaseOperator databaseOperator = new DatabaseOperator(mContext);
+        databaseOperator.deleteNote(mList.get(position).getNoteID());
+        Log.d("position", String.valueOf(position));
+        Log.d("Note_id", String.valueOf(mList.get(position).getNoteID()));
+        mList.remove(position); //移除数据
+        notifyItemRemoved(position);//刷新数据移除
+    }
+
+    @Override
+    public void onItemSelect(RecyclerView.ViewHolder viewHolder) {
+        viewHolder.itemView.setScaleX(1.2f);
+        viewHolder.itemView.setScaleY(1.2f);
+    }
+
+    @Override
+    public void onItemClear(RecyclerView.ViewHolder viewHolder) {
+        viewHolder.itemView.setScaleX(1.0f);
+        viewHolder.itemView.setScaleY(1.0f);
+    }
+
 
 }

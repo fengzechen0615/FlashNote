@@ -10,8 +10,9 @@
         android:id="@+id/icon_image"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:src="@drawable/group"
+        android:src="@drawable/test"
         android:layout_centerInParent="true"/>
+    <!--android:src="@drawable/group"-->
 
     <TextView
         android:id="@+id/username"
