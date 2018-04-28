@@ -2,7 +2,7 @@ package com.example.wuke.flashnote.database_storage;
 
 import java.sql.Timestamp;
 
-/**
+/*
  * Created by recur on 2018/3/25.
  */
 
@@ -34,6 +34,10 @@ public class Note {
     }
 
 
+    public Note(){
+
+    }
+
     public int getNoteID()
     {
         return noteID;
@@ -62,5 +66,29 @@ public class Note {
     public int getPriority()
     {
         return priority;
+    }
+
+    public void setNoteID(int i) {
+        noteID = i;
+    }
+
+    public void setUserID(int i) {
+        userID = i;
+    }
+
+    public void setWords(String i) {
+        words = i;
+    }
+
+    public void setTimestamp(String i) {
+        Timestamp = i;
+    }
+
+    public void setColor(int i) {
+        color = i;
+    }
+
+    public void setPriority(int i) {
+        priority = i;
     }
 }

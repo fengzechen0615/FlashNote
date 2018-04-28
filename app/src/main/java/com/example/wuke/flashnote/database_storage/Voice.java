@@ -33,11 +33,15 @@ public class Voice {
         this.priority=priority;
     }
 
+    public Voice(){
+
+    }
 
     public int getVoiceID()
     {
         return voiceID;
     }
+
     public int getUserID()
     {
         return userID;
@@ -61,5 +65,29 @@ public class Voice {
     public int getPriority()
     {
         return priority;
+    }
+
+    public void setVoiceID(int i) {
+        voiceID = i;
+    }
+
+    public void setUserID(int i) {
+        userID = i;
+    }
+
+    public void setURL(String i) {
+        url = i;
+    }
+
+    public void setTimestamp(String i) {
+        timestamp = i;
+    }
+
+    public void setColor(int i) {
+        color = i;
+    }
+
+    public void setPriority(int i) {
+        priority = i;
     }
 }
