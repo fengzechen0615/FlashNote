@@ -16,53 +16,37 @@
 
     </android.support.v7.widget.RecyclerView>
 
-
-<<<<<<< Updated upstream
-    <FrameLayout
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/add"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-=======
-        <LinearLayout
-            android:id="@+id/text_field"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        app:menu_colorNormal="@color/colorAccent"
+        app:menu_labels_ellipsize="end"
+        app:menu_labels_singleLine="true"
+        app:menu_backgroundColor="#ccffffff">
 
-            <EditText
-                android:id="@+id/text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <Button
-                    android:id="@+id/speak"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@+id/change"
-                    android:text="Speaking" />
-
-                <Button
-                    android:id="@+id/create"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:text="Create" />
->>>>>>> Stashed changes
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/add"
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:src="@drawable/ic_add"
-            android:layout_margin="16dp" />
+            app:fab_colorNormal="@color/colorAccent"
+            app:fab_size="mini"
+            app:fab_label=" TEXT " />
 
-    </FrameLayout>
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_voice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_colorNormal="@color/colorAccent"
+            app:fab_size="mini"
+            app:fab_label="VOICE" />
+
+        </com.github.clans.fab.FloatingActionMenu>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"

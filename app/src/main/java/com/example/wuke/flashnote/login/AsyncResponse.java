@@ -1,4 +1,4 @@
-package com.example.wuke.flashnote;
+package com.example.wuke.flashnote.login;
 
 import java.util.List;
 
