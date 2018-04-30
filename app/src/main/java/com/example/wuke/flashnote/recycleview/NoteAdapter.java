@@ -15,6 +15,7 @@ import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Note;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,7 +27,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
 
     private List<Note> mList;
     private Context mContext;
-    private List<Integer> Delete_List;
+    private List<Note> Delete_List=new ArrayList<>();
+    Note deleteNote;
     class ViewHolder extends RecyclerView.ViewHolder {
 
         LinearLayout linearLayout;
@@ -125,8 +127,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
         Log.d("position", String.valueOf(position));
         Log.d("Note_id", String.valueOf(mList.get(position).getNoteID()));
         Log.d("Note_words", String.valueOf(mList.get(position).getWords()));
-        Note deleteNote=mList.remove(position); //移除数据
-        Delete_List.add(deleteNote.getNoteID());
+        deleteNote=mList.remove(position); //移除数据
+        Delete_List.add(deleteNote);
 
         try {
             SaveObjectTool.writeObject(mList,"dataset");
@@ -149,7 +151,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
         viewHolder.itemView.setScaleY(1.0f);
     }
 
-    public List<Integer> getDelete_List()
+    public List<Note> getDelete_List()
     {
         return Delete_List;
     }

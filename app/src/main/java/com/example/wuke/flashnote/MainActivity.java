@@ -42,6 +42,7 @@ import com.example.wuke.flashnote.database_storage.Sync;
 import com.example.wuke.flashnote.login.Locallogin;
 import com.example.wuke.flashnote.login.Login;
 import com.example.wuke.flashnote.recycleview.SaveObjectTool;
+import com.example.wuke.flashnote.setting.FriendsActivity;
 import com.example.wuke.flashnote.setting.Setting;
 import com.example.wuke.flashnote.recycleview.NoteAdapter;
 import com.example.wuke.flashnote.util.JsonParser;
@@ -139,12 +140,11 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
             Log.i(TAG, "error: "+e.toString());
             e.printStackTrace();
         }
-        if(list == null){
+        if(list != null){
             list = new ArrayList<Note>();
             dbo = new DatabaseOperator(this);
             list = new ArrayList();
             list = dbo.getAllNote();
-            Log.d("mimi",list.get(0).getNoteID()+"");
         }
 //        dbo = new DatabaseOperator(this);
 //        list = new ArrayList();
@@ -522,7 +522,12 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         if (item.getItemId() == R.id.setting) {
             Intent intents = new Intent(MainActivity.this, Setting.class);
             startActivity(intents);
-        } else if (item.getItemId() == R.id.log_out) {
+        }else if(item.getItemId()==R.id.Friends)
+        {
+            Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.log_out) {
             Locallogin in = new Locallogin();
             Intent intent = new Intent(MainActivity.this, MainActivity.class);
             startActivity(intent);
