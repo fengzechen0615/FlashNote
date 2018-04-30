@@ -1,0 +1,444 @@
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/misc.xml	(revision 0dcee16816c6f085244490019e47254caa5d531b)
++++ .idea/misc.xml	(revision 395a1ad623eeb33dba836c5f52d823cafe7e81db)
+@@ -25,7 +25,7 @@
+       </value>
+     </option>
+   </component>
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" project-jdk-name="JDK" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" project-jdk-name="1.8 (1)" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/build/classes" />
+   </component>
+   <component name="ProjectType">
+Index: app/src/main/java/com/example/wuke/flashnote/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/wuke/flashnote/MainActivity.java	(revision 0dcee16816c6f085244490019e47254caa5d531b)
++++ app/src/main/java/com/example/wuke/flashnote/MainActivity.java	(revision 395a1ad623eeb33dba836c5f52d823cafe7e81db)
+@@ -12,6 +12,7 @@
+ import android.os.Build;
+ import android.os.Bundle;
+ import android.os.Environment;
++import android.os.Handler;
+ import android.support.annotation.NonNull;
+ import android.support.design.widget.NavigationView;
+ import android.support.v4.app.ActivityCompat;
+@@ -44,6 +45,8 @@
+ import com.example.wuke.flashnote.setting.Setting;
+ import com.example.wuke.flashnote.recycleview.NoteAdapter;
+ import com.example.wuke.flashnote.util.JsonParser;
++import com.example.wuke.flashnote.util.Uploading;
++import com.example.wuke.flashnote.util.downloading;
+ import com.github.clans.fab.FloatingActionButton;
+ import com.github.clans.fab.FloatingActionMenu;
+ import com.iflytek.cloud.ErrorCode;
+@@ -146,7 +149,6 @@
+ //        dbo = new DatabaseOperator(this);
+ //        list = new ArrayList();
+ //        list = dbo.getAllNote();
+-        Log.d("mimi",list.get(0).getNoteID()+"");
+         mRecyclerView = (RecyclerView) findViewById(R.id.note_recycler_view);
+         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+         mRecyclerView.setLayoutManager(layoutManager);
+@@ -530,11 +532,29 @@
+             startActivity(intent);
+         } else if (item.getItemId() == R.id.update) {
+             if (time!=null) {
+-                //Log.e("sync", time);
+                 HashMap map = Sync.CompareTimestamp(time, list);
+                 ArrayList before = (ArrayList<Note>) map.get("Before");//verify
+-                ArrayList After = (ArrayList<Note>) map.get("After");//new content
++                ArrayList After = (ArrayList<Note>) map.get("After");//new content,upload to server
++                ArrayList Delete= (ArrayList) mAdapter.getDelete_List();
++                Uploading uploading=new Uploading();
++                //uploading.uploadnote(After);
++
++                final downloading dl=new downloading();
++                dl.downnote(username);
++                new Handler().postDelayed(new Runnable() {
++                    @Override
++                    public void run() {
++                        if(dl.notes!=null) {
++                            ArrayList<Note> test=dl.notes;
++                        }
++                        else {
++                            mToast = Toast.makeText(MainActivity.this, "No", Toast.LENGTH_LONG);
++                            mToast.show();
++                        }
++                    }
++                },1000);
+             }
++
+             else
+                 Log.e("sync", "Empty");
+ 
+Index: app/src/main/java/com/example/wuke/flashnote/database_storage/Database.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/wuke/flashnote/database_storage/Database.java	(revision 0dcee16816c6f085244490019e47254caa5d531b)
++++ app/src/main/java/com/example/wuke/flashnote/database_storage/Database.java	(revision 395a1ad623eeb33dba836c5f52d823cafe7e81db)
+@@ -19,7 +19,7 @@
+ 
+ 
+     private static final String sql2="Create table if not exists "+Initial.table_note+" ( "
+-            +Initial.note_id+" integer primary key autoincrement, "
++            +Initial.note_id+" integer primary key autoincrement unique, "
+             +Initial.note_user+ " VARCHAR(255), "
+             +Initial.note_words+ " TEXT, "
+             +Initial.note_color+" INTEGER, "
+@@ -27,6 +27,7 @@
+             +Initial.note_priority+" INTEGER) ";
+ 
+ 
++
+     private static final String sql3="Create table if not exists "+Initial.table_voice+" ( "
+             +Initial.voice_id+" integer primary key autoincrement, "
+             +Initial.voice_users+ " INTEGER, "
+@@ -46,6 +47,17 @@
+             +Initial.shared_noteid+" INTEGER, "
+             +Initial.shared_Voiceid+" INTEGER) ";
+ 
++    private static final String sql6="Create table if not exists "+Initial.Garbage_table+" ( "
++            +Initial.Litter_id+" integer primary key autoincrement unique, "
++            +Initial.DeleteTime+" TEXT, "
++            +Initial.OutTime+" TEXT, "
++            +Initial.note_id+" INTEGER, "
++            +Initial.note_user+ " VARCHAR(255), "
++            +Initial.note_words+ " TEXT, "
++            +Initial.note_color+" INTEGER, "
++            +Initial.note_timestamp+" TEXT, "
++            +Initial.note_priority+" INTEGER) ";
++
+ 
+     public Database(Context context) {
+         super(context, DBNAME, null, 1);
+@@ -62,6 +74,7 @@
+         sqLiteDatabase.execSQL(sql3);
+         sqLiteDatabase.execSQL(sql4);
+         sqLiteDatabase.execSQL(sql5);
++        sqLiteDatabase.execSQL(sql6);
+ 
+     }
+ 
+Index: app/src/main/java/com/example/wuke/flashnote/database_storage/DatabaseOperator.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/wuke/flashnote/database_storage/DatabaseOperator.java	(revision 0dcee16816c6f085244490019e47254caa5d531b)
++++ app/src/main/java/com/example/wuke/flashnote/database_storage/DatabaseOperator.java	(revision 395a1ad623eeb33dba836c5f52d823cafe7e81db)
+@@ -4,6 +4,7 @@
+ import android.content.Context;
+ import android.database.Cursor;
+ import android.database.sqlite.SQLiteDatabase;
++import android.renderscript.RenderScript;
+ import android.support.annotation.RequiresPermission;
+ import android.util.Log;
+ 
+@@ -47,11 +48,25 @@
+         cValue.put(Initial.user_Lastlogin,timestamp);
+ 
+         wdb.update(Initial.table_user,cValue,Initial.username+"=?",
+-                new String[]{String.valueOf(timestamp)});
++                new String[]{String.valueOf(username)});
+         wdb.close();
+         return true;
+     }
+ 
++    public int FindUserId(String username)
++    {
++        int result=0;
++        SQLiteDatabase rdb=ReadDatabase;
++        Cursor cursor=rdb.query(Initial.table_user,new String[]{Initial.user_id},"Username=?",
++                new String[]{String.valueOf(username)},null,null,null,null);
++        int userIdIndex=cursor.getColumnIndex(Initial.user_id);
++        for (cursor.moveToFirst();!(cursor.isAfterLast());cursor.moveToNext())
++        {
++            result=cursor.getInt(userIdIndex);
++        }
++        cursor.close();
++        return result;
++    }
+ 
+     public int InsertNote(Note note)
+     {
+@@ -80,17 +95,33 @@
+         return (int)VID;
+     }
+ 
+-    public List SearchNote ()
++    public boolean updatePriority(int id,int Priority)
+     {
+-        ArrayList<Note> result= new ArrayList<>();
+-       SQLiteDatabase rdb= ReadDatabase;
++        ContentValues cValue = new ContentValues();
++        SQLiteDatabase wdb=WriteDatabase;
++        cValue.put(Initial.note_priority,Priority);
+ 
+-        return result;
++        wdb.update(Initial.table_user,cValue,Initial.note_id+"=?",
++                new String[]{String.valueOf(id)});
++        wdb.close();
++        return true;
+     }
+ 
+     public boolean deleteNote(int id){
+         SQLiteDatabase wdb=WriteDatabase;
+         wdb.delete(Initial.table_note,"note_id=?",new String[]{String.valueOf(id)});
++        wdb.close();
++        return false;
++    }
++
++    private boolean addGarbage(Garbage garbage)
++    {
++        ContentValues cValue = new ContentValues();
++        SQLiteDatabase wdb=WriteDatabase;
++        cValue.put(Initial.note_id,garbage.NID());
++        cValue.put(Initial.note_user,garbage.UID());
++        wdb.insert(Initial.Garbage_table,null,cValue);
++        wdb.close();
+         return false;
+     }
+ 
+@@ -119,7 +150,6 @@
+         }
+         cursor.close();
+         rdb.close();
+-        Log.d("database","load");
+         return result;
+     }
+ 
+Index: app/src/main/java/com/example/wuke/flashnote/database_storage/Garbage.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/wuke/flashnote/database_storage/Garbage.java	(revision 395a1ad623eeb33dba836c5f52d823cafe7e81db)
++++ app/src/main/java/com/example/wuke/flashnote/database_storage/Garbage.java	(revision 395a1ad623eeb33dba836c5f52d823cafe7e81db)
+@@ -0,0 +1,30 @@
++package com.example.wuke.flashnote.database_storage;
++
++/**
++ * Created by recur on 2018/4/23.
++ */
++
++public class Garbage {
++    private int  GID;
++    private int  UID;
++    private int  NID;
++
++    public Garbage(int GID,int UID,int NID)
++    {
++        this.GID=GID;
++        this.UID=UID;
++        this.NID=NID;
++    }
++
++    public int getGID()
++    {
++        return this.GID;
++    }
++    public int UID()
++    {
++        return this.UID;
++    }
++    public int NID(){return this.NID;}
++
++
++}
+Index: app/src/main/java/com/example/wuke/flashnote/database_storage/Initial.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/wuke/flashnote/database_storage/Initial.java	(revision 0dcee16816c6f085244490019e47254caa5d531b)
++++ app/src/main/java/com/example/wuke/flashnote/database_storage/Initial.java	(revision 395a1ad623eeb33dba836c5f52d823cafe7e81db)
+@@ -41,4 +41,12 @@
+     public static final String shared_userid="User_id";
+     public static final String shared_noteid="Note_id";
+     public static final String shared_Voiceid="Voice_id";
++
++    //Garbage
++    public static final String Garbage_table ="Garbage";
++    public static final String Litter_id ="Litter_id";
++    public static final String DeleteTime="Delete_Time";
++    public static final String OutTime="Out_Time";
++
++
+ }
+Index: app/src/main/java/com/example/wuke/flashnote/database_storage/Sync.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/wuke/flashnote/database_storage/Sync.java	(revision 0dcee16816c6f085244490019e47254caa5d531b)
++++ app/src/main/java/com/example/wuke/flashnote/database_storage/Sync.java	(revision 395a1ad623eeb33dba836c5f52d823cafe7e81db)
+@@ -28,10 +28,15 @@
+         {
+             Note note= (Note) iterator.next();
+             Date d=form.parse(note.getTimestamp(),new ParsePosition(0));
++            SimpleDateFormat form1=new SimpleDateFormat("yyyy-MM-dd");
++            SimpleDateFormat form2=new SimpleDateFormat("HH:mm:ss");
++            Log.e("before",form1.format(d)+"%20"+form2.format(d));
++
++            note.setTimestamp(form1.format(d)+"%20"+form2.format(d));
+             if(date.before(d)==true)
+             {
+                 afterList.add(note);
+-                Log.e("after",note.getTimestamp());
++                Log.e("after",note.getNoteID()+"");
+             }
+             else
+             {
+@@ -46,8 +51,22 @@
+     }
+ 
+ 
+-    public boolean VerifyList()
++    public List<Note> VerifyList(List LocalList,List ServerList)
+     {
+-        return true;
++        List Verified =new ArrayList<>();
++        Iterator itl=LocalList.iterator();
++        Iterator its=LocalList.iterator();
++        while(itl.hasNext())
++        {
++            int i=((Note)itl.next()).getNoteID();
++            while(its.hasNext())
++            {
++                if(((Note)its.next()).getNoteID()!=i)
++                {
++                    its.remove();
++                }
++            }
++        }
++        return Verified;
+     }
+ }
+Index: app/src/main/java/com/example/wuke/flashnote/recycleview/NoteAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/wuke/flashnote/recycleview/NoteAdapter.java	(revision 0dcee16816c6f085244490019e47254caa5d531b)
++++ app/src/main/java/com/example/wuke/flashnote/recycleview/NoteAdapter.java	(revision 395a1ad623eeb33dba836c5f52d823cafe7e81db)
+@@ -26,7 +26,7 @@
+ 
+     private List<Note> mList;
+     private Context mContext;
+-
++    private List<Integer> Delete_List;
+     class ViewHolder extends RecyclerView.ViewHolder {
+ 
+         LinearLayout linearLayout;
+@@ -125,7 +125,8 @@
+         Log.d("position", String.valueOf(position));
+         Log.d("Note_id", String.valueOf(mList.get(position).getNoteID()));
+         Log.d("Note_words", String.valueOf(mList.get(position).getWords()));
+-        mList.remove(position); //移除数据
++        Note deleteNote=mList.remove(position); //移除数据
++        Delete_List.add(deleteNote.getNoteID());
+ 
+         try {
+             SaveObjectTool.writeObject(mList,"dataset");
+@@ -148,5 +149,13 @@
+         viewHolder.itemView.setScaleY(1.0f);
+     }
+ 
++    public List<Integer> getDelete_List()
++    {
++        return Delete_List;
++    }
+ 
++    public void ClearList()
++    {
++        Delete_List.clear();
++    }
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/wuke/flashnote/setting/FriendsActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/wuke/flashnote/setting/FriendsActivity.java	(revision 395a1ad623eeb33dba836c5f52d823cafe7e81db)
++++ app/src/main/java/com/example/wuke/flashnote/setting/FriendsActivity.java	(revision 395a1ad623eeb33dba836c5f52d823cafe7e81db)
+@@ -0,0 +1,15 @@
++package com.example.wuke.flashnote.setting;
++
++import android.support.v7.app.AppCompatActivity;
++import android.os.Bundle;
++
++import com.example.wuke.flashnote.R;
++
++public class FriendsActivity extends AppCompatActivity {
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        setContentView(R.layout.activity_friends);
++    }
++}
+Index: app/src/main/java/com/example/wuke/flashnote/login/AsyncResponse.java
+===================================================================
+--- app/src/main/java/com/example/wuke/flashnote/login/AsyncResponse.java	(revision 0dcee16816c6f085244490019e47254caa5d531b)
++++ app/src/main/java/com/example/wuke/flashnote/util/AsyncResponse.java	(revision 395a1ad623eeb33dba836c5f52d823cafe7e81db)
+@@ -1,4 +1,4 @@
+-package com.example.wuke.flashnote.login;
++package com.example.wuke.flashnote.util;
+ 
+ import java.util.List;
+ 
+Index: app/src/main/java/com/example/wuke/flashnote/login/downloading.java
+===================================================================
+--- app/src/main/java/com/example/wuke/flashnote/login/downloading.java	(revision 0dcee16816c6f085244490019e47254caa5d531b)
++++ app/src/main/java/com/example/wuke/flashnote/util/downloading.java	(revision 395a1ad623eeb33dba836c5f52d823cafe7e81db)
+@@ -1,4 +1,4 @@
+-package com.example.wuke.flashnote.login;
++package com.example.wuke.flashnote.util;
+ 
+ import android.os.AsyncTask;
+ import android.util.Log;
+Index: app/src/main/res/layout/activity_friends.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_friends.xml	(revision 395a1ad623eeb33dba836c5f52d823cafe7e81db)
++++ app/src/main/res/layout/activity_friends.xml	(revision 395a1ad623eeb33dba836c5f52d823cafe7e81db)
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="utf-8"?>
++<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    tools:context="com.example.wuke.flashnote.setting.FriendsActivity">
++
++</android.support.constraint.ConstraintLayout>
+Index: app/src/main/res/menu/nav_menu.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/menu/nav_menu.xml	(revision 0dcee16816c6f085244490019e47254caa5d531b)
++++ app/src/main/res/menu/nav_menu.xml	(revision 395a1ad623eeb33dba836c5f52d823cafe7e81db)
+@@ -9,6 +9,10 @@
+             android:id="@+id/update"
+             android:title="Update" />
+ 
++        <item
++            android:id="@+id/Friends"
++            android:title="Friends" />
++
+         <item
+             android:id="@+id/log_in"
+             android:title="Log in" />
