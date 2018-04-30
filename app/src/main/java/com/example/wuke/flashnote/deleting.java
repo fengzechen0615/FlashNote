@@ -45,17 +45,17 @@ public class deleting {
         }
     }
 
-    private void denote(String userID,String noteID){
+    public void denote(String userID,String noteID){
         String s = note + "?userID="+ userID + "&noteID=" + noteID;
         new MyAsyncTask().execute(s);
     }
 
-    private void devoice(String userID,String noteID){
+    public void devoice(String userID,String noteID){
         String s = voice + "?userID="+ userID + "&voiceID=" + noteID;
         new MyAsyncTask().execute(s);
     }
 
-    private class MyAsyncTask extends AsyncTask<String ,Integer, String > {
+    public class MyAsyncTask extends AsyncTask<String ,Integer, String > {
 
         Log log;
 
