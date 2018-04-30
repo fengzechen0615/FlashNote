@@ -20,10 +20,12 @@ import java.util.List;
  * Created by kumbaya on 2018/4/28.
  */
 
-public class downloading {
+public class Downloading {
 
     private String note = "http://39.106.205.176:8080/artifacts/downnote";
     private String voice = "http://39.106.205.176:8080/artifacts/downvoice";
+    private String sharedvoice = "http://39.106.205.176:8080/artifacts/getsharedvoice";
+    private String sharednote = "http://39.106.205.176:8080/artifacts/getsharednote";
 
     private TextView result;
 
@@ -48,6 +50,24 @@ public class downloading {
             }
         });
     }
+
+    public void downsharednote(String id){
+        String s = sharednote + "?ID="+ id;
+        final MyAsyncTask connect = new MyAsyncTask();
+        connect.execute(s);
+        connect.setOnAsyncResponse(new AsyncResponse() {
+
+            public void onDataReceivedSuccess(List<String> listData) {
+                subsn = (ArrayList<String>) listData;
+                notes = transnote(subsn);
+            }
+
+            public void onDataReceivedFailed() {
+                notes = null;
+            }
+        });
+    }
+
     public void downnvoice(String user){
         String s = voice + "?user="+ user;
         final MyAsyncTask connect = new MyAsyncTask();
@@ -65,6 +85,22 @@ public class downloading {
         });
     }
 
+    public void downsharedvoice(String id){
+        String s = sharedvoice + "?ID="+ id;
+        final MyAsyncTask connect = new MyAsyncTask();
+        connect.execute(s);
+        connect.setOnAsyncResponse(new AsyncResponse() {
+
+            public void onDataReceivedSuccess(List<String> listData) {
+                subsv = (ArrayList<String>) listData;
+                voices = transvoice(subsv);
+            }
+
+            public void onDataReceivedFailed() {
+                notes = null;
+            }
+        });
+    }
 
     public ArrayList<Note> transnote (ArrayList<String> a){
         ArrayList<Note> notes = new ArrayList<>();
