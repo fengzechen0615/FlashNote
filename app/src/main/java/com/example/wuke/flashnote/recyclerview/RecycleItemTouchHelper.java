@@ -1,4 +1,4 @@
-package com.example.wuke.flashnote.recycleview;
+package com.example.wuke.flashnote.recyclerview;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -16,6 +16,7 @@ public class RecycleItemTouchHelper extends ItemTouchHelper.Callback {
         // 上下滑动
         int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT;
         int swipeFlags = ItemTouchHelper.LEFT;
+//        int swipeFlags = 0;
         return makeMovementFlags(dragFlags, swipeFlags);
     }
 

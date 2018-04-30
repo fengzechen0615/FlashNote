@@ -1,6 +1,7 @@
 package com.example.wuke.flashnote.setting;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -8,7 +9,10 @@ import android.util.Log;
 import android.view.Window;
 import android.widget.Toast;
 
+import com.example.wuke.flashnote.MainActivity;
 import com.example.wuke.flashnote.R;
+import com.example.wuke.flashnote.login.Locallogin;
+import com.example.wuke.flashnote.login.Login;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
 import com.iflytek.cloud.LexiconListener;
@@ -56,6 +60,23 @@ public class Setting extends PreferenceActivity implements Preference.OnPreferen
                 } else if ((Boolean)newValue == false) {
                     ContactManager.destroy();
 //                    Toast.makeText(mContext, String.format("Preference的值为%s", newValue),Toast.LENGTH_LONG).show();
+                }
+                return true;
+            }
+        });
+
+        preference = findPreference("cloud");
+        preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if ((Boolean)newValue == true) {
+                    Intent intent = new Intent(Setting.this, Login.class);
+                    startActivity(intent);
+                } else if ((Boolean)newValue == false) {
+                    Locallogin in = new Locallogin();
+//                    Intent intent = new Intent(Setting.this, MainActivity.class);
+//                    startActivity(intent);
+                    in.delete();
                 }
                 return true;
             }

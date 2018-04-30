@@ -5,13 +5,14 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.wuke.flashnote.MainActivity;
 import com.example.wuke.flashnote.R;
+import com.example.wuke.flashnote.setting.Setting;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,19 +43,21 @@ public class Login extends AppCompatActivity {
         password = (EditText) findViewById(R.id.password);
         result = (TextView) findViewById(R.id.result);
 
+        this.setFinishOnTouchOutside(false);
+
         Locallogin l = new Locallogin();
-        if(l.check() == true) {
+        if (l.check() == true) {
             String[] x = l.getaccount();
             account.setText(x[0]);
             password.setText(x[1]);
             access(x[0], x[1], "login");
         }
-        
+
         login = (Button) findViewById(R.id.login_button);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(account.getText().toString() != null &&
+                if (account.getText().toString() != null &&
                         password.getText().toString() != null) {
                     String a = account.getText().toString();
                     String p = password.getText().toString();
@@ -65,9 +68,9 @@ public class Login extends AppCompatActivity {
         });
 
         sign = (Button) findViewById(R.id.sign_button);
-        sign.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                if(account.getText().toString() != null &&
+        sign.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (account.getText().toString() != null &&
                         password.getText().toString() != null) {
                     String a = account.getText().toString();
                     String p = password.getText().toString();
@@ -76,27 +79,27 @@ public class Login extends AppCompatActivity {
             }
         });
 
-        }
+    }
 
-    private void access(String a, String p, String l){
-        String s = url+"?account="+ a + "&password=" + p +"&login="+l;
+    private void access(String a, String p, String l) {
+        String s = url + "?account=" + a + "&password=" + p + "&login=" + l;
         new MyAsyncTask(result).execute(s);
     }
 
-    public class MyAsyncTask extends AsyncTask<String ,Integer, String > {
+    public class MyAsyncTask extends AsyncTask<String, Integer, String> {
         private TextView tv;
 
         Log log;
 
-        public MyAsyncTask(TextView v){
+        public MyAsyncTask(TextView v) {
             tv = v;
         }
 
-        protected void onPreExecute(){
+        protected void onPreExecute() {
             log.w("1", "task onPreExecute()");
         }
 
-        protected String doInBackground (String... params){
+        protected String doInBackground(String... params) {
             log.w("1", "task DoInBackStage()");
 
             HttpURLConnection connection = null;
@@ -114,7 +117,7 @@ public class Login extends AppCompatActivity {
                 InputStream input = connection.getInputStream();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(input));
                 String line;
-                while ((line = reader.readLine()) != null){
+                while ((line = reader.readLine()) != null) {
                     response.append(line);
                 }
             } catch (MalformedURLException e) {
@@ -127,30 +130,39 @@ public class Login extends AppCompatActivity {
             return response.toString();
         }
 
-        protected void onPostExecute(String s){
-            if(s.contains("resCode=201")){
+        protected void onPostExecute(String s) {
+            if (s.contains("resCode=201")) {
                 Locallogin l = new Locallogin();
                 String a = account.getText().toString();
                 String p = password.getText().toString();
-                l.save(a,p);
-                Log.e("post",a+" "+p);
-                Timestamp nowTime=new Timestamp(System.currentTimeMillis());//Login Time
-                SimpleDateFormat form=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String time=form.format(nowTime);
-                Bundle bundle=new Bundle();
-                bundle.putString("time",time);
-                bundle.putString("username",a);
-                Log.e("post",time+" "+a);
-                Intent intent= new Intent (Login.this, MainActivity.class);
-                intent.putExtra("Bundle",bundle);
+                l.save(a, p);
+                Log.e("post", a + " " + p);
+                Timestamp nowTime = new Timestamp(System.currentTimeMillis());//Login Time
+                SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String time = form.format(nowTime);
+                Bundle bundle = new Bundle();
+                bundle.putString("time", time);
+                bundle.putString("username", a);
+                Log.e("post", time + " " + a);
+                // 这里我改了下一个页面 可不可以 不用intent传值？
+                Intent intent = new Intent(Login.this, Setting.class);
+                intent.putExtra("Bundle", bundle);
                 startActivity(intent);
 
 
                 finish();
-            }
-            else{
+            } else {
                 tv.setText(s);
             }
         }
+    }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

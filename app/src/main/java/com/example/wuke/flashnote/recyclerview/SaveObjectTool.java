@@ -1,4 +1,4 @@
-package com.example.wuke.flashnote.recycleview;
+package com.example.wuke.flashnote.recyclerview;
 
 import android.annotation.SuppressLint;
 import android.util.Log;

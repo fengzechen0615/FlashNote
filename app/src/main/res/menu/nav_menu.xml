@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single" >
+
         <item
-            android:id="@+id/setting"
-            android:title="Setting" />
+            android:id="@+id/friends"
+            android:title="Friends" />
 
         <item
             android:id="@+id/update"
             android:title="Update" />
 
         <item
-            android:id="@+id/Friends"
-            android:title="Friends" />
+            android:id="@+id/trash"
+            android:title="Trash" />
 
         <item
-            android:id="@+id/log_in"
-            android:title="Log in" />
-
-        <item
-            android:id="@+id/log_out"
-            android:title="Log out" />
-
+            android:id="@+id/setting"
+            android:title="Setting" />
     </group>
 </menu>

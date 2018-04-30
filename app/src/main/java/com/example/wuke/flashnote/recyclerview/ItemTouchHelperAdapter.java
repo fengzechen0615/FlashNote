@@ -1,4 +1,4 @@
-package com.example.wuke.flashnote.recycleview;
+package com.example.wuke.flashnote.recyclerview;
 
 import android.support.v7.widget.RecyclerView;
 

@@ -22,7 +22,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -34,20 +33,20 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.wuke.flashnote.download_upload.Deleting;
 import com.example.wuke.flashnote.function.Datatransformer;
-import com.example.wuke.flashnote.recycleview.RecycleItemTouchHelper;
+import com.example.wuke.flashnote.recyclerview.RecycleItemTouchHelper;
 import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Note;
 import com.example.wuke.flashnote.database_storage.Sync;
 import com.example.wuke.flashnote.login.Locallogin;
 import com.example.wuke.flashnote.login.Login;
-import com.example.wuke.flashnote.recycleview.SaveObjectTool;
-import com.example.wuke.flashnote.setting.FriendsActivity;
+import com.example.wuke.flashnote.recyclerview.SaveObjectTool;
 import com.example.wuke.flashnote.setting.Setting;
-import com.example.wuke.flashnote.recycleview.NoteAdapter;
+import com.example.wuke.flashnote.recyclerview.NoteAdapter;
 import com.example.wuke.flashnote.util.JsonParser;
-import com.example.wuke.flashnote.util.Uploading;
-import com.example.wuke.flashnote.util.downloading;
+import com.example.wuke.flashnote.download_upload.Uploading;
+import com.example.wuke.flashnote.download_upload.downloading;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.iflytek.cloud.ErrorCode;
@@ -140,7 +139,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
             Log.i(TAG, "error: "+e.toString());
             e.printStackTrace();
         }
-        if(list != null){
+        if(list == null){
             list = new ArrayList<Note>();
             dbo = new DatabaseOperator(this);
             list = new ArrayList();
@@ -522,19 +521,13 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         if (item.getItemId() == R.id.setting) {
             Intent intents = new Intent(MainActivity.this, Setting.class);
             startActivity(intents);
-        }else if(item.getItemId()==R.id.Friends)
+        }else if(item.getItemId()==R.id.friends)
         {
             Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
             startActivity(intent);
         }
-        else if (item.getItemId() == R.id.log_out) {
-            Locallogin in = new Locallogin();
-            Intent intent = new Intent(MainActivity.this, MainActivity.class);
-            startActivity(intent);
-            in.delete();
-        } else if (item.getItemId() == R.id.log_in) {
-            Intent intent = new Intent(MainActivity.this, Login.class);
-            startActivity(intent);
+        else if (item.getItemId() == R.id.trash) {
+
         } else if (item.getItemId() == R.id.update) {
             if (time!=null) {
                 HashMap map = Sync.CompareTimestamp(time, list);
@@ -542,7 +535,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                 ArrayList After = (ArrayList<Note>) map.get("After");//new content,upload to server
                 ArrayList Delete= (ArrayList) mAdapter.getDelete_List();
                 Uploading uploading=new Uploading();
-                deleting d=new deleting();
+                Deleting d=new Deleting();
                 //uploading.uploadnote(After);
                 //d.deletenote(Delete);
                 final downloading dl=new downloading();

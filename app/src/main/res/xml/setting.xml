@@ -20,4 +20,8 @@
     <SwitchPreference
         android:key="contact"
         android:title="Upload contact" />
+
+    <SwitchPreference
+        android:key="cloud"
+        android:title="WuKe Cloud" />
 </PreferenceScreen>

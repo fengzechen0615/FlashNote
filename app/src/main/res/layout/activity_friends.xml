@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.wuke.flashnote.setting.FriendsActivity">
+    tools:context="com.example.wuke.flashnote.FriendsActivity">
 
     <ListView
         android:id="@+id/friend_list"

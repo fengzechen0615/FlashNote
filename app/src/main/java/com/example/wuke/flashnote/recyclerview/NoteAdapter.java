@@ -1,4 +1,4 @@
-package com.example.wuke.flashnote.recycleview;
+package com.example.wuke.flashnote.recyclerview;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -7,8 +7,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.wuke.flashnote.R;
 import com.example.wuke.flashnote.database_storage.DatabaseOperator;
@@ -29,19 +31,20 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
     private Context mContext;
     private List<Note> Delete_List=new ArrayList<>();
     Note deleteNote;
+
     class ViewHolder extends RecyclerView.ViewHolder {
 
         LinearLayout linearLayout;
-
         TextView note_content;
-
         TextView note_time;
+        Button share;
 
         public ViewHolder(View view) {
             super(view);
             linearLayout = (LinearLayout) view.findViewById(R.id.recycle_note);
             note_content = (TextView) view.findViewById(R.id.note_content);
             note_time = (TextView) view.findViewById(R.id.note_time);
+            share = (Button) view.findViewById(R.id.share);
 
         }
 
@@ -59,9 +62,12 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
     }
 
     @Override
-    public void onBindViewHolder(final NoteAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final NoteAdapter.ViewHolder holder, final int position) {
         holder.note_content.setText(mList.get(position).getWords());
         holder.note_time.setText(mList.get(position).getTimestamp());
+
+        holder.share.setVisibility(View.INVISIBLE);
+        holder.share.setVisibility(View.GONE);
 
         // 超过一行隐藏 点击展开全部
         holder.note_content.setEllipsize(TextUtils.TruncateAt.END);
@@ -76,12 +82,23 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
                     flag = false;
                     holder.note_content.setEllipsize(null);
                     holder.note_content.setSingleLine(flag);
+                    holder.share.setVisibility(View.VISIBLE);
                 }
                 else {
                     flag = true;
                     holder.note_content.setEllipsize(TextUtils.TruncateAt.END);
                     holder.note_content.setSingleLine(flag);
+                    holder.share.setVisibility(View.INVISIBLE);
+                    holder.share.setVisibility(View.GONE);
                 }
+            }
+        });
+
+        holder.share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("share", "click share");
+                Toast.makeText(mContext,"click" + position, Toast.LENGTH_SHORT);
             }
         });
 
