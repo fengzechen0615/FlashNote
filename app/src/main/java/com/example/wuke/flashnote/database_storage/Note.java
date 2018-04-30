@@ -7,7 +7,7 @@ import java.sql.Timestamp;
  */
 
 public class Note {
-    private int noteID=-1;//auto
+    private int noteID;//auto
     private int userID;
     private String words; //text context
     private int color; // qiqiu color

@@ -117,6 +117,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
         databaseOperator.deleteNote(mList.get(position).getNoteID());
         Log.d("position", String.valueOf(position));
         Log.d("Note_id", String.valueOf(mList.get(position).getNoteID()));
+        Log.d("Note_words", String.valueOf(mList.get(position).getWords()));
         mList.remove(position); //移除数据
         notifyItemRemoved(position);//刷新数据移除
     }

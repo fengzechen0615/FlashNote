@@ -129,7 +129,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         dbo = new DatabaseOperator(this);
         list = new ArrayList();
         list = dbo.getAllNote();
-
+        Log.d("mimi",list.get(0).getNoteID()+"");
         mRecyclerView = (RecyclerView) findViewById(R.id.note_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -293,7 +293,9 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                             SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm");
                             String time = form.format(timestamp);
                             Note newnote =new Note(1, note, Color.CYAN, time.toString(),0);
-                            dbo.InsertNote(newnote);
+                            int i = dbo.InsertNote(newnote);
+                            Log.d("i", String.valueOf(i));
+                            newnote.setNoteID(i);
                             list.add(newnote);
                             mAdapter.notifyItemInserted(list.size() - 1);
                             mRecyclerView.scrollToPosition(list.size() - 1);

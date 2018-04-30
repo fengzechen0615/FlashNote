@@ -114,6 +114,7 @@ public class DatabaseOperator {
                     ,cursor.getInt(colorindex)
                     ,cursor.getString(timeindex)
                     ,cursor.getInt(pindex));
+            Log.e("db",note.getNoteID()+"");
             result.add(note);
         }
         cursor.close();
