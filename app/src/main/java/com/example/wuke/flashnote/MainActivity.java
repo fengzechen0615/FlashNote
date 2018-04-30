@@ -40,6 +40,7 @@ import com.example.wuke.flashnote.database_storage.Note;
 import com.example.wuke.flashnote.database_storage.Sync;
 import com.example.wuke.flashnote.login.Locallogin;
 import com.example.wuke.flashnote.login.Login;
+import com.example.wuke.flashnote.recycleview.SaveObjectTool;
 import com.example.wuke.flashnote.setting.Setting;
 import com.example.wuke.flashnote.recycleview.NoteAdapter;
 import com.example.wuke.flashnote.util.JsonParser;
@@ -57,6 +58,7 @@ import com.iflytek.sunflower.FlowerCollector;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -126,9 +128,24 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
     }
 
     private void init_List() {
-        dbo = new DatabaseOperator(this);
-        list = new ArrayList();
-        list = dbo.getAllNote();
+        try {
+            list = (List<Note>) SaveObjectTool.readObject("dataset");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            Log.i(TAG, "error: "+e.toString());
+            e.printStackTrace();
+        }
+        if(list == null){
+            list = new ArrayList<Note>();
+            dbo = new DatabaseOperator(this);
+            list = new ArrayList();
+            list = dbo.getAllNote();
+            Log.d("mimi",list.get(0).getNoteID()+"");
+        }
+//        dbo = new DatabaseOperator(this);
+//        list = new ArrayList();
+//        list = dbo.getAllNote();
         Log.d("mimi",list.get(0).getNoteID()+"");
         mRecyclerView = (RecyclerView) findViewById(R.id.note_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);

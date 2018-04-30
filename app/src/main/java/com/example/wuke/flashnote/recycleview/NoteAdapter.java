@@ -14,6 +14,7 @@ import com.example.wuke.flashnote.R;
 import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Note;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -102,11 +103,17 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
         if (fromPosition < mList.size() && toPosition < mList.size()) {
             //交换数据位置
             Collections.swap(mList, fromPosition, toPosition);
+            try {
+                SaveObjectTool.writeObject(mList,"dataset");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             //刷新位置交换
             notifyItemMoved(fromPosition, toPosition);
         }
         //移动过程中移除view的放大效果
         onItemClear(source);
+
     }
 
     @Override
@@ -119,6 +126,13 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
         Log.d("Note_id", String.valueOf(mList.get(position).getNoteID()));
         Log.d("Note_words", String.valueOf(mList.get(position).getWords()));
         mList.remove(position); //移除数据
+
+        try {
+            SaveObjectTool.writeObject(mList,"dataset");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         notifyItemRemoved(position);//刷新数据移除
     }
 

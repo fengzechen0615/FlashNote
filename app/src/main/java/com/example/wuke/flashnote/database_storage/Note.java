@@ -1,12 +1,13 @@
 package com.example.wuke.flashnote.database_storage;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /*
  * Created by recur on 2018/3/25.
  */
 
-public class Note {
+public class Note implements Serializable{
     private int noteID;//auto
     private int userID;
     private String words; //text context
