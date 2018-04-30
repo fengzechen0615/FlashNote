@@ -542,8 +542,9 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                 ArrayList After = (ArrayList<Note>) map.get("After");//new content,upload to server
                 ArrayList Delete= (ArrayList) mAdapter.getDelete_List();
                 Uploading uploading=new Uploading();
+                deleting d=new deleting();
                 //uploading.uploadnote(After);
-
+                //d.deletenote(Delete);
                 final downloading dl=new downloading();
                 dl.downnote(username);
                 new Handler().postDelayed(new Runnable() {

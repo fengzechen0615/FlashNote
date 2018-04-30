@@ -46,6 +46,9 @@
         <activity
             android:name=".login.Login"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
+        <activity
+            android:name=".setting.FriendsActivity"
+            android:theme="@style/Theme.AppCompat.Light" />
 
         <meta-data
             android:name="IFLYTEK_APPKEY"
