@@ -19,12 +19,13 @@ public class Database extends SQLiteOpenHelper{
 
 
     private static final String sql2="Create table if not exists "+Initial.table_note+" ( "
-            +Initial.note_id+" integer primary key autoincrement, "
+            +Initial.note_id+" integer primary key autoincrement unique, "
             +Initial.note_user+ " VARCHAR(255), "
             +Initial.note_words+ " TEXT, "
             +Initial.note_color+" INTEGER, "
             +Initial.note_timestamp+" TEXT, "
             +Initial.note_priority+" INTEGER) ";
+
 
 
     private static final String sql3="Create table if not exists "+Initial.table_voice+" ( "
@@ -46,6 +47,17 @@ public class Database extends SQLiteOpenHelper{
             +Initial.shared_noteid+" INTEGER, "
             +Initial.shared_Voiceid+" INTEGER) ";
 
+    private static final String sql6="Create table if not exists "+Initial.Garbage_table+" ( "
+            +Initial.Litter_id+" integer primary key autoincrement unique, "
+            +Initial.DeleteTime+" TEXT, "
+            +Initial.OutTime+" TEXT, "
+            +Initial.note_id+" INTEGER, "
+            +Initial.note_user+ " VARCHAR(255), "
+            +Initial.note_words+ " TEXT, "
+            +Initial.note_color+" INTEGER, "
+            +Initial.note_timestamp+" TEXT, "
+            +Initial.note_priority+" INTEGER) ";
+
 
     public Database(Context context) {
         super(context, DBNAME, null, 1);
@@ -62,6 +74,7 @@ public class Database extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL(sql3);
         sqLiteDatabase.execSQL(sql4);
         sqLiteDatabase.execSQL(sql5);
+        sqLiteDatabase.execSQL(sql6);
 
     }
 

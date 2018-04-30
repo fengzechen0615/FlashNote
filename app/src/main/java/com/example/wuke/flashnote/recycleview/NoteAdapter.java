@@ -26,7 +26,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
 
     private List<Note> mList;
     private Context mContext;
-
+    private List<Integer> Delete_List;
     class ViewHolder extends RecyclerView.ViewHolder {
 
         LinearLayout linearLayout;
@@ -125,7 +125,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
         Log.d("position", String.valueOf(position));
         Log.d("Note_id", String.valueOf(mList.get(position).getNoteID()));
         Log.d("Note_words", String.valueOf(mList.get(position).getWords()));
-        mList.remove(position); //移除数据
+        Note deleteNote=mList.remove(position); //移除数据
+        Delete_List.add(deleteNote.getNoteID());
 
         try {
             SaveObjectTool.writeObject(mList,"dataset");
@@ -148,5 +149,13 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
         viewHolder.itemView.setScaleY(1.0f);
     }
 
+    public List<Integer> getDelete_List()
+    {
+        return Delete_List;
+    }
 
+    public void ClearList()
+    {
+        Delete_List.clear();
+    }
 }

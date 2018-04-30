@@ -41,4 +41,12 @@ public class Initial {
     public static final String shared_userid="User_id";
     public static final String shared_noteid="Note_id";
     public static final String shared_Voiceid="Voice_id";
+
+    //Garbage
+    public static final String Garbage_table ="Garbage";
+    public static final String Litter_id ="Litter_id";
+    public static final String DeleteTime="Delete_Time";
+    public static final String OutTime="Out_Time";
+
+
 }

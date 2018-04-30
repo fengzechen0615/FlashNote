@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -44,6 +45,8 @@ import com.example.wuke.flashnote.recycleview.SaveObjectTool;
 import com.example.wuke.flashnote.setting.Setting;
 import com.example.wuke.flashnote.recycleview.NoteAdapter;
 import com.example.wuke.flashnote.util.JsonParser;
+import com.example.wuke.flashnote.util.Uploading;
+import com.example.wuke.flashnote.util.downloading;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.iflytek.cloud.ErrorCode;
@@ -146,7 +149,6 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 //        dbo = new DatabaseOperator(this);
 //        list = new ArrayList();
 //        list = dbo.getAllNote();
-        Log.d("mimi",list.get(0).getNoteID()+"");
         mRecyclerView = (RecyclerView) findViewById(R.id.note_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -530,11 +532,29 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
             startActivity(intent);
         } else if (item.getItemId() == R.id.update) {
             if (time!=null) {
-                //Log.e("sync", time);
                 HashMap map = Sync.CompareTimestamp(time, list);
                 ArrayList before = (ArrayList<Note>) map.get("Before");//verify
-                ArrayList After = (ArrayList<Note>) map.get("After");//new content
+                ArrayList After = (ArrayList<Note>) map.get("After");//new content,upload to server
+                ArrayList Delete= (ArrayList) mAdapter.getDelete_List();
+                Uploading uploading=new Uploading();
+                //uploading.uploadnote(After);
+
+                final downloading dl=new downloading();
+                dl.downnote(username);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(dl.notes!=null) {
+                            ArrayList<Note> test=dl.notes;
+                        }
+                        else {
+                            mToast = Toast.makeText(MainActivity.this, "No", Toast.LENGTH_LONG);
+                            mToast.show();
+                        }
+                    }
+                },1000);
             }
+
             else
                 Log.e("sync", "Empty");
 

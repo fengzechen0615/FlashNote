@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.renderscript.RenderScript;
 import android.support.annotation.RequiresPermission;
 import android.util.Log;
 
@@ -47,11 +48,25 @@ public class DatabaseOperator {
         cValue.put(Initial.user_Lastlogin,timestamp);
 
         wdb.update(Initial.table_user,cValue,Initial.username+"=?",
-                new String[]{String.valueOf(timestamp)});
+                new String[]{String.valueOf(username)});
         wdb.close();
         return true;
     }
 
+    public int FindUserId(String username)
+    {
+        int result=0;
+        SQLiteDatabase rdb=ReadDatabase;
+        Cursor cursor=rdb.query(Initial.table_user,new String[]{Initial.user_id},"Username=?",
+                new String[]{String.valueOf(username)},null,null,null,null);
+        int userIdIndex=cursor.getColumnIndex(Initial.user_id);
+        for (cursor.moveToFirst();!(cursor.isAfterLast());cursor.moveToNext())
+        {
+            result=cursor.getInt(userIdIndex);
+        }
+        cursor.close();
+        return result;
+    }
 
     public int InsertNote(Note note)
     {
@@ -80,17 +95,33 @@ public class DatabaseOperator {
         return (int)VID;
     }
 
-    public List SearchNote ()
+    public boolean updatePriority(int id,int Priority)
     {
-        ArrayList<Note> result= new ArrayList<>();
-       SQLiteDatabase rdb= ReadDatabase;
+        ContentValues cValue = new ContentValues();
+        SQLiteDatabase wdb=WriteDatabase;
+        cValue.put(Initial.note_priority,Priority);
 
-        return result;
+        wdb.update(Initial.table_user,cValue,Initial.note_id+"=?",
+                new String[]{String.valueOf(id)});
+        wdb.close();
+        return true;
     }
 
     public boolean deleteNote(int id){
         SQLiteDatabase wdb=WriteDatabase;
         wdb.delete(Initial.table_note,"note_id=?",new String[]{String.valueOf(id)});
+        wdb.close();
+        return false;
+    }
+
+    private boolean addGarbage(Garbage garbage)
+    {
+        ContentValues cValue = new ContentValues();
+        SQLiteDatabase wdb=WriteDatabase;
+        cValue.put(Initial.note_id,garbage.NID());
+        cValue.put(Initial.note_user,garbage.UID());
+        wdb.insert(Initial.Garbage_table,null,cValue);
+        wdb.close();
         return false;
     }
 
@@ -119,7 +150,6 @@ public class DatabaseOperator {
         }
         cursor.close();
         rdb.close();
-        Log.d("database","load");
         return result;
     }
 

@@ -28,10 +28,15 @@ public class Sync {
         {
             Note note= (Note) iterator.next();
             Date d=form.parse(note.getTimestamp(),new ParsePosition(0));
+            SimpleDateFormat form1=new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat form2=new SimpleDateFormat("HH:mm:ss");
+            Log.e("before",form1.format(d)+"%20"+form2.format(d));
+
+            note.setTimestamp(form1.format(d)+"%20"+form2.format(d));
             if(date.before(d)==true)
             {
                 afterList.add(note);
-                Log.e("after",note.getTimestamp());
+                Log.e("after",note.getNoteID()+"");
             }
             else
             {
@@ -46,8 +51,22 @@ public class Sync {
     }
 
 
-    public boolean VerifyList()
+    public List<Note> VerifyList(List LocalList,List ServerList)
     {
-        return true;
+        List Verified =new ArrayList<>();
+        Iterator itl=LocalList.iterator();
+        Iterator its=LocalList.iterator();
+        while(itl.hasNext())
+        {
+            int i=((Note)itl.next()).getNoteID();
+            while(its.hasNext())
+            {
+                if(((Note)its.next()).getNoteID()!=i)
+                {
+                    its.remove();
+                }
+            }
+        }
+        return Verified;
     }
 }

@@ -10,6 +10,10 @@
             android:title="Update" />
 
         <item
+            android:id="@+id/Friends"
+            android:title="Friends" />
+
+        <item
             android:id="@+id/log_in"
             android:title="Log in" />
 
