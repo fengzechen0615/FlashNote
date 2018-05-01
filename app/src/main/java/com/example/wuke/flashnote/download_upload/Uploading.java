@@ -4,7 +4,10 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.example.wuke.flashnote.database_storage.Friends;
 import com.example.wuke.flashnote.database_storage.Note;
+import com.example.wuke.flashnote.database_storage.Sharednote;
+import com.example.wuke.flashnote.database_storage.Sharedvoice;
 import com.example.wuke.flashnote.database_storage.Voice;
 
 import java.io.BufferedReader;
@@ -26,21 +29,37 @@ public class Uploading {
     private String note = "http://39.106.205.176:8080/artifacts/upnote";
     private String voice = "http://39.106.205.176:8080/artifacts/upvoice";
     private String friend = "http://39.106.205.176:8080/artifacts/upfriends";
-    private String share = "http://39.106.205.176:8080/artifacts/upshared";
+    private String sharenote = "http://39.106.205.176:8080/artifacts/upsharednote";
+    private String sharevoice = "http://39.106.205.176:8080/artifacts/upsharedvoice";
 
     private TextView result;
 
     public void upnote(String id, String content, String user, String time, String color, String priority){
         String s = note + "?ID="+ id + "&content=" + content +"&user=" + user + "&time=" + time + "&color="
                 + color + "&priority=" + priority;
-        new Uploading.MyAsyncTask(result).execute(s);
+        new Uploading.MyAsyncTask().execute(s);
     }//单条上传的方法
 
     public void upvoice(String id, String content, String user, String time, String color, String priority){
         String s = voice + "?ID="+ id + "&content=" + content +"&user=" + user + "&time=" + time + "&color="
                 + color + "&priority=" + priority;
-        new Uploading.MyAsyncTask(result).execute(s);
+        new Uploading.MyAsyncTask().execute(s);
     }//单条上传的方法
+
+    public void upfriend(String userid, String friendid){
+        String s = friend + "?ID=" + userid + "&friend=" + friendid;
+        new Uploading.MyAsyncTask().execute(s);
+    }
+
+    public void upsharednote(String userid, String noteid){
+        String s = sharenote + "?ID=" + userid + "&sharednote=" + noteid;
+        new Uploading.MyAsyncTask().execute(s);
+    }
+
+    public void upsharevoice(String userid, String voiceid){
+        String s = sharevoice + "?ID=" + userid + "&sharedvoice=" + voiceid;
+        new Uploading.MyAsyncTask().execute(s);
+    }
 
     public void uploadnote(ArrayList<Note> a){
         int i = 0;
@@ -78,11 +97,53 @@ public class Uploading {
         }
     }
 
+    public void uploadfriend(ArrayList<Friends> a){
+        int i = 0;
+        Friends friend;
+        while(i < a.size()){
+            friend = a.get(i);
+
+            String userid = Integer.toString(friend.getUserID());
+            String frienid = Integer.toString(friend.getFriendsID());
+
+            upfriend(userid,frienid);  //upload one piece
+            i++;
+        }
+    }
+
+    public void uploadsharednote(ArrayList<Sharednote> a){
+        int i = 0;
+        Sharednote note;
+        while(i < a.size()){
+            note = a.get(i);
+
+            String userid = Integer.toString(note.getUserID());
+            String noteid = Integer.toString(note.getShared_noteID());
+
+            upsharednote(userid,noteid);  //upload one piece
+            i++;
+        }
+    }
+
+    public void uploadsharedvoice(ArrayList<Sharedvoice> a){
+        int i = 0;
+        Sharedvoice voice;
+        while(i < a.size()){
+            voice = a.get(i);
+
+            String userid = Integer.toString(voice.getUserID());
+            String voiceid = Integer.toString(voice.getShared_noteID());
+
+            upfriend(userid,voiceid);  //upload one piece
+            i++;
+        }
+    }
+
     private class MyAsyncTask extends AsyncTask<String ,Integer, String > {
 
         Log log;
 
-        public MyAsyncTask(TextView v) {
+        public MyAsyncTask() {
 
         }
 
