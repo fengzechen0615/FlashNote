@@ -20,7 +20,7 @@ import java.util.List;
  * Created by kumbaya on 2018/4/28.
  */
 
-public class downloading {
+public class Downloading {
 
     private String note = "http://39.106.205.176:8080/artifacts/downnote";
     private String voice = "http://39.106.205.176:8080/artifacts/downvoice";

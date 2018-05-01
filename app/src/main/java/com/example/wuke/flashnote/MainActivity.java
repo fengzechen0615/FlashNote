@@ -40,13 +40,12 @@ import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Note;
 import com.example.wuke.flashnote.database_storage.Sync;
 import com.example.wuke.flashnote.login.Locallogin;
-import com.example.wuke.flashnote.login.Login;
 import com.example.wuke.flashnote.recyclerview.SaveObjectTool;
 import com.example.wuke.flashnote.setting.Setting;
 import com.example.wuke.flashnote.recyclerview.NoteAdapter;
 import com.example.wuke.flashnote.util.JsonParser;
 import com.example.wuke.flashnote.download_upload.Uploading;
-import com.example.wuke.flashnote.download_upload.downloading;
+import com.example.wuke.flashnote.download_upload.Downloading;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.iflytek.cloud.ErrorCode;
@@ -317,6 +316,12 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                             list.add(newnote);
                             mAdapter.notifyItemInserted(list.size() - 1);
                             mRecyclerView.scrollToPosition(list.size() - 1);
+                            try {
+                                SaveObjectTool.writeObject(list,"dataset");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
                         }
 
                     }
@@ -538,7 +543,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                 Deleting d=new Deleting();
                 //uploading.uploadnote(After);
                 //d.deletenote(Delete);
-                final downloading dl=new downloading();
+                final Downloading dl=new Downloading();
                 dl.downnote(username);
                 new Handler().postDelayed(new Runnable() {
                     @Override

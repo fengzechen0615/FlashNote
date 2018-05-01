@@ -14,4 +14,5 @@ public interface ItemTouchHelperAdapter {
 
     //状态清除
     void onItemClear(RecyclerView.ViewHolder source);
+
 }

@@ -1,7 +1,11 @@
 package com.example.wuke.flashnote.recyclerview;
 
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+
+import com.example.wuke.flashnote.R;
 
 public class RecycleItemTouchHelper extends ItemTouchHelper.Callback {
 
@@ -45,7 +49,7 @@ public class RecycleItemTouchHelper extends ItemTouchHelper.Callback {
     @Override
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
         super.onSelectedChanged(viewHolder, actionState);
-        if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
+        if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
             // 当滑动或者拖拽view的时候通过接口返回该ViewHolder
             mAdapter.onItemSelect(viewHolder);
         }
@@ -59,4 +63,16 @@ public class RecycleItemTouchHelper extends ItemTouchHelper.Callback {
             mAdapter.onItemClear(viewHolder);
         }
     }
+
+    @Override
+    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+            //滑动时改变Item的透明度
+            final float alpha = 1 - Math.abs(dX) / (float)viewHolder.itemView.getWidth();
+            viewHolder.itemView.setAlpha(alpha);
+            viewHolder.itemView.setTranslationX(dX);
+        }
+    }
+
 }
