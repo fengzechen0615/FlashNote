@@ -11,7 +11,7 @@
             android:title="Update" />
 
         <item
-            android:id="@+id/trash"
+            android:id="@+id/trashy"
             android:title="Trash" />
 
         <item

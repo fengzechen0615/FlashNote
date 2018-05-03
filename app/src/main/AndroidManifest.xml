@@ -47,7 +47,7 @@
             android:name=".login.Login"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
         <activity
-            android:name=".FriendsActivity"
+            android:name=".Friends.FriendsActivity"
             android:theme="@style/Theme.AppCompat.Light" />
 
         <meta-data

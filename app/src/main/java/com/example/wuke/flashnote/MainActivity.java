@@ -33,6 +33,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.wuke.flashnote.Friends.FriendsActivity;
 import com.example.wuke.flashnote.download_upload.Deleting;
 import com.example.wuke.flashnote.function.Datatransformer;
 import com.example.wuke.flashnote.recyclerview.RecycleItemTouchHelper;
@@ -531,7 +532,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
             Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
             startActivity(intent);
         }
-        else if (item.getItemId() == R.id.trash) {
+        else if (item.getItemId() == R.id.trashy) {
 
         } else if (item.getItemId() == R.id.update) {
             if (time!=null) {

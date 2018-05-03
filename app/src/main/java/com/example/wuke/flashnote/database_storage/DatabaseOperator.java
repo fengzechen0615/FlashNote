@@ -53,6 +53,29 @@ public class DatabaseOperator {
         return true;
     }
 
+    public boolean EditWord(int noteId,String words)
+    {
+        ContentValues cValue = new ContentValues();
+        SQLiteDatabase wdb=WriteDatabase;
+        cValue.put(Initial.note_words,words);
+        wdb.update(Initial.table_note,cValue,Initial.note_id+"=?",
+                new String[]{String.valueOf(noteId)});
+        wdb.close();
+        return true;
+    }
+
+    public boolean EditColor(int noteId,int color)
+    {
+        ContentValues cValue = new ContentValues();
+        SQLiteDatabase wdb=WriteDatabase;
+        cValue.put(Initial.note_color,color);
+        wdb.update(Initial.table_note,cValue,Initial.note_id+"=?",
+                new String[]{String.valueOf(noteId)});
+        wdb.close();
+        return true;
+    }
+
+
     public int FindUserId(String username)
     {
         int result=0;
@@ -63,6 +86,21 @@ public class DatabaseOperator {
         for (cursor.moveToFirst();!(cursor.isAfterLast());cursor.moveToNext())
         {
             result=cursor.getInt(userIdIndex);
+        }
+        cursor.close();
+        return result;
+    }
+
+    public String FindUser(int id)
+    {
+        String result=null;
+        SQLiteDatabase rdb=ReadDatabase;
+        Cursor cursor=rdb.query(Initial.table_user,new String[]{Initial.username},Initial.user_id+"=?",
+                new String[]{String.valueOf(id)},null,null,null);
+
+        for (cursor.moveToFirst();!(cursor.isAfterLast());cursor.moveToNext())
+        {
+            result=cursor.getString(cursor.getColumnIndex(Initial.username));
         }
         cursor.close();
         return result;
@@ -123,6 +161,21 @@ public class DatabaseOperator {
         wdb.insert(Initial.Garbage_table,null,cValue);
         wdb.close();
         return false;
+    }
+
+    public List getAllFriends(){
+        ArrayList<Friends> result = new ArrayList<>();
+        SQLiteDatabase rdb=ReadDatabase;
+        Cursor cursor=rdb.rawQuery("SELECT * FROM "+Initial.table_friend,null);
+        int FriendsIDindex=cursor.getColumnIndex(Initial.friend_fid);
+        int userIDindex=cursor.getColumnIndex(Initial.friend_user_id);
+        for (cursor.moveToFirst();!(cursor.isAfterLast());cursor.moveToNext()) {
+            Friends friends = new Friends(cursor.getInt(FriendsIDindex)
+                    , cursor.getInt(userIDindex));
+            Log.e("db", friends.getUserID() + "");
+            result.add(friends);
+        }
+        return result;
     }
 
 
