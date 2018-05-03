@@ -85,6 +85,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
             }
         });
 
+        // note颜色选择器
         holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -107,26 +108,29 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
             }
         });
 
-//        holder.edit.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
+        // edit text 状态 是否可输入
+        // 需要在后期解决 光标跳转小键盘出现等问题
+        holder.note_content.setFocusable(false);
+        holder.note_content.setFocusableInTouchMode(false);
+        holder.note_content.setCursorVisible(false);
+        holder.edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 if (holder.edit.getText().toString().equals("Edit")) {
                     holder.edit.setText("Done");
                     holder.note_content.setFocusable(true);
                     holder.note_content.setFocusableInTouchMode(true);
-                    holder.note_content.setEnabled(true);
+                    holder.note_content.setCursorVisible(true);
+//                    holder.note_content.setSelection(mList.get(position).getWords().length());
                 } else if (holder.edit.getText().toString().equals("Done")) {
                     holder.edit.setText("Edit");
                     holder.note_content.setFocusable(false);
                     holder.note_content.setFocusableInTouchMode(false);
-                    holder.note_content.setEnabled(false);
+                    holder.note_content.isCursorVisible();
+                    holder.note_content.setCursorVisible(false);
                 }
-//            }
-//        });
-
-    }
-
-    private void setEdictable(boolean b) {
+            }
+        });
 
     }
 
