@@ -70,11 +70,29 @@ public class DatabaseOperator {
         ContentValues cValue = new ContentValues();
         SQLiteDatabase wdb = WriteDatabase;
         cValue.put(Initial.note_color,color);
-        //wdb.update(Initial.table_note,cValue,Initial.note_id + "=?",
-         //       new String[]{String.valueOf(noteId)});
-        wdb.rawQuery("Update "+Initial.table_note+" set "+Initial.note_words+" = "+
-                color+" where "+Initial.note_id+"=?",new String[] {String.valueOf(noteId)});
+        String sql = "Update "+Initial.table_note+" set "+Initial.note_color+"= "+
+                color+" where "+Initial.note_id+"="+noteId;
+        wdb.execSQL(sql);
+        return true;
+    }
 
+    public boolean UpdateNotePriority(int noteid, int priority) {
+        ContentValues cValue = new ContentValues();
+        SQLiteDatabase wdb = WriteDatabase;
+        cValue.put(Initial.note_priority,priority);
+        String sql = "Update "+Initial.table_note+" set "+Initial.note_priority+"= "+
+                priority+" where "+Initial.note_id+"="+noteid;
+        wdb.execSQL(sql);
+        return true;
+    }
+
+    public boolean UpdateVoicePriority(int voiceid, int priority) {
+        ContentValues cValue = new ContentValues();
+        SQLiteDatabase wdb = WriteDatabase;
+        cValue.put(Initial.voice_priority,priority);
+        String sql = "Update "+Initial.table_voice+" set "+Initial.voice_priority+"= "+
+                priority+" where "+Initial.voice_id+"="+voiceid;
+        wdb.execSQL(sql);
         return true;
     }
 

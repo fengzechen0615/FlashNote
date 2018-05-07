@@ -33,10 +33,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.wuke.flashnote.friends.FriendsActivity;
 import com.example.wuke.flashnote.database_storage.Storage;
 import com.example.wuke.flashnote.database_storage.Voice;
 import com.example.wuke.flashnote.download_upload.Deleting;
+import com.example.wuke.flashnote.friends.FriendsActivity;
 import com.example.wuke.flashnote.function.Datatransformer;
 import com.example.wuke.flashnote.function.TaoBaoView;
 import com.example.wuke.flashnote.function.Taobao;
@@ -97,7 +97,6 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
     int ret = 0;
 
     private RecyclerView mRecyclerView;
-
     private DatabaseOperator dbo;
     private DrawerLayout drawerLayout;
     private String time = null;

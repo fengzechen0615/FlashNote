@@ -35,13 +35,12 @@ public class Storage implements Comparator{
 
     @Override
     public int compare(Object o1, Object o2) {
-        SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date d1=form.parse((String)o1,new ParsePosition(0));
-        Date d2=form.parse((String)o2,new ParsePosition(0));
-        if(d1.after(d2)) {
+        int I1=((Storage)o1).getPriority();
+        int I2=((Storage)o2).getPriority();
+        if(I1>I2) {
             return 1;
         }
-        else {
+        else{
             return -1;
         }
     }
