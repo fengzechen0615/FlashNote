@@ -65,12 +65,6 @@ public class Datatransformer extends Activity{
             messageVector.set_value_b();
             startActivity(Wechat.startWechat(messageVector));
         }
-
-        //淘宝类
-        else if (command.contains("淘宝")) {
-            messageVector.set_value_c();
-            startActivity(Taobao.startTaobao(messageVector));
-        }
     }
 
 }

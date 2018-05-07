@@ -33,12 +33,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.wuke.flashnote.Friends.FriendsActivity;
+import com.example.wuke.flashnote.friends.FriendsActivity;
 import com.example.wuke.flashnote.database_storage.Storage;
 import com.example.wuke.flashnote.database_storage.Voice;
 import com.example.wuke.flashnote.download_upload.Deleting;
 import com.example.wuke.flashnote.function.Datatransformer;
-import com.example.wuke.flashnote.record.Record;
+import com.example.wuke.flashnote.function.TaoBaoView;
+import com.example.wuke.flashnote.function.Taobao;
 import com.example.wuke.flashnote.recyclerview.RecycleItemTouchHelper;
 import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Note;
@@ -267,7 +268,8 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                         break;
                     case MotionEvent.ACTION_UP:
                         stop_speak();
-                        alertVoiceDialog();
+                        alertVoiceDialog(mResultText.getText().toString());
+//                        Log.d("note_123", mResultText.getText().toString());
                         break;
                     default:
                         break;
@@ -311,7 +313,16 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Datatransformer datatransformer = new Datatransformer();
-                        datatransformer.Datatransform(note);
+
+                        if (note.contains("淘宝")){
+                            Intent i = new Intent();
+                            i.putExtra("path", Taobao.ObjecttoSearch(note));
+                            i.setClass(MainActivity.this,TaoBaoView.class);
+                            startActivity(i);
+                        }else{
+                            datatransformer.Datatransform(note);
+                        }
+
                         DatabaseOperator dbo = new DatabaseOperator(MainActivity.this);
                         String content = note;
                         if (!"".equals(content)) {
@@ -344,13 +355,24 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                 }).show();
     }
 
-    private void alertVoiceDialog() {
+    private void alertVoiceDialog(final String note) {
         new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Create Confirm")
                 .setMessage("Are you confirm to create this?")
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        Datatransformer datatransformer = new Datatransformer();
+
+                        if (note.contains("淘宝")){
+                            Intent i = new Intent();
+                            i.putExtra("path", Taobao.ObjecttoSearch(note));
+                            i.setClass(MainActivity.this,TaoBaoView.class);
+                            startActivity(i);
+                        }else{
+                            datatransformer.Datatransform(note);
+                        }
+
                         Voice voice = new Voice(1,new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), Color.CYAN, time_stamp, 0, 1);
                         list.add(voice);
                         dbo = new DatabaseOperator(MainActivity.this);

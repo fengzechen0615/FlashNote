@@ -1,4 +1,4 @@
-package com.example.wuke.flashnote.Friends;
+package com.example.wuke.flashnote.friends;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
