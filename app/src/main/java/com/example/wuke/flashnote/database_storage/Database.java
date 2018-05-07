@@ -24,17 +24,19 @@ public class Database extends SQLiteOpenHelper{
             +Initial.note_words+ " TEXT, "
             +Initial.note_color+" INTEGER, "
             +Initial.note_timestamp+" TEXT, "
-            +Initial.note_priority+" INTEGER) ";
+            +Initial.note_priority+" INTEGER, "+
+            Initial.datatype+" INTEGER)" ;
 
 
 
     private static final String sql3="Create table if not exists "+Initial.table_voice+" ( "
             +Initial.voice_id+" integer primary key autoincrement, "
             +Initial.voice_users+ " INTEGER, "
-            +Initial.voice_url+ " VARCHAR(255), "
+            +Initial.voice_file+ " TEXT, "
             +Initial.voice_color+" INTEGER, "
             +Initial.voice_timestamp+" TEXT, "
-            +Initial.voice_priority+" INTEGER) ";
+            +Initial.voice_priority+" INTEGER, "
+            +Initial.datatype+" INTEGER)";
 
 
     private static final String sql4="Create table if not exists "+Initial.table_friend+" ( "

@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.example.wuke.flashnote.R;
 
-public class ViewHolder extends RecyclerView.ViewHolder {
+public class TextViewHolder extends RecyclerView.ViewHolder {
 
     public LinearLayout layout;
     public EditText note_content;
@@ -22,7 +22,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     public LinearLayout function;
     public Button edit;
 
-    public ViewHolder(View itemView) {
+    public TextViewHolder(View itemView) {
         super(itemView);
         layout = (LinearLayout) itemView.findViewById(R.id.recycle_note);
         note_content = (EditText) itemView.findViewById(R.id.note_content);

@@ -34,8 +34,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.wuke.flashnote.Friends.FriendsActivity;
+import com.example.wuke.flashnote.database_storage.Storage;
+import com.example.wuke.flashnote.database_storage.Voice;
 import com.example.wuke.flashnote.download_upload.Deleting;
 import com.example.wuke.flashnote.function.Datatransformer;
+import com.example.wuke.flashnote.record.Record;
 import com.example.wuke.flashnote.recyclerview.RecycleItemTouchHelper;
 import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Note;
@@ -61,6 +64,7 @@ import com.iflytek.sunflower.FlowerCollector;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -87,6 +91,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
     private SharedPreferences mSharedPreferences;
     // 引擎类型
     private String mEngineType = SpeechConstant.TYPE_CLOUD;
+    private int dt=-1;
 
     int ret = 0;
 
@@ -97,7 +102,11 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
     private String time = null;
     private String username = null;
     private NoteAdapter mAdapter;
-    private List<Note> list;
+    private List list;
+
+    private String time_record;
+
+    private String time_stamp;
 
     @SuppressLint({"ShowToast", "ClickableViewAccessibility"})
     public void onCreate(Bundle savedInstanceState) {
@@ -132,7 +141,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
     private void init_List() {
         try {
-            list = (List<Note>) SaveObjectTool.readObject("dataset");
+            list = (List<Storage>) SaveObjectTool.readObject("dataset");
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -140,14 +149,10 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
             e.printStackTrace();
         }
         if(list == null){
-            list = new ArrayList<Note>();
+            list = new ArrayList<Storage>();
             dbo = new DatabaseOperator(this);
-            list = new ArrayList();
-            list = dbo.getAllNote();
+            list = dbo.getAllStorage();
         }
-//        dbo = new DatabaseOperator(this);
-//        list = new ArrayList();
-//        list = dbo.getAllNote();
         mRecyclerView = (RecyclerView) findViewById(R.id.note_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -224,7 +229,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertDialog(mResultText.getText().toString());
+                alertTextDialog(mResultText.getText().toString());
                 dialog.dismiss();
             }
         });
@@ -253,12 +258,16 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
             public boolean onTouch(View v, MotionEvent event) {
                 switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                        Timestamp timestamp=new Timestamp(System.currentTimeMillis());
+                        SimpleDateFormat form = new SimpleDateFormat("yyyyMMddHHmmss");
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        time_record = form.format(timestamp);
+                        time_stamp = formatter.format(timestamp);
                         start_speak();
                         break;
                     case MotionEvent.ACTION_UP:
                         stop_speak();
-                        alertDialog(mResultVoice.getText().toString());
-                        dialog.dismiss();
+                        alertVoiceDialog();
                         break;
                     default:
                         break;
@@ -294,7 +303,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         showTip("停止听写");
     }
 
-    private void alertDialog(final String note) {
+    private void alertTextDialog(final String note) {
         new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Create Confirm")
                 .setMessage("Are you confirm to create this?")
@@ -310,7 +319,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                             SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                             SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm");
                             String time = form.format(timestamp);
-                            Note newnote =new Note(1, note, Color.CYAN, time.toString(),0);
+                            Note newnote =new Note(1, note, Color.CYAN, time.toString(), 0, 0);
                             int i = dbo.InsertNote(newnote);
                             Log.d("i", String.valueOf(i));
                             newnote.setNoteID(i);
@@ -325,6 +334,35 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
                         }
 
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+//                        mResultText.setText(null);
+                    }
+                }).show();
+    }
+
+    private void alertVoiceDialog() {
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Create Confirm")
+                .setMessage("Are you confirm to create this?")
+                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Voice voice = new Voice(1,new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), Color.CYAN, time_stamp, 0, 1);
+                        list.add(voice);
+                        dbo = new DatabaseOperator(MainActivity.this);
+                        dbo.InsertVoice(voice);
+                        Log.d("data2",list.get(list.size()-1).getClass().toString());
+                        mAdapter.notifyItemInserted(list.size() - 1);
+                        mRecyclerView.scrollToPosition(list.size() - 1);
+                        try {
+                            SaveObjectTool.writeObject(list,"dataset");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -457,7 +495,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
         // 设置音频保存路径，保存音频格式支持pcm、wav，设置路径为sd卡请注意WRITE_EXTERNAL_STORAGE权限
         mIat.setParameter(SpeechConstant.AUDIO_FORMAT,"wav");
-        mIat.setParameter(SpeechConstant.ASR_AUDIO_PATH, Environment.getExternalStorageDirectory()+"/msc/iat.wav");
+        mIat.setParameter(SpeechConstant.ASR_AUDIO_PATH, Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav");
     }
 
     @Override

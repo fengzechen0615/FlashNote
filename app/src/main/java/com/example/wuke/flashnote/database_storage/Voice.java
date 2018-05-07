@@ -1,40 +1,57 @@
 package com.example.wuke.flashnote.database_storage;
 
+import java.io.File;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  * Created by recur on 2018/3/27.
  */
 
-public class Voice {
+public class Voice extends Storage implements Serializable{
     private int voiceID;
     private int userID;
     private String url;//file position
     private int priority;
     private int color;
     private String timestamp;
+    private int dataType;
 
-    public Voice(int voiceID, int userID, String url, int color, String timestamp,int priority)
+    public Voice(int voiceID, int userID, String file, int color, String timestamp,int priority,int dataType)
     {
         this.voiceID=voiceID;
         this.userID=userID;
-        this.url=url;
+        this.url=file;
         this.color=color;
         this.timestamp=timestamp;
         this.priority=priority;
+        this.dataType=dataType;
     }
 
-    public Voice(int userID, String url, int color, Timestamp timestamp,int priority)
+    public Voice(int userID, String url, int color, String timestamp,int priority,int dataType)
     {
         this.userID=userID;
         this.url=url;
         this.color=color;
         this.timestamp=timestamp.toString();
         this.priority=priority;
+        this.dataType=dataType;
     }
 
     public Voice(){
 
+    }
+
+    public String getFile() {
+        return url;
+    }
+
+    public void setFile(String file) {
+        this.url = file;
+    }
+
+    public String getURL() {
+        return url;
     }
 
     public int getVoiceID()
@@ -42,14 +59,13 @@ public class Voice {
         return voiceID;
     }
 
+    public void setURL(String url) {
+        this.url = url;
+    }
+
     public int getUserID()
     {
         return userID;
-    }
-
-    public String getURL()
-    {
-        return url;
     }
 
     public String getTimestamp()
@@ -75,10 +91,6 @@ public class Voice {
         userID = i;
     }
 
-    public void setURL(String i) {
-        url = i;
-    }
-
     public void setTimestamp(String i) {
         timestamp = i;
     }
@@ -89,5 +101,9 @@ public class Voice {
 
     public void setPriority(int i) {
         priority = i;
+    }
+
+    public int getDataType() {
+        return dataType;
     }
 }

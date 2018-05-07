@@ -5,10 +5,20 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.renderscript.RenderScript;
-import android.support.annotation.RequiresPermission;
 import android.util.Log;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -115,6 +125,7 @@ public class DatabaseOperator {
         cValue.put(Initial.note_color,note.getColor());
         cValue.put(Initial.note_timestamp,note.getTimestamp());
         cValue.put(Initial.note_priority,note.getPriority());
+        cValue.put(Initial.datatype,note.getDataType());
         long NID=wdb.insert(Initial.table_note,null,cValue);
         Log.d("database","Insert successfully");
         return (int)NID;
@@ -124,11 +135,12 @@ public class DatabaseOperator {
     {
         ContentValues cValue = new ContentValues();
         SQLiteDatabase wdb=WriteDatabase;
+        cValue.put(Initial.voice_file,voice.getURL());
         cValue.put(Initial.voice_users,voice.getUserID());
-        cValue.put(Initial.voice_url,voice.getURL());
         cValue.put(Initial.voice_color,voice.getColor());
         cValue.put(Initial.voice_timestamp,voice.getTimestamp());
         cValue.put(Initial.voice_priority,voice.getPriority());
+        cValue.put(Initial.datatype,voice.getDataType());
         long VID=wdb.insert(Initial.table_voice,null,cValue);
         return (int)VID;
     }
@@ -190,6 +202,7 @@ public class DatabaseOperator {
         int timeindex=cursor.getColumnIndex(Initial.note_timestamp);
         int colorindex=cursor.getColumnIndex(Initial.note_color);
         int pindex=cursor.getColumnIndex(Initial.note_priority);
+        int dataindex=cursor.getColumnIndex(Initial.datatype);
         for (cursor.moveToFirst();!(cursor.isAfterLast());cursor.moveToNext())
         {
             Note note=new Note(cursor.getInt(noteIDindex)
@@ -197,7 +210,8 @@ public class DatabaseOperator {
                     ,cursor.getString(wordsindex)
                     ,cursor.getInt(colorindex)
                     ,cursor.getString(timeindex)
-                    ,cursor.getInt(pindex));
+                    ,cursor.getInt(pindex),
+                    cursor.getInt(dataindex));
             Log.e("db",note.getNoteID()+"");
             result.add(note);
         }
@@ -210,21 +224,26 @@ public class DatabaseOperator {
     {
         ArrayList<Voice> result = new ArrayList<>();
         SQLiteDatabase rdb=ReadDatabase;
+
+
+
         Cursor cursor=rdb.rawQuery("SELECT * FROM "+Initial.table_voice,null);
         int voiceIDindex=cursor.getColumnIndex(Initial.voice_id);
         int userIDindex=cursor.getColumnIndex(Initial.voice_users);
-        int urlindex=cursor.getColumnIndex(Initial.voice_url);
+        int fileindex=cursor.getColumnIndex(Initial.voice_file);
         int timeindex=cursor.getColumnIndex(Initial.voice_timestamp);
         int colorindex=cursor.getColumnIndex(Initial.voice_color);
         int pindex=cursor.getColumnIndex(Initial.voice_priority);
+        int dataindex=cursor.getColumnIndex(Initial.datatype);
         for (cursor.moveToFirst();!(cursor.isAfterLast());cursor.moveToNext())
         {
             Voice voice=new Voice(cursor.getInt(voiceIDindex)
                     ,cursor.getInt(userIDindex)
-                    ,cursor.getString(urlindex)
+                    ,cursor.getString(fileindex)
                     ,cursor.getInt(colorindex)
                     ,cursor.getString(timeindex)
-                    ,cursor.getInt(pindex));
+                    ,cursor.getInt(pindex)
+                    ,cursor.getInt(dataindex));
             result.add(voice);
         }
         cursor.close();
@@ -238,6 +257,16 @@ public class DatabaseOperator {
         map.put("NOTE",getAllNote());
         map.put("VOICE",getAllVoice());
         return map;
+    }
+
+    public List<Storage> getAllStorage()
+    {
+        List<Storage> AlList=new ArrayList<>();
+        AlList.addAll(getAllNote());
+        AlList.addAll(getAllVoice());
+        Storage s=new Storage();
+        Collections.sort(AlList,s);
+        return AlList;
     }
 
 

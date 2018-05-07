@@ -6,16 +6,20 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.wuke.flashnote.R;
 import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Note;
+import com.example.wuke.flashnote.database_storage.Storage;
+import com.example.wuke.flashnote.database_storage.Voice;
+import com.example.wuke.flashnote.record.Record;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,111 +31,175 @@ import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelperAdapter{
 
-    private List<Note> mList;
+    private List<Storage> mList;
     private Context mContext;
     private List<Note> Delete_List = new ArrayList<>();
     Note deleteNote;
 
-    public NoteAdapter(Context mContext, List<Note> mDatas) {
+    // 文本
+    private static final int TYPE_TEXT = 0;
+    // Record
+    private static final int TYPE_RECORD = 1;
+
+    public NoteAdapter(Context mContext, List<Storage> mDatas) {
         this.mContext = mContext;
         this.mList = mDatas;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.recycler_view, parent, false);
-        return new ViewHolder(view);
+        if (viewType == TYPE_TEXT) {
+            View view = LayoutInflater.from(mContext).inflate(R.layout.text_item, parent, false);
+            TextViewHolder viewHolder = new TextViewHolder(view);
+            return viewHolder;
+        } else if (viewType == TYPE_RECORD) {
+            View view = LayoutInflater.from(mContext).inflate(R.layout.record_item, parent, false);
+            RecordViewHolder viewHolder = new RecordViewHolder(view);
+            return viewHolder;
+        }
+        return null;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
-        final ViewHolder holder = (ViewHolder) viewHolder;
-        holder.note_content.setText(mList.get(position).getWords());
-        holder.note_time.setText(mList.get(position).getTimestamp());
+        // text的逻辑
+        if (viewHolder instanceof TextViewHolder) {
+            final TextViewHolder holder = (TextViewHolder) viewHolder;
+            if (mList.get(position) instanceof Note) {
+                holder.note_content.setText(((Note) mList.get(position)).getWords());
+                holder.note_time.setText(((Note) mList.get(position)).getTimestamp());
 
-        holder.function.setVisibility(View.INVISIBLE);
-        holder.function.setVisibility(View.GONE);
 
-        // 超过一行隐藏 点击展开全部
-        holder.note_content.setEllipsize(TextUtils.TruncateAt.END);
-        holder.note_content.setSingleLine(true);
-        holder.note_content.setOnClickListener(new View.OnClickListener() {
+                holder.function.setVisibility(View.INVISIBLE);
+                holder.function.setVisibility(View.GONE);
 
-            Boolean flag = true;
+                // 超过一行隐藏 点击展开全部
+                holder.note_content.setEllipsize(TextUtils.TruncateAt.END);
+                holder.note_content.setSingleLine(true);
+                holder.note_content.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View view) {
-                if (flag) {
-                    flag = false;
-                    holder.note_content.setEllipsize(null);
-                    holder.note_content.setSingleLine(flag);
-                    holder.function.setVisibility(View.VISIBLE);
-                }
-                else {
-                    flag = true;
-                    holder.note_content.setEllipsize(TextUtils.TruncateAt.END);
-                    holder.note_content.setSingleLine(flag);
-                    holder.function.setVisibility(View.INVISIBLE);
-                    holder.function.setVisibility(View.GONE);
-                }
-            }
-        });
+                    Boolean flag = true;
 
-        holder.share.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("share", "click share");
-                Toast.makeText(mContext,"click" + position, Toast.LENGTH_SHORT).show();
-            }
-        });
+                    @Override
+                    public void onClick(View view) {
+                        if (flag) {
+                            flag = false;
+                            holder.note_content.setEllipsize(null);
+                            holder.note_content.setSingleLine(flag);
+                            holder.function.setVisibility(View.VISIBLE);
+                        } else {
+                            flag = true;
+                            holder.note_content.setEllipsize(TextUtils.TruncateAt.END);
+                            holder.note_content.setSingleLine(flag);
+                            holder.function.setVisibility(View.INVISIBLE);
+                            holder.function.setVisibility(View.GONE);
+                        }
+                    }
+                });
 
-        // note颜色选择器
-        holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String[] color = view.getResources().getStringArray(R.array.note_color);
-                Toast.makeText(mContext, color[position], Toast.LENGTH_LONG).show();
-                if (color[position].equals("Red")) {
-                    holder.itemView.setBackgroundColor(Color.RED);
-                } else if (color[position].equals("White")) {
-                    holder.itemView.setBackgroundColor(Color.WHITE);
-                } else if (color[position].equals("Blue")) {
-                    holder.itemView.setBackgroundColor(Color.BLUE);
-                } else if (color[position].equals("Orange")) {
-                    holder.itemView.setBackgroundColor(Color.YELLOW);
-                }
-            }
+                holder.share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d("share", "click share");
+                        Toast.makeText(mContext, "click" + position, Toast.LENGTH_SHORT).show();
+                    }
+                });
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                // note颜色选择器
+                holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        String[] color = view.getResources().getStringArray(R.array.note_color);
+//                Toast.makeText(mContext, color[position], Toast.LENGTH_LONG).show();
+                        if (color[position].equals("Red")) {
+                            holder.itemView.setBackgroundColor(Color.RED);
+                        } else if (color[position].equals("White")) {
+                            holder.itemView.setBackgroundColor(Color.WHITE);
+                        } else if (color[position].equals("Blue")) {
+                            holder.itemView.setBackgroundColor(Color.BLUE);
+                        } else if (color[position].equals("Orange")) {
+                            holder.itemView.setBackgroundColor(Color.YELLOW);
+                        }
+                    }
 
-            }
-        });
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
 
-        // edit text 状态 是否可输入
-        // 需要在后期解决 光标跳转小键盘出现等问题
-        holder.note_content.setFocusable(false);
-        holder.note_content.setFocusableInTouchMode(false);
-        holder.note_content.setCursorVisible(false);
-        holder.edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (holder.edit.getText().toString().equals("Edit")) {
-                    holder.edit.setText("Done");
-                    holder.note_content.setFocusable(true);
-                    holder.note_content.setFocusableInTouchMode(true);
-                    holder.note_content.setCursorVisible(true);
+                    }
+                });
+
+                // edit text 状态 是否可输入
+                // 需要在后期解决 光标跳转小键盘出现等问题
+                holder.note_content.setFocusable(false);
+                holder.note_content.setFocusableInTouchMode(false);
+                holder.note_content.setCursorVisible(false);
+                holder.edit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (holder.edit.getText().toString().equals("Edit")) {
+                            holder.edit.setText("Done");
+                            holder.note_content.setFocusable(true);
+                            holder.note_content.setFocusableInTouchMode(true);
+                            holder.note_content.setCursorVisible(true);
 //                    holder.note_content.setSelection(mList.get(position).getWords().length());
-                } else if (holder.edit.getText().toString().equals("Done")) {
-                    holder.edit.setText("Edit");
-                    holder.note_content.setFocusable(false);
-                    holder.note_content.setFocusableInTouchMode(false);
-                    holder.note_content.isCursorVisible();
-                    holder.note_content.setCursorVisible(false);
-                }
+                        } else if (holder.edit.getText().toString().equals("Done")) {
+                            holder.edit.setText("Edit");
+                            holder.note_content.setFocusable(false);
+                            holder.note_content.setFocusableInTouchMode(false);
+                            holder.note_content.isCursorVisible();
+                            holder.note_content.setCursorVisible(false);
+                        }
+                    }
+                });
             }
-        });
+        }
 
+        if (viewHolder instanceof RecordViewHolder) {
+            final RecordViewHolder holder = (RecordViewHolder) viewHolder;
+            if (mList.get(position) instanceof Voice) {
+                holder.record_content.setFocusable(false);
+                holder.record_content.setFocusableInTouchMode(false);
+                holder.record_content.setCursorVisible(false);
+                holder.record_content.setText("录音地址" + ((Voice) mList.get(position)).getURL());
+                holder.record_time.setText(((Voice) mList.get(position)).getTimestamp());
+                holder.record_content.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Record record = new Record();
+                        record.startPlay(((Voice) mList.get(position)).getURL());
+                        Log.d("time_2", mList.get(position).getTimestamp());
+                        Log.d("URL", ((Voice) mList.get(position)).getURL());
+                        Toast.makeText(mContext, "play", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }
+
+
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (mList.get(position) instanceof Voice) {
+            Log.d("data", String.valueOf(mList.get(position).getDataType()));
+            if (0 == mList.get(position).getDataType()) {
+                return TYPE_TEXT;
+            } else if (1 == mList.get(position).getDataType()) {
+                return TYPE_RECORD;
+            } else {
+                return 0;
+            }
+        } else if (mList.get(position) instanceof Note) {
+            if (0 == mList.get(position).getDataType()) {
+                return TYPE_TEXT;
+            } else if (1 == mList.get(position).getDataType()) {
+                return TYPE_RECORD;
+            } else {
+                return 0;
+            }
+        } else {
+            return 0;
+        }
     }
 
     @Override
@@ -165,21 +233,24 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
         int position = source.getAdapterPosition();
 
         DatabaseOperator databaseOperator = new DatabaseOperator(mContext);
-        databaseOperator.deleteNote(mList.get(position).getNoteID());
-        Log.d("position", String.valueOf(position));
-        Log.d("Note_id", String.valueOf(mList.get(position).getNoteID()));
-        Log.d("Note_words", String.valueOf(mList.get(position).getWords()));
 
-        deleteNote = mList.remove(position); //移除数据
-        Delete_List.add(deleteNote);
+        if (mList.get(position) instanceof Note) {
+            databaseOperator.deleteNote(((Note) mList.get(position)).getNoteID());
+//        Log.d("position", String.valueOf(position));
+//        Log.d("Note_id", String.valueOf(mList.get(position).getNoteID()));
+//        Log.d("Note_words", String.valueOf(mList.get(position).getWords()));
 
-        try {
-            SaveObjectTool.writeObject(mList,"dataset");
-        } catch (IOException e) {
-            e.printStackTrace();
+            deleteNote = (Note) mList.remove(position); //移除数据
+            Delete_List.add(deleteNote);
+
+            try {
+                SaveObjectTool.writeObject(mList, "dataset");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            notifyItemRemoved(position);//刷新数据移除
         }
-
-        notifyItemRemoved(position);//刷新数据移除
     }
 
     @Override
@@ -203,4 +274,5 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
     {
         Delete_List.clear();
     }
+
 }
