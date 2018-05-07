@@ -70,4 +70,9 @@ public class Record {
             mediaPlayer = null;
         }
     }
+
+//    public String RecordText() {
+//        String recordText;
+//        return recordText;
+//    }
 }

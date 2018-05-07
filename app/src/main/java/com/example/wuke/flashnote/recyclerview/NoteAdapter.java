@@ -64,13 +64,12 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
-        // text的逻辑
+        // TEXT的逻辑
         if (viewHolder instanceof TextViewHolder) {
             final TextViewHolder holder = (TextViewHolder) viewHolder;
             if (mList.get(position) instanceof Note) {
                 holder.note_content.setText(((Note) mList.get(position)).getWords());
                 holder.note_time.setText(((Note) mList.get(position)).getTimestamp());
-
 
                 holder.function.setVisibility(View.INVISIBLE);
                 holder.function.setVisibility(View.GONE);
@@ -94,6 +93,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                             holder.note_content.setEllipsize(TextUtils.TruncateAt.END);
                             holder.note_content.setSingleLine(flag);
                             holder.function.setVisibility(View.INVISIBLE);
+                            holder.function.setVisibility(View.GONE);
                         }
                     }
                 });
@@ -123,18 +123,18 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
 //                Toast.makeText(mContext, color[position], Toast.LENGTH_LONG).show();
                         if (color[position].equals("Red")) {
                             holder.itemView.setBackgroundColor(Color.RED);
-                            databaseOperator.EditColor(((Note) mList.get(position)).getNoteID(), Color.RED);
-                            ((Note) mList.get(position)).setColor(Color.RED);
-                            update_file();
+//                            databaseOperator.EditColor(((Note) mList.get(position)).getNoteID(), Color.RED);
+//                            ((Note) mList.get(position)).setColor(Color.RED);
+//                            update_file();
                         } else if (color[position].equals("White")) {
                             holder.itemView.setBackgroundColor(Color.WHITE);
-                            databaseOperator.EditColor(((Note) mList.get(position)).getNoteID(), Color.WHITE);
+//                            databaseOperator.EditColor(((Note) mList.get(position)).getNoteID(), Color.WHITE);
                         } else if (color[position].equals("Blue")) {
                             holder.itemView.setBackgroundColor(Color.BLUE);
-                            databaseOperator.EditColor(((Note) mList.get(position)).getNoteID(), Color.BLUE);
+//                            databaseOperator.EditColor(((Note) mList.get(position)).getNoteID(), Color.BLUE);
                         } else if (color[position].equals("Orange")) {
                             holder.itemView.setBackgroundColor(Color.YELLOW);
-                            databaseOperator.EditColor(((Note) mList.get(position)).getNoteID(), Color.YELLOW);
+//                            databaseOperator.EditColor(((Note) mList.get(position)).getNoteID(), Color.YELLOW);
                         }
                     }
 
@@ -174,28 +174,95 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
             }
         }
 
+        // RECORD的逻辑
         if (viewHolder instanceof RecordViewHolder) {
             final RecordViewHolder holder = (RecordViewHolder) viewHolder;
             if (mList.get(position) instanceof Voice) {
+                holder.function.setVisibility(View.INVISIBLE);
+                holder.function.setVisibility(View.GONE);
+
                 holder.record_content.setFocusable(false);
                 holder.record_content.setFocusableInTouchMode(false);
                 holder.record_content.setCursorVisible(false);
-                holder.record_content.setText("录音地址" + ((Voice) mList.get(position)).getURL());
+                holder.record_content.setText("Record Time:");
                 holder.record_time.setText(((Voice) mList.get(position)).getTimestamp());
-                holder.record_content.setOnClickListener(new View.OnClickListener() {
+
+                holder.record_time.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Record record = new Record();
                         record.startPlay(((Voice) mList.get(position)).getURL());
-                        Log.d("time_2", mList.get(position).getTimestamp());
-                        Log.d("URL", ((Voice) mList.get(position)).getURL());
-                        Toast.makeText(mContext, "play", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, "play record", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                // record颜色选择器
+                holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        String[] color = view.getResources().getStringArray(R.array.note_color);
+                        databaseOperator = new DatabaseOperator(mContext);
+//                Toast.makeText(mContext, color[position], Toast.LENGTH_LONG).show();
+                        if (color[position].equals("Red")) {
+                            holder.itemView.setBackgroundColor(Color.RED);
+//                            databaseOperator.EditColor(((Note) mList.get(position)).getNoteID(), Color.RED);
+//                            ((Note) mList.get(position)).setColor(Color.RED);
+//                            update_file();
+                        } else if (color[position].equals("White")) {
+                            holder.itemView.setBackgroundColor(Color.WHITE);
+//                            databaseOperator.EditColor(((Note) mList.get(position)).getNoteID(), Color.WHITE);
+                        } else if (color[position].equals("Blue")) {
+                            holder.itemView.setBackgroundColor(Color.BLUE);
+//                            databaseOperator.EditColor(((Note) mList.get(position)).getNoteID(), Color.BLUE);
+                        } else if (color[position].equals("Orange")) {
+                            holder.itemView.setBackgroundColor(Color.YELLOW);
+//                            databaseOperator.EditColor(((Note) mList.get(position)).getNoteID(), Color.YELLOW);
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+
+                holder.record_content.setOnClickListener(new View.OnClickListener() {
+
+                    Boolean flag = true;
+
+                    @Override
+                    public void onClick(View view) {
+                        if (flag) {
+                            flag = false;
+                            holder.function.setVisibility(View.VISIBLE);
+                        } else {
+                            flag = true;
+                            holder.function.setVisibility(View.INVISIBLE);
+                            holder.function.setVisibility(View.GONE);
+                        }
+                    }
+                });
+
+                holder.record_text.setVisibility(View.INVISIBLE);
+                holder.record_text.setVisibility(View.GONE);
+
+                holder.convert.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String fileName = null;
+
+                        String pathName = ((Voice) mList.get(position)).getURL();
+                        int start = pathName.lastIndexOf("/");
+                        int end = pathName.lastIndexOf(".");
+                        if(start != -1 && end !=- 1){
+                            fileName = pathName.substring(start + 1,end);
+                        }
+                        holder.record_text.setVisibility(View.VISIBLE);
+                        holder.record_text.setText(fileName);
                     }
                 });
             }
         }
-
-
     }
 
     @Override
@@ -234,6 +301,8 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
         if (fromPosition < mList.size() && toPosition < mList.size()) {
             //交换数据位置
             Collections.swap(mList, fromPosition, toPosition);
+            Log.d("fromPosition", String.valueOf(fromPosition));
+            Log.d("toPosition", String.valueOf(toPosition));
             update_file();
             //刷新位置交换
             notifyItemMoved(fromPosition, toPosition);
