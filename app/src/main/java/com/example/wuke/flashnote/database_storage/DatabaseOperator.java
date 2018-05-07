@@ -216,7 +216,6 @@ public class DatabaseOperator {
             result.add(note);
         }
         cursor.close();
-        rdb.close();
         return result;
     }
 
@@ -224,8 +223,6 @@ public class DatabaseOperator {
     {
         ArrayList<Voice> result = new ArrayList<>();
         SQLiteDatabase rdb=ReadDatabase;
-
-
 
         Cursor cursor=rdb.rawQuery("SELECT * FROM "+Initial.table_voice,null);
         int voiceIDindex=cursor.getColumnIndex(Initial.voice_id);
@@ -247,7 +244,6 @@ public class DatabaseOperator {
             result.add(voice);
         }
         cursor.close();
-        rdb.close();
         return result;
     }
 

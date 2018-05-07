@@ -34,13 +34,13 @@ public class Uploading {
 
     private TextView result;
 
-    public void upnote(String id, String content, String user, String time, String color, String priority){
+    private void upnote(String id, String content, String user, String time, String color, String priority){
         String s = note + "?ID="+ id + "&content=" + content +"&user=" + user + "&time=" + time + "&color="
                 + color + "&priority=" + priority;
         new Uploading.MyAsyncTask().execute(s);
     }//单条上传的方法
 
-    public void upvoice(String id, String content, String user, String time, String color, String priority){
+    private void upvoice(String id, String content, String user, String time, String color, String priority){
         String s = voice + "?ID="+ id + "&content=" + content +"&user=" + user + "&time=" + time + "&color="
                 + color + "&priority=" + priority;
         new Uploading.MyAsyncTask().execute(s);

@@ -20,7 +20,7 @@ public class Database extends SQLiteOpenHelper{
 
     private static final String sql2="Create table if not exists "+Initial.table_note+" ( "
             +Initial.note_id+" integer primary key autoincrement unique, "
-            +Initial.note_user+ " VARCHAR(255), "
+            +Initial.note_user+ " INTEGER, "
             +Initial.note_words+ " TEXT, "
             +Initial.note_color+" INTEGER, "
             +Initial.note_timestamp+" TEXT, "
@@ -51,14 +51,8 @@ public class Database extends SQLiteOpenHelper{
 
     private static final String sql6="Create table if not exists "+Initial.Garbage_table+" ( "
             +Initial.Litter_id+" integer primary key autoincrement unique, "
-            +Initial.DeleteTime+" TEXT, "
-            +Initial.OutTime+" TEXT, "
             +Initial.note_id+" INTEGER, "
-            +Initial.note_user+ " VARCHAR(255), "
-            +Initial.note_words+ " TEXT, "
-            +Initial.note_color+" INTEGER, "
-            +Initial.note_timestamp+" TEXT, "
-            +Initial.note_priority+" INTEGER) ";
+            +Initial.note_user+" INTEGER) ";
 
 
     public Database(Context context) {

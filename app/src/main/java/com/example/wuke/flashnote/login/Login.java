@@ -135,21 +135,21 @@ public class Login extends AppCompatActivity {
                 Locallogin l = new Locallogin();
                 String a = account.getText().toString();
                 String p = password.getText().toString();
+                int id = s.indexOf("resCode=201 Login in succeeduserID=");
+                String userid = s.substring(id);
                 l.save(a, p);
-                Log.e("post", a + " " + p);
+                Log.e("post1", a + " " + p);
                 Timestamp nowTime = new Timestamp(System.currentTimeMillis());//Login Time
                 SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String time = form.format(nowTime);
                 Bundle bundle = new Bundle();
                 bundle.putString("time", time);
                 bundle.putString("username", a);
-                Log.e("post", time + " " + a);
+                Log.e("post2", time + " " + userid);
                 // 这里我改了下一个页面 可不可以 不用intent传值？
                 Intent intent = new Intent(Login.this, Setting.class);
                 intent.putExtra("Bundle", bundle);
                 startActivity(intent);
-
-
                 finish();
             } else {
                 tv.setText(s);

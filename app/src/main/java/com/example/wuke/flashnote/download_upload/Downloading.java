@@ -102,7 +102,7 @@ public class Downloading {
         });
     }
 
-    public ArrayList<Note> transnote (ArrayList<String> a){
+    private ArrayList<Note> transnote (ArrayList<String> a){
         ArrayList<Note> notes = new ArrayList<>();
         int i = 0;
         while (i < a.size()){
@@ -142,7 +142,7 @@ public class Downloading {
         return notes;
     }
 
-    public ArrayList<Voice> transvoice (ArrayList<String> a){
+    private ArrayList<Voice> transvoice (ArrayList<String> a){
         ArrayList<Voice> voices = new ArrayList<>();
         int i = 0;
         while (i < a.size()){
