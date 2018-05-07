@@ -268,8 +268,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                         break;
                     case MotionEvent.ACTION_UP:
                         stop_speak();
-                        alertVoiceDialog(mResultText.getText().toString());
-//                        Log.d("note_123", mResultText.getText().toString());
+                        alertVoiceDialog(mResultVoice.getText().toString());
                         break;
                     default:
                         break;
@@ -592,7 +591,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
             Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
             startActivity(intent);
         }
-        else if (item.getItemId() == R.id.trashy) {
+        else if (item.getItemId() == R.id.trash) {
 
         } else if (item.getItemId() == R.id.update) {
             if (time!=null) {
