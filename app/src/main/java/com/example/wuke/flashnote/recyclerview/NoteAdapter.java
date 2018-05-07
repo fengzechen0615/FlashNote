@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
@@ -33,6 +34,8 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
     private Context mContext;
     private List<Note> Delete_List = new ArrayList<>();
     Note deleteNote;
+
+    private DatabaseOperator databaseOperator;
 
     // 文本
     private static final int TYPE_TEXT = 0;
@@ -108,15 +111,22 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         String[] color = view.getResources().getStringArray(R.array.note_color);
+                        databaseOperator = new DatabaseOperator(mContext);
 //                Toast.makeText(mContext, color[position], Toast.LENGTH_LONG).show();
                         if (color[position].equals("Red")) {
                             holder.itemView.setBackgroundColor(Color.RED);
+                            databaseOperator.EditColor(((Note) mList.get(position)).getNoteID(), Color.RED);
+                            ((Note) mList.get(position)).setColor(Color.RED);
+                            update_file();
                         } else if (color[position].equals("White")) {
                             holder.itemView.setBackgroundColor(Color.WHITE);
+                            databaseOperator.EditColor(((Note) mList.get(position)).getNoteID(), Color.WHITE);
                         } else if (color[position].equals("Blue")) {
                             holder.itemView.setBackgroundColor(Color.BLUE);
+                            databaseOperator.EditColor(((Note) mList.get(position)).getNoteID(), Color.BLUE);
                         } else if (color[position].equals("Orange")) {
                             holder.itemView.setBackgroundColor(Color.YELLOW);
+                            databaseOperator.EditColor(((Note) mList.get(position)).getNoteID(), Color.YELLOW);
                         }
                     }
 
@@ -139,8 +149,12 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                             holder.note_content.setFocusable(true);
                             holder.note_content.setFocusableInTouchMode(true);
                             holder.note_content.setCursorVisible(true);
-//                    holder.note_content.setSelection(mList.get(position).getWords().length());
                         } else if (holder.edit.getText().toString().equals("Done")) {
+//                            Log.d("id and word", ((Note) mList.get(position)).getNoteID() + holder.note_content.getText().toString());
+                            databaseOperator = new DatabaseOperator(mContext);
+                            databaseOperator.EditWord(((Note) mList.get(position)).getNoteID(), holder.note_content.getText().toString());
+                            ((Note) mList.get(position)).setWords(holder.note_content.getText().toString());
+                            update_file();
                             holder.edit.setText("Edit");
                             holder.note_content.setFocusable(false);
                             holder.note_content.setFocusableInTouchMode(false);
@@ -212,11 +226,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
         if (fromPosition < mList.size() && toPosition < mList.size()) {
             //交换数据位置
             Collections.swap(mList, fromPosition, toPosition);
-            try {
-                SaveObjectTool.writeObject(mList,"dataset");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            update_file();
             //刷新位置交换
             notifyItemMoved(fromPosition, toPosition);
         }
@@ -234,19 +244,10 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
 
         if (mList.get(position) instanceof Note) {
             databaseOperator.deleteNote(((Note) mList.get(position)).getNoteID());
-//        Log.d("position", String.valueOf(position));
-//        Log.d("Note_id", String.valueOf(mList.get(position).getNoteID()));
-//        Log.d("Note_words", String.valueOf(mList.get(position).getWords()));
 
             deleteNote = (Note) mList.remove(position); //移除数据
             Delete_List.add(deleteNote);
-
-            try {
-                SaveObjectTool.writeObject(mList, "dataset");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+            update_file();
             notifyItemRemoved(position);//刷新数据移除
         }
     }
@@ -271,6 +272,14 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
     public void ClearList()
     {
         Delete_List.clear();
+    }
+
+    public void update_file() {
+        try {
+            SaveObjectTool.writeObject(mList, "dataset");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

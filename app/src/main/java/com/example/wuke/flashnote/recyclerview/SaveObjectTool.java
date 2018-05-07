@@ -14,13 +14,12 @@ import java.io.ObjectOutputStream;
 public class SaveObjectTool {
 
     @SuppressLint("SdCardPath")
-    private static String defaultPath = "/sdcard/damily_cache/";
+    private static String defaultPath = "/sdcard/flash_note/";
 
     public static void writeObject(Object object, String name)
             throws FileNotFoundException, IOException {
         File file = getFile(name);
-        ObjectOutputStream outputStream = new ObjectOutputStream(
-                new FileOutputStream(file));
+        ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(file));
         outputStream.writeObject(object);
         outputStream.flush();
         outputStream.close();
@@ -29,8 +28,7 @@ public class SaveObjectTool {
     public static Object readObject(String name) throws FileNotFoundException,
             IOException, ClassNotFoundException {
         File file = getFile(name);
-        ObjectInputStream inputStream = new ObjectInputStream(
-                new FileInputStream(file));
+        ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(file));
         Object object = inputStream.readObject();
         inputStream.close();
         Log.i("SaveObjectTool", file.getAbsolutePath());

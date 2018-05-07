@@ -52,25 +52,29 @@ public class DatabaseOperator {
         return true;
     }
 
-    public boolean EditWord(int noteId,String words)
+    public boolean EditWord(int noteId, String words)
     {
         ContentValues cValue = new ContentValues();
-        SQLiteDatabase wdb=WriteDatabase;
-        cValue.put(Initial.note_words,words);
-        wdb.update(Initial.table_note,cValue,Initial.note_id+"=?",
-                new String[]{String.valueOf(noteId)});
-        wdb.close();
+        SQLiteDatabase wdb = WriteDatabase;
+        Log.e("database",words);
+        cValue.put(Initial.note_words, words);
+        String sql = "Update "+Initial.table_note+" set "+Initial.note_words+"= '"+
+        words+"' where "+Initial.note_id+"="+noteId;
+        Log.d("db",sql);
+        wdb.execSQL(sql);
         return true;
     }
 
-    public boolean EditColor(int noteId,int color)
+    public boolean EditColor(int noteId, int color)
     {
         ContentValues cValue = new ContentValues();
-        SQLiteDatabase wdb=WriteDatabase;
+        SQLiteDatabase wdb = WriteDatabase;
         cValue.put(Initial.note_color,color);
-        wdb.update(Initial.table_note,cValue,Initial.note_id+"=?",
-                new String[]{String.valueOf(noteId)});
-        wdb.close();
+        //wdb.update(Initial.table_note,cValue,Initial.note_id + "=?",
+         //       new String[]{String.valueOf(noteId)});
+        wdb.rawQuery("Update "+Initial.table_note+" set "+Initial.note_words+" = "+
+                color+" where "+Initial.note_id+"=?",new String[] {String.valueOf(noteId)});
+
         return true;
     }
 

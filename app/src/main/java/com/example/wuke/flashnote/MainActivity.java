@@ -253,6 +253,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
         mResultVoice.setFocusable(false);
         mResultVoice.setFocusableInTouchMode(false);
+        mResultVoice.setVisibility(View.GONE);
 
         speak.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -269,6 +270,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                     case MotionEvent.ACTION_UP:
                         stop_speak();
                         alertVoiceDialog(mResultVoice.getText().toString());
+                        dialog.dismiss();
                         break;
                     default:
                         break;
@@ -331,7 +333,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                             String time = form.format(timestamp);
                             Note newnote =new Note(1, note, Color.CYAN, time.toString(), 0, 0);
                             int i = dbo.InsertNote(newnote);
-                            Log.d("i", String.valueOf(i));
+                            Log.d("i", String.valueOf(newnote.getDataType()));
                             newnote.setNoteID(i);
                             list.add(newnote);
                             mAdapter.notifyItemInserted(list.size() - 1);
@@ -363,26 +365,25 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                     public void onClick(DialogInterface dialog, int which) {
                         Datatransformer datatransformer = new Datatransformer();
 
-                        if (note.contains("淘宝")){
+                        if (note.contains("淘宝") && note.contains("搜索")){
                             Intent i = new Intent();
                             i.putExtra("path", Taobao.ObjecttoSearch(note));
                             i.setClass(MainActivity.this,TaoBaoView.class);
                             startActivity(i);
-                        }else{
-                            datatransformer.Datatransform(note);
-                        }
-
-                        Voice voice = new Voice(1,new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), Color.CYAN, time_stamp, 0, 1);
-                        list.add(voice);
-                        dbo = new DatabaseOperator(MainActivity.this);
-                        dbo.InsertVoice(voice);
-                        Log.d("data2",list.get(list.size()-1).getClass().toString());
-                        mAdapter.notifyItemInserted(list.size() - 1);
-                        mRecyclerView.scrollToPosition(list.size() - 1);
-                        try {
-                            SaveObjectTool.writeObject(list,"dataset");
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        } else {
+//                            datatransformer.Datatransform(note);
+                            Voice voice = new Voice(1,new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), Color.CYAN, time_stamp, 0, 1);
+                            list.add(voice);
+                            dbo = new DatabaseOperator(MainActivity.this);
+                            dbo.InsertVoice(voice);
+                            Log.d("data2",list.get(list.size()-1).getClass().toString());
+                            mAdapter.notifyItemInserted(list.size() - 1);
+                            mRecyclerView.scrollToPosition(list.size() - 1);
+                            try {
+                                SaveObjectTool.writeObject(list,"dataset");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 })
