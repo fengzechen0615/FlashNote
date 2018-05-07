@@ -156,6 +156,18 @@ public class DatabaseOperator {
         return (int)VID;
     }
 
+    public int InsertFriend(Friends f)
+    {
+        ContentValues cValue = new ContentValues();
+        SQLiteDatabase wdb=WriteDatabase;
+        cValue.put(Initial.friend_fid,f.getFriendsID());
+        cValue.put(Initial.friend_user_id,f.getUserID());
+        long FID=wdb.insert(Initial.table_friend,null,cValue);
+        return (int)FID;
+    }
+
+
+
     public boolean updatePriority(int id,int Priority)
     {
         ContentValues cValue = new ContentValues();
@@ -171,7 +183,12 @@ public class DatabaseOperator {
     public boolean deleteNote(int id){
         SQLiteDatabase wdb=WriteDatabase;
         wdb.delete(Initial.table_note,"note_id=?",new String[]{String.valueOf(id)});
-        wdb.close();
+        return false;
+    }
+
+    public boolean deleteVoice(int id){
+        SQLiteDatabase wdb=WriteDatabase;
+        wdb.delete(Initial.table_voice,"voice_id=?",new String[]{String.valueOf(id)});
         return false;
     }
 
@@ -186,10 +203,11 @@ public class DatabaseOperator {
         return false;
     }
 
-    public List getAllFriends(){
+
+    public List getAllFriends(int userID){
         ArrayList<Friends> result = new ArrayList<>();
         SQLiteDatabase rdb=ReadDatabase;
-        Cursor cursor=rdb.rawQuery("SELECT * FROM "+Initial.table_friend,null);
+        Cursor cursor=rdb.rawQuery("SELECT * FROM Friends WHERE User_id=?",new String[]{String.valueOf(userID)});
         int FriendsIDindex=cursor.getColumnIndex(Initial.friend_fid);
         int userIDindex=cursor.getColumnIndex(Initial.friend_user_id);
         for (cursor.moveToFirst();!(cursor.isAfterLast());cursor.moveToNext()) {
@@ -198,6 +216,7 @@ public class DatabaseOperator {
             Log.e("db", friends.getUserID() + "");
             result.add(friends);
         }
+        cursor.close();
         return result;
     }
 

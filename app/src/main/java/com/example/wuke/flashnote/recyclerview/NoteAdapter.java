@@ -17,6 +17,7 @@ import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Note;
 import com.example.wuke.flashnote.database_storage.Storage;
 import com.example.wuke.flashnote.database_storage.Voice;
+import com.example.wuke.flashnote.download_upload.Uploading;
 import com.example.wuke.flashnote.record.Record;
 
 import java.io.IOException;
@@ -93,7 +94,6 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                             holder.note_content.setEllipsize(TextUtils.TruncateAt.END);
                             holder.note_content.setSingleLine(flag);
                             holder.function.setVisibility(View.INVISIBLE);
-                            holder.function.setVisibility(View.GONE);
                         }
                     }
                 });
@@ -102,6 +102,14 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                     @Override
                     public void onClick(View v) {
                         Log.d("share", "click share");
+                        Uploading uploading=new Uploading();
+                        if (mList.get(position) instanceof Note){
+                            uploading.upsharednote(String.valueOf(((Note) mList.get(position)).getUserID()),String.valueOf(((Note) mList.get(position)).getNoteID()));
+                        }
+                        else {
+                            uploading.upsharevoice(String.valueOf(((Voice) mList.get(position)).getUserID()),String.valueOf(((Voice) mList.get(position)).getVoiceID()));
+                        }
+
                         Toast.makeText(mContext, "click" + position, Toast.LENGTH_SHORT).show();
                     }
                 });
