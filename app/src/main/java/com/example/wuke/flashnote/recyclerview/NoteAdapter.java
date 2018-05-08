@@ -193,6 +193,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                         Record record = new Record();
                         record.startPlay(((Voice) mList.get(position)).getURL());
                         Toast.makeText(mContext, "play record", Toast.LENGTH_SHORT).show();
+                        Log.d("URL", ((Voice) mList.get(position)).getURL());
                     }
                 });
 

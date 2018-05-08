@@ -46,15 +46,13 @@
         <activity
             android:name=".login.Login"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
-        <activity
-            android:name=".friends.FriendsActivity"
-            android:theme="@style/Theme.AppCompat.Light" />
 
         <meta-data
             android:name="IFLYTEK_APPKEY"
             android:value="&apos;5aa758dc&apos;" />
 
-        <activity android:name=".function.TaoBaoView"></activity>
+        <activity android:name=".function.TaoBaoView" />
+        <activity android:name=".login.Register"></activity>
     </application>
 
 </manifest>

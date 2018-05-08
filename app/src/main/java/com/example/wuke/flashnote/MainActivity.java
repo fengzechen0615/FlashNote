@@ -36,7 +36,6 @@ import android.widget.Toast;
 import com.example.wuke.flashnote.database_storage.Storage;
 import com.example.wuke.flashnote.database_storage.Voice;
 import com.example.wuke.flashnote.download_upload.Deleting;
-import com.example.wuke.flashnote.friends.FriendsActivity;
 import com.example.wuke.flashnote.function.Datatransformer;
 import com.example.wuke.flashnote.function.TaoBaoView;
 import com.example.wuke.flashnote.function.Taobao;
