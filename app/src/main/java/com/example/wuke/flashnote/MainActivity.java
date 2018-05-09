@@ -36,6 +36,7 @@ import android.widget.Toast;
 import com.example.wuke.flashnote.database_storage.Storage;
 import com.example.wuke.flashnote.database_storage.Voice;
 import com.example.wuke.flashnote.download_upload.Deleting;
+import com.example.wuke.flashnote.friends.Friend;
 import com.example.wuke.flashnote.function.Datatransformer;
 import com.example.wuke.flashnote.function.TaoBaoView;
 import com.example.wuke.flashnote.function.Taobao;
@@ -587,7 +588,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
             startActivity(intents);
         }else if(item.getItemId()==R.id.friends)
         {
-            Intent intent = new Intent(MainActivity.this, FriendsActivity.class);
+            Intent intent = new Intent(MainActivity.this, Friend.class);
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.trash) {
