@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FriendsActivity extends AppCompatActivity {
+public class Friend extends AppCompatActivity {
 
     private List mList;
     private static String TAG = FragmentActivity.class.getSimpleName();
