@@ -375,7 +375,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                             list.add(voice);
                             dbo = new DatabaseOperator(MainActivity.this);
                             dbo.InsertVoice(voice);
-                            Log.d("data2",list.get(list.size()-1).getClass().toString());
+                            Log.d("path", new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath());
                             mAdapter.notifyItemInserted(list.size() - 1);
                             mRecyclerView.scrollToPosition(list.size() - 1);
                             try {

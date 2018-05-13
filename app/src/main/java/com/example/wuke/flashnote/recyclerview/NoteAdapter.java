@@ -184,7 +184,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                 holder.record_content.setFocusable(false);
                 holder.record_content.setFocusableInTouchMode(false);
                 holder.record_content.setCursorVisible(false);
-                holder.record_content.setText("Record Time:");
+                holder.record_content.setText("Record Time:" + mList.get(position).getTimestamp());
                 holder.record_time.setText(((Voice) mList.get(position)).getTimestamp());
 
                 holder.record_time.setOnClickListener(new View.OnClickListener() {
@@ -258,8 +258,9 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                         if(start != -1 && end !=- 1){
                             fileName = pathName.substring(start + 1,end);
                         }
-                        holder.record_text.setVisibility(View.VISIBLE);
-                        holder.record_text.setText(fileName);
+
+                        Record record = new Record();
+                        record.Convert(mContext, holder.record_text, fileName);
                     }
                 });
             }
