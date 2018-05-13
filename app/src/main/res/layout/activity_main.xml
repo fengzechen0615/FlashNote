@@ -16,6 +16,24 @@
 
     </android.support.v7.widget.RecyclerView>
 
+    <RelativeLayout
+        android:id="@+id/recording_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/ease_recording_hint_bg"
+        android:padding="10dp"
+        android:visibility="invisible" >
+
+        <ImageView
+            android:id="@+id/mic_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ease_record_animate_01" />
+
+    </RelativeLayout>
+
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/add"
         android:layout_width="match_parent"

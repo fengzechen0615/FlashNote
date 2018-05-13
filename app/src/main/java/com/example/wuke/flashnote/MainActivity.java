@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -30,6 +31,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -108,6 +111,15 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
     private String time_stamp;
 
+    private int voice = 0;
+
+    //存储很多张话筒图片的数组
+    private Drawable[] micImages;
+    //话筒的图片
+    private ImageView micImage;
+
+    private RelativeLayout recordingContainer;
+
     @SuppressLint({"ShowToast", "ClickableViewAccessibility"})
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -179,6 +191,25 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
         View headerView = navigationView.getHeaderView(0);
         TextView username = (TextView) headerView.findViewById(R.id.username);
+
+        micImage = (ImageView) findViewById(R.id.mic_image);
+        recordingContainer = (RelativeLayout) findViewById(R.id.recording_container);
+
+        micImages = new Drawable[] {
+                getResources().getDrawable(R.drawable.ease_record_animate_01),
+                getResources().getDrawable(R.drawable.ease_record_animate_02),
+                getResources().getDrawable(R.drawable.ease_record_animate_03),
+                getResources().getDrawable(R.drawable.ease_record_animate_04),
+                getResources().getDrawable(R.drawable.ease_record_animate_05),
+                getResources().getDrawable(R.drawable.ease_record_animate_06),
+                getResources().getDrawable(R.drawable.ease_record_animate_07),
+                getResources().getDrawable(R.drawable.ease_record_animate_08),
+                getResources().getDrawable(R.drawable.ease_record_animate_09),
+                getResources().getDrawable(R.drawable.ease_record_animate_10),
+                getResources().getDrawable(R.drawable.ease_record_animate_11),
+                getResources().getDrawable(R.drawable.ease_record_animate_12),
+                getResources().getDrawable(R.drawable.ease_record_animate_13),
+                getResources().getDrawable(R.drawable.ease_record_animate_14), };
 
         Locallogin locallogin = new Locallogin();
 
@@ -265,11 +296,14 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                         time_record = form.format(timestamp);
                         time_stamp = formatter.format(timestamp);
                         start_speak();
+                        UpdateMicStatus();
+                        recordingContainer.setVisibility(View.VISIBLE);
                         break;
                     case MotionEvent.ACTION_UP:
                         stop_speak();
                         alertVoiceDialog(mResultVoice.getText().toString());
                         dialog.dismiss();
+                        recordingContainer.setVisibility(View.INVISIBLE);
                         break;
                     default:
                         break;
@@ -441,6 +475,8 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         @Override
         public void onVolumeChanged(int volume, byte[] data) {
             showTip("Speaking, volume: " + volume);
+            Log.d("volume", String.valueOf(volume));
+            voice = volume;
 //            Log.d(TAG, "返回音频数据："+data.length);
         }
 
@@ -448,6 +484,32 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         public void onEvent(int eventType, int arg1, int arg2, Bundle obj) {
         }
     };
+
+    // 声音大小监控
+    private final Handler mHandler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            int what=msg.what;
+            //根据mHandler发送what的大小决定话筒的图片是哪一张
+            //说话声音越大,发送过来what值越大
+            if(what>13){
+                what=13;
+            }
+            micImage.setImageDrawable(micImages[what]);
+        };
+    };
+
+    private Runnable mUpdateMicStatusTimer = new Runnable() {
+        public void run() {
+            UpdateMicStatus();
+        }
+    };
+
+    private int SPACE = 200;
+
+    private void UpdateMicStatus() {
+        mHandler.postDelayed(mUpdateMicStatusTimer, SPACE);
+        mHandler.sendEmptyMessage(voice / 2);
+    }
 
     private void printResult(RecognizerResult results) {
         String text = JsonParser.parseIatResult(results.getResultString());
