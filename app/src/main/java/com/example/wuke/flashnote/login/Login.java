@@ -33,7 +33,6 @@ public class Login extends AppCompatActivity {
     private EditText password;
     private TextView result;
     private Button login;
-    private Button sign;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +50,7 @@ public class Login extends AppCompatActivity {
             String[] x = l.getaccount();
             account.setText(x[0]);
             password.setText(x[1]);
-            access(x[0], x[1], "login");
+            access(x[0], x[1]);
         }
 
         login = (Button) findViewById(R.id.login_button);
@@ -62,28 +61,16 @@ public class Login extends AppCompatActivity {
                         password.getText().toString() != null) {
                     String a = account.getText().toString();
                     String p = password.getText().toString();
-                    access(a, p, "login");
+                    access(a, p);
 
-                }
-            }
-        });
-
-        sign = (Button) findViewById(R.id.sign_button);
-        sign.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (account.getText().toString() != null &&
-                        password.getText().toString() != null) {
-                    String a = account.getText().toString();
-                    String p = password.getText().toString();
-                    access(a, p, "sign");
                 }
             }
         });
 
     }
 
-    private void access(String a, String p, String l) {
-        String s = url + "?account=" + a + "&password=" + p + "&login=" + l;
+    private void access(String a, String p) {
+        String s = url + "?account=" + a + "&password=" + p ;
         new MyAsyncTask(result).execute(s);
     }
 
