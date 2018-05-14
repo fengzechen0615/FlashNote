@@ -53,6 +53,7 @@
 
         <activity android:name=".function.TaoBaoView" />
         <activity android:name=".login.Register"></activity>
+        <activity android:name=".friends.Friend"></activity>
     </application>
 
 </manifest>

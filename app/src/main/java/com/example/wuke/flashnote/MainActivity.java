@@ -116,8 +116,12 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
     private Drawable[] micImages;
     //话筒的图片
     private ImageView micImage;
-
     private RelativeLayout recordingContainer;
+    private TextView recordingHint;
+
+    private RelativeLayout recording;
+    private ImageButton speak;
+
 
     @SuppressLint({"ShowToast", "ClickableViewAccessibility"})
     public void onCreate(Bundle savedInstanceState) {
@@ -175,8 +179,12 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         View headerView = navigationView.getHeaderView(0);
         TextView username = (TextView) headerView.findViewById(R.id.username);
 
+        speak = (ImageButton) findViewById(R.id.speak);
+        recording = (RelativeLayout) findViewById(R.id.recording);
+
         micImage = (ImageView) findViewById(R.id.mic_image);
         recordingContainer = (RelativeLayout) findViewById(R.id.recording_container);
+        recordingHint = (TextView) findViewById(R.id.recording_hint);
 
         micImages = new Drawable[] {
                 getResources().getDrawable(R.drawable.ease_record_animate_01),
@@ -214,6 +222,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
             @Override
             public void onClick(View v) {
                 Add_text_note();
+                recording.setVisibility(View.INVISIBLE);
                 add.close(true);
             }
         });
@@ -244,7 +253,6 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
             @Override
             public void onClick(View v) {
                 createNote(mResultText.getText().toString());
-//                alertTextDialog(mResultText.getText().toString());
                 dialog.dismiss();
             }
         });
@@ -256,19 +264,21 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final AlertDialog dialog = builder.create();
 
-        Window dialogWindow = dialog.getWindow();
-
+//        Window dialogWindow = dialog.getWindow();
+//
         View view = View.inflate(this, R.layout.add_voice_note, null);
-        dialog.setView(view, 0, 0, 0, 0);
-        dialogWindow.setGravity(Gravity.CENTER | Gravity.BOTTOM);
-        dialog.getWindow().setDimAmount(0);
+//        dialog.setView(view, 0, 0, 0, 0);
+//        dialogWindow.setGravity(Gravity.CENTER | Gravity.BOTTOM);
+//        dialog.getWindow().setDimAmount(0);
 
-        final ImageButton speak = (ImageButton) view.findViewById(R.id.speak);
+//        final ImageButton speak = (ImageButton) view.findViewById(R.id.speak);
         mResultVoice = ((EditText) view.findViewById(R.id.voice));
 
         mResultVoice.setFocusable(false);
         mResultVoice.setFocusableInTouchMode(false);
         mResultVoice.setVisibility(View.GONE);
+
+        recording.setVisibility(View.VISIBLE);
 
         speak.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -286,19 +296,27 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                         break;
                     case MotionEvent.ACTION_UP:
                         stop_speak();
-                        createVoice(mResultVoice.getText().toString());
-//                        alertVoiceDialog(mResultVoice.getText().toString());
+                        createVoice(mResultVoice.getText().toString(), 0);
                         dialog.dismiss();
                         recordingContainer.setVisibility(View.INVISIBLE);
+                        recording.setVisibility(View.INVISIBLE);
                         break;
+                    case MotionEvent.ACTION_MOVE:
+                        if (event.getY() < 0) {
+                            recordingHint.setText("Loose finger to stop");
+                            recordingHint.setBackgroundResource(R.drawable.ease_recording_text_hint_bg);
+                            createVoice(mResultVoice.getText().toString(), 1);
+                            Log.d("move", "123");
+                        } else {
+                            recordingHint.setText("Slide up to cancel");
+                            recordingHint.setBackgroundColor(Color.TRANSPARENT);
+                        }
                     default:
                         break;
                 }
                 return false;
             }
         });
-
-        dialog.show();
     }
 
     private void start_speak() {
@@ -322,7 +340,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
     private void stop_speak() {
         mIat.stopListening();
-        showTip("停止听写");
+//        showTip("停止听写");
     }
 
     // create note
@@ -339,7 +357,6 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                 CalendarDialog();
             }
             else if (note.contains("打开微信")) {
-
             }
             else {
                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -361,35 +378,39 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
     }
 
     // create voice
-    private void createVoice(String note) {
-        DatabaseOperator dbo = new DatabaseOperator(MainActivity.this);
-        String content = note;
-        if (!"".equals(content)) {
-            // 触发淘宝条件
-            if (note.contains("淘宝") && note.contains("搜索")) {
-                TaobaoDialog();
-                new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();
+    private void createVoice(String note, int i) {
+        if (i == 0) {
+            DatabaseOperator dbo = new DatabaseOperator(MainActivity.this);
+            String content = note;
+            if (!"".equals(content)) {
+                // 触发淘宝条件
+                if (note.contains("淘宝") && note.contains("搜索")) {
+                    TaobaoDialog();
+                    new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();
+                }
+                // 触发日历条件
+                else if (note.contains("日历") && note.contains("创建")) {
+                    CalendarDialog();
+                    new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();
+                } else if (note.contains("打开微信")) {
+                    new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();
+                } else {
+                    pref = getSharedPreferences("info", MODE_PRIVATE);
+                    int userid = pref.getInt("userid", 0);
+                    // 插入priority list.size
+                    Voice voice = new Voice(userid, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), 0, time_stamp, list.size(), 1);
+                    list.add(voice);
+                    dbo = new DatabaseOperator(MainActivity.this);
+                    dbo.InsertVoice(voice);
+//                    Log.d("path", new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath());
+                    mAdapter.notifyItemInserted(list.size() - 1);
+                    mRecyclerView.scrollToPosition(list.size() - 1);
+                }
             }
-            // 触发日历条件
-            else if (note.contains("日历") && note.contains("创建")) {
-                CalendarDialog();
-                new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();
-            }
-            else if (note.contains("打开微信")) {
-                new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();
-            }
-            else {
-                pref = getSharedPreferences("info", MODE_PRIVATE);
-                int userid = pref.getInt("userid",0);
-                // 插入priority list.size
-                Voice voice = new Voice(userid, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), 0, time_stamp, list.size(), 1);
-                list.add(voice);
-                dbo = new DatabaseOperator(MainActivity.this);
-                dbo.InsertVoice(voice);
-                Log.d("path", new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath());
-                mAdapter.notifyItemInserted(list.size() - 1);
-                mRecyclerView.scrollToPosition(list.size() - 1);
-            }
+        } else if (i == 1) {
+            // nothing 删不掉啊
+            File file = new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsoluteFile();
+            file.delete();
         }
     }
 
@@ -533,7 +554,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
         @Override
         public void onVolumeChanged(int volume, byte[] data) {
-            showTip("Speaking, volume: " + volume);
+//            showTip("Speaking, volume: " + volume);
             Log.d("volume", String.valueOf(volume));
             voice = volume;
 //            Log.d(TAG, "返回音频数据："+data.length);

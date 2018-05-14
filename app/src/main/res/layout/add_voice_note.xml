@@ -2,28 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#50FFFFFF"
     android:orientation="vertical" >
 
-    <!--<LinearLayout-->
-        <!--android:id="@+id/voice_field"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:orientation="vertical">-->
+    <EditText
+        android:id="@+id/voice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-        <EditText
-            android:id="@+id/voice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <ImageButton
-            android:id="@+id/speak"
-            android:background="@drawable/voice_icon"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="center"
-            android:adjustViewBounds="true" />
-
-    <!--</LinearLayout>-->
 </LinearLayout>
