@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="note_color">
-        <item>White</item>
-        <item>Blue</item>
-        <item>Red</item>
-        <item>Orange </item>
+        <item> White </item>
+        <item> Blue </item>
+        <item> Red </item>
+        <item> Orange </item>
+        <item> Green </item>
     </string-array>
 </resources>

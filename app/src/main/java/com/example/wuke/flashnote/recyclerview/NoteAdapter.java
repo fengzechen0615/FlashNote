@@ -2,6 +2,8 @@ package com.example.wuke.flashnote.recyclerview;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.wuke.flashnote.R;
@@ -44,6 +47,8 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
     // Record
     private static final int TYPE_RECORD = 1;
 
+    private Drawable[] ColorImages;
+
     public NoteAdapter(Context mContext, List<Storage> mDatas) {
         this.mContext = mContext;
         this.mList = mDatas;
@@ -65,6 +70,15 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
+
+        ColorImages = new Drawable[] {
+                mContext.getResources().getDrawable(R.drawable.light_green),
+                mContext.getResources().getDrawable(R.drawable.blue),
+                mContext.getResources().getDrawable(R.drawable.red),
+                mContext.getResources().getDrawable(R.drawable.orange),
+                mContext.getResources().getDrawable(R.drawable.green),
+        };
+
         // TEXT的逻辑
         if (viewHolder instanceof TextViewHolder) {
             final TextViewHolder holder = (TextViewHolder) viewHolder;
@@ -120,15 +134,27 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                 });
 
                 //改变颜色的初始内容
-                holder.itemView.setBackgroundColor((mList.get(position)).getColor());
-                if ((mList.get(position)).getColor()==Color.WHITE)
+//                holder.itemView.setBackgroundColor((mList.get(position)).getColor());
+                if ((mList.get(position)).getColor()==0) {
                     holder.spinner.setSelection(0);
-                else if (( mList.get(position)).getColor()==Color.RED)
-                    holder.spinner.setSelection(2);
-                else if (( mList.get(position)).getColor()==Color.BLUE)
+                    holder.ColorImage.setImageDrawable(ColorImages[0]);
+                }
+                else if (( mList.get(position)).getColor()==1) {
                     holder.spinner.setSelection(1);
-                else if (( mList.get(position)).getColor()==Color.YELLOW)
+                    holder.ColorImage.setImageDrawable(ColorImages[1]);
+                }
+                else if (( mList.get(position)).getColor()==2) {
+                    holder.spinner.setSelection(2);
+                    holder.ColorImage.setImageDrawable(ColorImages[2]);
+                }
+                else if (( mList.get(position)).getColor()==3) {
                     holder.spinner.setSelection(3);
+                    holder.ColorImage.setImageDrawable(ColorImages[3]);
+                }
+                else if (( mList.get(position)).getColor()==4) {
+                    holder.spinner.setSelection(4);
+                    holder.ColorImage.setImageDrawable(ColorImages[4]);
+                }
 
                 // note颜色选择器
                 holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -136,24 +162,26 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                     public void onItemSelected(AdapterView<?> parent, View view, int colorPosition, long id) {
                         String[] color = view.getResources().getStringArray(R.array.note_color);
                         databaseOperator = new DatabaseOperator(mContext);
-//                Toast.makeText(mContext, color[position], Toast.LENGTH_LONG).show();
-                        if (color[colorPosition].equals("Red")) {
-                            holder.itemView.setBackgroundColor(Color.RED);
-                            databaseOperator.UpdateNoteColor(((Note) mList.get(position)).getNoteID(), Color.RED);
-                            ((Note) mList.get(position)).setColor(Color.RED);
-//                            update_file();
-                        } else if (color[colorPosition].equals("White")) {
-                            holder.itemView.setBackgroundColor(Color.WHITE);
-                            databaseOperator.UpdateNoteColor(((Note) mList.get(position)).getNoteID(), Color.WHITE);
-                            ((Note) mList.get(position)).setColor(Color.WHITE);
+                        if (color[colorPosition].equals("White")) {
+                            holder.ColorImage.setImageDrawable(ColorImages[0]);
+                            databaseOperator.UpdateNoteColor(((Note) mList.get(position)).getNoteID(), 0);
+                            ((Note) mList.get(position)).setColor(0);
                         } else if (color[colorPosition].equals("Blue")) {
-                            holder.itemView.setBackgroundColor(Color.BLUE);
-                            databaseOperator.UpdateNoteColor(((Note) mList.get(position)).getNoteID(), Color.BLUE);
-                            ((Note) mList.get(position)).setColor(Color.BLUE);
+                            holder.ColorImage.setImageDrawable(ColorImages[1]);
+                            databaseOperator.UpdateNoteColor(((Note) mList.get(position)).getNoteID(), 1);
+                            ((Note) mList.get(position)).setColor(1);
+                        } else if (color[colorPosition].equals("Red")) {
+                            holder.ColorImage.setImageDrawable(ColorImages[2]);
+                            databaseOperator.UpdateNoteColor(((Note) mList.get(position)).getNoteID(), 2);
+                            ((Note) mList.get(position)).setColor(2);
                         } else if (color[colorPosition].equals("Orange")) {
-                            holder.itemView.setBackgroundColor(Color.YELLOW);
-                            databaseOperator.UpdateNoteColor(((Note) mList.get(position)).getNoteID(), Color.YELLOW);
-                            ((Note) mList.get(position)).setColor(Color.YELLOW);
+                            holder.ColorImage.setImageDrawable(ColorImages[3]);
+                            databaseOperator.UpdateNoteColor(((Note) mList.get(position)).getNoteID(), 3);
+                            ((Note) mList.get(position)).setColor(3);
+                        } else if (color[colorPosition].equals("Green")) {
+                            holder.ColorImage.setImageDrawable(ColorImages[4]);
+                            databaseOperator.UpdateNoteColor(((Note) mList.get(position)).getNoteID(), 4);
+                            ((Note) mList.get(position)).setColor(4);
                         }
                     }
 
@@ -169,23 +197,26 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                 holder.note_content.setFocusableInTouchMode(false);
                 holder.note_content.setCursorVisible(false);
                 holder.edit.setOnClickListener(new View.OnClickListener() {
+
+                    boolean edit_down = true;
                     @Override
                     public void onClick(View v) {
-                        if (holder.edit.getText().toString().equals("Edit")) {
-                            holder.edit.setText("Done");
+                        if (edit_down == true) {
+                            holder.edit.setBackgroundResource(R.drawable.done);
                             holder.note_content.setFocusable(true);
                             holder.note_content.setFocusableInTouchMode(true);
                             holder.note_content.setCursorVisible(true);
-                        } else if (holder.edit.getText().toString().equals("Done")) {
-//                            Log.d("id and word", ((Note) mList.get(position)).getNoteID() + holder.note_content.getText().toString());
+                            edit_down = false;
+                        } else if (edit_down == false) {
                             databaseOperator = new DatabaseOperator(mContext);
                             databaseOperator.EditWord(((Note) mList.get(position)).getNoteID(), holder.note_content.getText().toString());
                             ((Note) mList.get(position)).setWords(holder.note_content.getText().toString());
-                            holder.edit.setText("Edit");
+                            holder.edit.setBackgroundResource(R.drawable.edit);
                             holder.note_content.setFocusable(false);
                             holder.note_content.setFocusableInTouchMode(false);
                             holder.note_content.isCursorVisible();
                             holder.note_content.setCursorVisible(false);
+                            edit_down = true;
                         }
                     }
                 });
@@ -205,7 +236,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                 holder.record_content.setText("Record Time:" + mList.get(position).getTimestamp());
                 holder.record_time.setText(((Voice) mList.get(position)).getTimestamp());
 
-                holder.record_time.setOnClickListener(new View.OnClickListener() {
+                holder.play_record.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Record record = new Record();
@@ -216,15 +247,26 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                 });
 
                 //改变颜色的初始内容
-                holder.itemView.setBackgroundColor((mList.get(position)).getColor());
-                if ((mList.get(position)).getColor()==Color.WHITE)
+                if ((mList.get(position)).getColor()==0) {
                     holder.spinner.setSelection(0);
-                else if (( mList.get(position)).getColor()==Color.RED)
-                    holder.spinner.setSelection(2);
-                else if (( mList.get(position)).getColor()==Color.BLUE)
+                    holder.color_voice.setImageDrawable(ColorImages[0]);
+                }
+                else if (( mList.get(position)).getColor()==1) {
                     holder.spinner.setSelection(1);
-                else if (( mList.get(position)).getColor()==Color.YELLOW)
+                    holder.color_voice.setImageDrawable(ColorImages[1]);
+                }
+                else if (( mList.get(position)).getColor()==2) {
+                    holder.spinner.setSelection(2);
+                    holder.color_voice.setImageDrawable(ColorImages[2]);
+                }
+                else if (( mList.get(position)).getColor()==3) {
                     holder.spinner.setSelection(3);
+                    holder.color_voice.setImageDrawable(ColorImages[3]);
+                }
+                else if (( mList.get(position)).getColor()==4) {
+                    holder.spinner.setSelection(4);
+                    holder.color_voice.setImageDrawable(ColorImages[4]);
+                }
 
                 // record颜色选择器
                 holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -232,23 +274,26 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                     public void onItemSelected(AdapterView<?> parent, View view, int colorPosition, long id) {
                         String[] color = view.getResources().getStringArray(R.array.note_color);
                         databaseOperator = new DatabaseOperator(mContext);
-//                Toast.makeText(mContext, color[position], Toast.LENGTH_LONG).show();
-                        if (color[colorPosition].equals("Red")) {
-                            holder.itemView.setBackgroundColor(Color.RED);
-                            databaseOperator.UpdateVoiceColor(((Voice) mList.get(position)).getVoiceID(), Color.RED);
-                            ((Voice) mList.get(position)).setColor(Color.RED);
-                        } else if (color[colorPosition].equals("White")) {
-                            holder.itemView.setBackgroundColor(Color.WHITE);
-                            databaseOperator.UpdateVoiceColor(((Voice) mList.get(position)).getVoiceID(), Color.WHITE);
-                            ((Voice) mList.get(position)).setColor(Color.WHITE);
+                        if (color[colorPosition].equals("White")) {
+                            holder.color_voice.setImageDrawable(ColorImages[0]);
+                            databaseOperator.UpdateVoiceColor(((Voice) mList.get(position)).getVoiceID(), 0);
+                            ((Voice) mList.get(position)).setColor(0);;
                         } else if (color[colorPosition].equals("Blue")) {
-                            holder.itemView.setBackgroundColor(Color.BLUE);
-                            databaseOperator.UpdateVoiceColor(((Voice) mList.get(position)).getVoiceID(), Color.BLUE);
-                            ((Voice) mList.get(position)).setColor(Color.BLUE);
+                            holder.color_voice.setImageDrawable(ColorImages[1]);
+                            databaseOperator.UpdateVoiceColor(((Voice) mList.get(position)).getVoiceID(), 1);
+                            ((Voice) mList.get(position)).setColor(1);
+                        } else if (color[colorPosition].equals("Red")) {
+                            holder.color_voice.setImageDrawable(ColorImages[2]);
+                            databaseOperator.UpdateVoiceColor(((Voice) mList.get(position)).getVoiceID(), 2);
+                            ((Voice) mList.get(position)).setColor(2);
                         } else if (color[colorPosition].equals("Orange")) {
-                            holder.itemView.setBackgroundColor(Color.YELLOW);
-                            databaseOperator.UpdateVoiceColor(((Voice) mList.get(position)).getVoiceID(), Color.YELLOW);
-                            ((Voice) mList.get(position)).setColor(Color.YELLOW);
+                            holder.color_voice.setImageDrawable(ColorImages[3]);
+                            databaseOperator.UpdateVoiceColor(((Voice) mList.get(position)).getVoiceID(), 3);
+                            ((Voice) mList.get(position)).setColor(3);
+                        } else if (color[colorPosition].equals("Green")) {
+                            holder.color_voice.setImageDrawable(ColorImages[4]);
+                            databaseOperator.UpdateVoiceColor(((Voice) mList.get(position)).getVoiceID(), 4);
+                            ((Voice) mList.get(position)).setColor(4);
                         }
                     }
 

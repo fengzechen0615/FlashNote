@@ -68,7 +68,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -347,7 +346,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                 pref = getSharedPreferences("info", MODE_PRIVATE);
                 int userid = pref.getInt("userid", 0);
                 // 插入priority
-                Note newnote = new Note(userid, note, Color.WHITE, time.toString(), list.size(), 0);
+                Note newnote = new Note(userid, note, 0, time.toString(), list.size(), 0);
                 int i = dbo.InsertNote(newnote);
                 Log.d("i", String.valueOf(newnote.getDataType()));
                 newnote.setNoteID(i);
@@ -380,7 +379,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                 pref = getSharedPreferences("info", MODE_PRIVATE);
                 int userid = pref.getInt("userid",0);
                 // 插入priority list.size
-                Voice voice = new Voice(userid, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), Color.CYAN, time_stamp, list.size(), 1);
+                Voice voice = new Voice(userid, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), 0, time_stamp, list.size(), 1);
                 list.add(voice);
                 dbo = new DatabaseOperator(MainActivity.this);
                 dbo.InsertVoice(voice);
