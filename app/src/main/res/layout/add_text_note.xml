@@ -1,28 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginRight="50dp"
-    android:layout_marginLeft="50dp" >
+    android:layout_height="wrap_content" >
 
-    <LinearLayout
-        android:id="@+id/text_field"
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/text"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical">
+        android:layout_weight="7"/>
 
-        <EditText
-            android:id="@+id/text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <ImageButton
+        android:id="@+id/create"
+        android:layout_width="0dp"
+        android:background="@drawable/edit"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:adjustViewBounds="true" />
 
-        <Button
-            android:id="@+id/create"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/change"
-            android:text="Create" />
-
-    </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

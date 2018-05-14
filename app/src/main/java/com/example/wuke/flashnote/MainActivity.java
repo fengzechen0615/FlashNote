@@ -31,6 +31,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -234,8 +235,9 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         View view = View.inflate(this, R.layout.add_text_note, null);
         dialog.setView(view, 0, 0, 0, 0);
         dialogWindow.setGravity(Gravity.CENTER | Gravity.BOTTOM);
+        dialog.getWindow().setDimAmount(0);
 
-        final Button create = (Button) view.findViewById(R.id.create);
+        final ImageButton create = (ImageButton) view.findViewById(R.id.create);
         mResultText = ((EditText) view.findViewById(R.id.text));
 
         create.setOnClickListener(new View.OnClickListener() {
@@ -259,8 +261,9 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         View view = View.inflate(this, R.layout.add_voice_note, null);
         dialog.setView(view, 0, 0, 0, 0);
         dialogWindow.setGravity(Gravity.CENTER | Gravity.BOTTOM);
+        dialog.getWindow().setDimAmount(0);
 
-        final Button speak = (Button) view.findViewById(R.id.speak);
+        final ImageButton speak = (ImageButton) view.findViewById(R.id.speak);
         mResultVoice = ((EditText) view.findViewById(R.id.voice));
 
         mResultVoice.setFocusable(false);
