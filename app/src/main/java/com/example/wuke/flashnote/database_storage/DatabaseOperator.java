@@ -65,13 +65,23 @@ public class DatabaseOperator {
         return true;
     }
 
-    public boolean EditColor(int noteId, int color)
+    public boolean UpdateNoteColor(int noteId, int color)
     {
         ContentValues cValue = new ContentValues();
         SQLiteDatabase wdb = WriteDatabase;
         cValue.put(Initial.note_color,color);
         String sql = "Update "+Initial.table_note+" set "+Initial.note_color+"= "+
                 color+" where "+Initial.note_id+"="+noteId;
+        wdb.execSQL(sql);
+        return true;
+    }
+
+    public boolean UpdateVoiceColor(int voiceid, int color) {
+        ContentValues cValue = new ContentValues();
+        SQLiteDatabase wdb = WriteDatabase;
+        cValue.put(Initial.voice_color,color);
+        String sql = "Update "+Initial.table_voice+" set "+Initial.voice_color+"= "+
+                color+" where "+Initial.voice_id+"="+voiceid;
         wdb.execSQL(sql);
         return true;
     }
@@ -166,19 +176,6 @@ public class DatabaseOperator {
         return (int)FID;
     }
 
-
-
-    public boolean updatePriority(int id,int Priority)
-    {
-        ContentValues cValue = new ContentValues();
-        SQLiteDatabase wdb=WriteDatabase;
-        cValue.put(Initial.note_priority,Priority);
-
-        wdb.update(Initial.table_user,cValue,Initial.note_id+"=?",
-                new String[]{String.valueOf(id)});
-        wdb.close();
-        return true;
-    }
 
     public boolean deleteNote(int id){
         SQLiteDatabase wdb=WriteDatabase;

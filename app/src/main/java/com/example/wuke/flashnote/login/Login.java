@@ -1,6 +1,7 @@
 package com.example.wuke.flashnote.login;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -136,19 +137,18 @@ public class Login extends AppCompatActivity {
                 String a = account.getText().toString();
                 String p = password.getText().toString();
                 int id = s.indexOf("resCode=201 Login in succeeduserID=");
-                String userid = s.substring(id);
+                String userid = s.substring(id+35);
                 l.save(a, p);
                 Log.e("post1", a + " " + p);
                 Timestamp nowTime = new Timestamp(System.currentTimeMillis());//Login Time
                 SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String time = form.format(nowTime);
-                Bundle bundle = new Bundle();
-                bundle.putString("time", time);
-                bundle.putString("username", a);
-                Log.e("post2", time + " " + userid);
-                // 这里我改了下一个页面 可不可以 不用intent传值？
+                SharedPreferences pref=getSharedPreferences("info",MODE_PRIVATE);
+                SharedPreferences.Editor editor=pref.edit();
+                editor.putString("username",a);
+                editor.putInt("userid",Integer.parseInt(userid));
+
                 Intent intent = new Intent(Login.this, Setting.class);
-                intent.putExtra("Bundle", bundle);
                 startActivity(intent);
                 finish();
             } else {

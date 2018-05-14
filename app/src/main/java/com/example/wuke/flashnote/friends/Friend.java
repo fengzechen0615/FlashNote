@@ -12,7 +12,6 @@ import com.example.wuke.flashnote.R;
 import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Friends;
 import com.example.wuke.flashnote.recyclerview.RecycleItemTouchHelper;
-import com.example.wuke.flashnote.recyclerview.SaveObjectTool;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,14 +34,6 @@ public class Friend extends AppCompatActivity {
     }
 
     private void init_List() {
-        try {
-            mList = (List<Friends>) SaveObjectTool.readObject("dataFriend");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            Log.i(TAG, "error: "+e.toString());
-            e.printStackTrace();
-        }
         if(mList == null){
             mList = new ArrayList<Friends>();
             // 测试数据

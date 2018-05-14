@@ -20,7 +20,7 @@ public class StringRecognizer {
 	private static final String[] TENS = {"twenty", "thirty", "forty", "fifty", "sixty"};
 	private static final String[] TEENS = {"ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
 	//create a new hashmap
-	final Map<String, String> map = new HashMap<>();
+	final Map<String, String> map = new HashMap<String, String>();
 	
 	public StringRecognizer() {
 		// TODO Auto-generated constructor stub
@@ -35,80 +35,53 @@ public class StringRecognizer {
 		
 		//
 		
-		command = command.replaceAll("，","");
+		command = command.replaceAll("��","");
 		command = command.replaceAll(",","");
 		
+		this.starttime = 0;
 		//
 		Calendar calendar = Calendar.getInstance();
 		long currenttime = calendar.getTime().getTime();
-		currenttime = ((currenttime / 86400000) * 86400000);
-		this.starttime += currenttime;
-		System.out.println(this.starttime);
+		currenttime = (long)(Math.floor(currenttime / 86400000) * 86400000);
+		this.starttime = currenttime;
 		
 		if (isContainChinese(command)) {
 			String[] temp = command.split("");
-			for(int i = 0;i< temp.length;i++){
-				System.out.println(temp[i]);
-			}
 			this.discription = command;
-			if (command.contains(":")) {
-//				System.out.println("mark");
-				String hour = temp[command.indexOf(":")-1];
-				System.out.println(hour);
-				System.out.println(command.indexOf(":")-1);
-				String min = temp[command.indexOf(":")+1] + temp[command.indexOf(":")+2];
-				System.out.println(min);
-				System.out.println((command.indexOf(":")+1) + "|" + (command.indexOf(":")+2));
-//				System.out.println(TranstoMinute(min) + "mark1");
-				this.starttime += TranstoMinute(min);
-//				System.out.println(this.starttime + "mark1");
-//				System.out.println(TranstoHour(hour) + "mark2");
-				this.starttime += TranstoHour(hour);
-//				System.out.println(this.starttime + "mark2");
-
-				if (command.contains("明天")) {
-					this.starttime += 86400000;
-					System.out.println(this.starttime + "mark3");
-				}
-
-				if (command.contains("下午")) {
-					this.starttime += 43200000;
-					System.out.println(this.starttime + "mark4");
-				}
-
-			}else{
-				if (command.contains("不要闹钟") || command.contains("不要提醒")) {
-					this.alarm = false;
-				}
-
-				if (command.contains("见面")) {
-					String title = "和";
-					title = title + temp[command.indexOf("见面")-2] + temp[command.indexOf("见面")-1] + "见面";
-					this.title = title;
-				}else{
-					this.title = "日程事件";
-				}
-
-				if (command.contains("明天")) {
-					this.starttime += 86400000;
-				}
-
-				if (command.contains("上午")) {
-
-					String aimtime = temp[command.indexOf("上午") + 2];
-					this.starttime += TranstoHour(aimtime);
-
-				}else if (command.contains("下午")) {
-					String aimtime = temp[command.indexOf("下午") + 2];
-					this.starttime += TranstoHour(aimtime);
-					this.starttime += 43200000;
-				}
-
-				if (command.contains("点") && temp[command.indexOf("点")+1] == "半") {
-					this.starttime += 1800000;
-				}
+			
+			if (command.contains("不要闹钟") || command.contains("不要提醒")) {
+				this.alarm = false;
 			}
-
+			
+			if (command.contains("见面")) {
+				String title = "和";
+				title = title + temp[command.indexOf("见面")-1] + temp[command.indexOf("见面")] + "见面";
+				this.title = title;
+			}else{
+				this.title = "日程事件";
+			}
+			
+			if (command.contains("明天")) {
+				this.starttime += 86400000;
+			}
+			
+			if (command.contains("上午")) {
+				
+				String aimtime = temp[command.indexOf("上午") + 3];
+				this.starttime += TranstoHour(aimtime);
+				
+			}else if (command.contains("下午")) {
+				String aimtime = temp[command.indexOf("下午") + 3];
+				this.starttime += TranstoHour(aimtime);
+				this.starttime += 43200000;
+			}
+			
+			if (command.contains("点") && temp[command.indexOf("点")+2].equals("半")) {
+				this.starttime += 1800000;
+			}else if (command.contains(":")) {
+				String min = temp[command.indexOf(":")+2] + temp[command.indexOf(":")+3];
+				this.starttime += TranstoMinute(min);
+			}
 		}else{
 			//the english version
 			DictionaryLoader();
@@ -230,7 +203,6 @@ public class StringRecognizer {
 		return this.title;
 	}
 	
-	
 	public String getLocation(){
 		return this.location;
 	}
@@ -266,110 +238,32 @@ public class StringRecognizer {
 		
 		long time = 0;
 		
-		switch (t) {
-		// 1
-		case "1":
-			return (time+(3600000*1));
-		case "һ":
-			return (time+(3600000*1));
-		case "one":
-			return (time+(3600000*1));
-		case "One":
-			return (time+(3600000*1));
-			
-		//2
-		case "2":
-			return (time+(3600000*2));
-		case "两":
-			return (time+(3600000*2));
-		case "two":
-			return (time+(3600000*2));
-		case "Two":
-			return (time+(3600000*2));
-			
-		//3
-		case "3":
-			return (time+(3600000*3));
-		case "three":
-			return (time+(3600000*3));
-		case "Three":
-			return (time+(3600000*3));
+		if (t.equals("一")) {
+			time = 3600000;
+		}
 		
-		//4
-		case "4":
-			return (time+(3600000*4));
-		case "four":
-			return (time+(3600000*4));
-		case "Four":
-			return (time+(3600000*4));
-			
-		//5
-		case "5":
-			return (time+(3600000*5));
-		case "five":
-			return (time+(3600000*5));
-		case "Five":
-			return (time+(3600000*5));
-			
-		//6
-		case "6":
-			return (time+(3600000*6));
-		case "six":
-			return (time+(3600000*6));
-		case "Six":
-			return (time+(3600000*6));
-			
-		//7
-		case "7":
-			return (time+(3600000*7));
-		case "seven":
-			return (time+(3600000*7));
-		case "Seven":
-			return (time+(3600000*7));
-			
-		//8
-		case "8":
-			return (time+(3600000*8));
-		case "eight":
-			return (time+(3600000*8));
-		case "Eight":
-			return (time+(3600000*8));
+		else if (t.equals("两")) {
+			time = 7200000;
+		}
 		
-		//9
-		case "9":
-			return (time+(3600000*9));
-		case "nine":
-			return (time+(3600000*9));
-		case "Nine":
-			return (time+(3600000*9));
-			
-		//10
-		case "10":
-			return (time+(3600000*10));
-		case "ten":
-			return (time+(3600000*10));
-		case "Ten":
-			return (time+(3600000*10));
+		else{
+			time = TranstoInt(t) * 3600000;
+		}
 		
-		//11
-		case "11":
-			return (time+(3600000*11));
-		case "eleven":
-			return (time+(3600000*11));
-		case "Eleven":
-			return (time+(3600000*11));
-			
-		//12
-		case "12":
-			return (time+(3600000*12));
-		case "twelve":
-			return (time+(3600000*12));
-		case "Twelve":
-			return (time+(3600000*12));
-			
-		default:
+		return time;
+		
+	}
+	
+	private static int TranstoInt(String t) {
+		
+		try {
+			int v = Integer.parseInt(t);
+			return v;
+		} catch (Exception e) {
+			// TODO: handle exception
 			return 0;
 		}
+		
 	}
 	
 	private static long TranstoMinute(String t) {

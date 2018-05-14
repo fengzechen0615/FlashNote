@@ -53,6 +53,7 @@ public class Uploading {
 
     public void upsharednote(String userid, String noteid){
         String s = sharenote + "?ID=" + userid + "&sharednote=" + noteid;
+        Log.w("a",s);
         new Uploading.MyAsyncTask().execute(s);
     }
 
@@ -132,7 +133,7 @@ public class Uploading {
             voice = a.get(i);
 
             String userid = Integer.toString(voice.getUserID());
-            String voiceid = Integer.toString(voice.getShared_noteID());
+            String voiceid = Integer.toString(voice.getShared_voiceID());
 
             upfriend(userid,voiceid);  //upload one piece
             i++;
@@ -182,9 +183,10 @@ public class Uploading {
         }
         protected void onPostExecute(String s){
             if(s.contains("resCode=100")){
-
+                Log.w("a",s);
             }
             else{
+                Log.w("a",s);
             }
         }
     }

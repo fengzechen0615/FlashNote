@@ -48,7 +48,6 @@ import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Note;
 import com.example.wuke.flashnote.database_storage.Sync;
 import com.example.wuke.flashnote.login.Locallogin;
-import com.example.wuke.flashnote.recyclerview.SaveObjectTool;
 import com.example.wuke.flashnote.setting.Setting;
 import com.example.wuke.flashnote.recyclerview.NoteAdapter;
 import com.example.wuke.flashnote.util.JsonParser;
@@ -93,6 +92,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
     private EditText mResultVoice;
     private Toast mToast;
     private SharedPreferences mSharedPreferences;
+    private SharedPreferences pref;
     // 引擎类型
     private String mEngineType = SpeechConstant.TYPE_CLOUD;
     private int dt=-1;
@@ -108,7 +108,6 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
     private List list;
 
     private String time_record;
-
     private String time_stamp;
 
     private int voice = 0;
@@ -132,19 +131,11 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
         mToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 
-        if(time != null && username != null) {
-            Intent intent = getIntent();
-            Bundle bundle = intent.getBundleExtra("Bundle");
-            time = bundle.getString("time");
-            username = bundle.getString("username");
-        }
-        else
-        {
-            Timestamp nowTime = new Timestamp(System.currentTimeMillis());//Login Time
-            SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            time=form.format(nowTime);
-            username="administrator";
-        }
+        Timestamp timestamp=new Timestamp(System.currentTimeMillis());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        time = formatter.format(timestamp);
+        Log.e("gtime1",time);
+
         // 初始化列表
         init_List();
         // 初始化布局
@@ -152,14 +143,6 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
     }
 
     private void init_List() {
-        try {
-            list = (List<Storage>) SaveObjectTool.readObject("dataset");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            Log.i(TAG, "error: "+e.toString());
-            e.printStackTrace();
-        }
         if(list == null){
             list = new ArrayList<Storage>();
             dbo = new DatabaseOperator(this);
@@ -354,7 +337,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                             i.setClass(MainActivity.this,TaoBaoView.class);
                             startActivity(i);
                         }else{
-                            datatransformer.Datatransform(note);
+                            datatransformer.Datatransform(MainActivity.this,note);
                         }
 
                         DatabaseOperator dbo = new DatabaseOperator(MainActivity.this);
@@ -364,19 +347,16 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                             SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                             SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm");
                             String time = form.format(timestamp);
-                            Note newnote =new Note(1, note, Color.CYAN, time.toString(), 0, 0);
+                            pref = getSharedPreferences("info",MODE_PRIVATE);
+                            int userid=pref.getInt("userid",0);
+                            // 插入priority
+                            Note newnote =new Note(userid, note, Color.WHITE, time.toString(), list.size(), 0);
                             int i = dbo.InsertNote(newnote);
                             Log.d("i", String.valueOf(newnote.getDataType()));
                             newnote.setNoteID(i);
                             list.add(newnote);
                             mAdapter.notifyItemInserted(list.size() - 1);
                             mRecyclerView.scrollToPosition(list.size() - 1);
-                            try {
-                                SaveObjectTool.writeObject(list,"dataset");
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
                         }
 
                     }
@@ -397,26 +377,24 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Datatransformer datatransformer = new Datatransformer();
-
                         if (note.contains("淘宝") && note.contains("搜索")){
                             Intent i = new Intent();
                             i.putExtra("path", Taobao.ObjecttoSearch(note));
                             i.setClass(MainActivity.this,TaoBaoView.class);
                             startActivity(i);
                         } else {
-//                            datatransformer.Datatransform(note);
-                            Voice voice = new Voice(1,new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), Color.CYAN, time_stamp, 0, 1);
+                            System.out.println(note);
+                            datatransformer.Datatransform(MainActivity.this,note);
+                            pref=getSharedPreferences("info",MODE_PRIVATE);
+                            int userid=pref.getInt("userid",0);
+                            // 插入priority list.size
+                            Voice voice = new Voice(userid, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), Color.CYAN, time_stamp, list.size(), 1);
                             list.add(voice);
                             dbo = new DatabaseOperator(MainActivity.this);
                             dbo.InsertVoice(voice);
                             Log.d("path", new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath());
                             mAdapter.notifyItemInserted(list.size() - 1);
                             mRecyclerView.scrollToPosition(list.size() - 1);
-                            try {
-                                SaveObjectTool.writeObject(list,"dataset");
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
                         }
                     }
                 })
@@ -657,16 +635,21 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
         } else if (item.getItemId() == R.id.update) {
             if (time!=null) {
-                HashMap map = Sync.CompareTimestamp(time, list);
+                pref=getSharedPreferences("info",MODE_PRIVATE);
+                String newtime=pref.getString("time","0");
+                Log.e("gtime2",newtime);
+                HashMap map = Sync.CompareTimestamp(newtime, list);
                 ArrayList before = (ArrayList<Note>) map.get("Before");//verify
                 ArrayList After = (ArrayList<Note>) map.get("After");//new content,upload to server
                 ArrayList Delete= (ArrayList) mAdapter.getDelete_List();
                 Uploading uploading=new Uploading();
                 Deleting d=new Deleting();
-                //uploading.uploadnote(After);
-                //d.deletenote(Delete);
+                uploading.uploadnote(After);
+                d.deletenote(Delete);
                 final Downloading dl=new Downloading();
-                dl.downnote(username);
+
+                int userid=pref.getInt("userid",0);
+                dl.downnote(String.valueOf(userid));
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -679,6 +662,11 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                         }
                     }
                 },1000);
+                Timestamp timestamp=new Timestamp(System.currentTimeMillis());
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String retime = formatter.format(timestamp);
+                pref.edit().putString("time",retime);
+                Log.e("gtime3",retime);
             }
 
             else

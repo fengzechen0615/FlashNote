@@ -12,7 +12,7 @@ public class Sharedvoice {
         return userID;
     }
 
-    public int getShared_noteID() {
+    public int getShared_voiceID() {
         return shared_voiceID;
     }
 }

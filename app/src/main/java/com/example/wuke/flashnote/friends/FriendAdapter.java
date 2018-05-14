@@ -5,14 +5,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.TextView;
 
 import com.example.wuke.flashnote.R;
 import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Friends;
 import com.example.wuke.flashnote.recyclerview.ItemTouchHelperAdapter;
-import com.example.wuke.flashnote.recyclerview.SaveObjectTool;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -58,11 +55,6 @@ public class FriendAdapter extends RecyclerView.Adapter implements ItemTouchHelp
         if (fromPosition < mList.size() && toPosition < mList.size()) {
             //交换数据位置
             Collections.swap(mList, fromPosition, toPosition);
-            try {
-                SaveObjectTool.writeObject(mList,"dataFriend");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
             //刷新位置交换
             notifyItemMoved(fromPosition, toPosition);
         }
@@ -81,12 +73,6 @@ public class FriendAdapter extends RecyclerView.Adapter implements ItemTouchHelp
 
         mList.remove(position);
 
-        try {
-            SaveObjectTool.writeObject(mList, "dataFriend");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         // 刷新数据
         notifyItemRemoved(position);
     }
@@ -101,5 +87,10 @@ public class FriendAdapter extends RecyclerView.Adapter implements ItemTouchHelp
     public void onItemClear(RecyclerView.ViewHolder viewHolder) {
         viewHolder.itemView.setScaleX(1.0f);
         viewHolder.itemView.setScaleY(1.0f);
+    }
+
+    @Override
+    public void onUpdate() {
+
     }
 }

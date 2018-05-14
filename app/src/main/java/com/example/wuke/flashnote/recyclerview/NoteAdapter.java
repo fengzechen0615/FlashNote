@@ -20,6 +20,7 @@ import com.example.wuke.flashnote.database_storage.Voice;
 import com.example.wuke.flashnote.download_upload.Uploading;
 import com.example.wuke.flashnote.record.Record;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -88,6 +89,8 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                             holder.note_content.setEllipsize(null);
                             holder.note_content.setSingleLine(flag);
                             holder.function.setVisibility(View.VISIBLE);
+                            Log.e("color",""+mList.get(position).getColor());
+
                         } else {
                             flag = true;
                             holder.note_content.setEllipsize(TextUtils.TruncateAt.END);
@@ -104,7 +107,9 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                         Log.d("share", "click share");
                         Uploading uploading=new Uploading();
                         if (mList.get(position) instanceof Note){
-                            uploading.upsharednote(String.valueOf(((Note) mList.get(position)).getUserID()),String.valueOf(((Note) mList.get(position)).getNoteID()));
+                            uploading.upsharednote(String.valueOf(2),String.valueOf(1));
+                            //uploading.upsharednote(String.valueOf(((Note) mList.get(position)).getUserID()),String.valueOf(((Note) mList.get(position)).getNoteID()));
+                            Log.e("share",((Note) mList.get(position)).getUserID()+" "+((Note) mList.get(position)).getNoteID());
                         }
                         else {
                             uploading.upsharevoice(String.valueOf(((Voice) mList.get(position)).getUserID()),String.valueOf(((Voice) mList.get(position)).getVoiceID()));
@@ -113,28 +118,41 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                         Toast.makeText(mContext, "click" + position, Toast.LENGTH_SHORT).show();
                     }
                 });
+                //改变颜色的初始内容
+                holder.itemView.setBackgroundColor((mList.get(position)).getColor());
+                if ((mList.get(position)).getColor()==Color.WHITE)
+                    holder.spinner.setSelection(0);
+                else if (( mList.get(position)).getColor()==Color.RED)
+                    holder.spinner.setSelection(2);
+                else if (( mList.get(position)).getColor()==Color.BLUE)
+                    holder.spinner.setSelection(1);
+                else if (( mList.get(position)).getColor()==Color.YELLOW)
+                    holder.spinner.setSelection(3);
 
                 // note颜色选择器
                 holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    public void onItemSelected(AdapterView<?> parent, View view, int colorPosition, long id) {
                         String[] color = view.getResources().getStringArray(R.array.note_color);
                         databaseOperator = new DatabaseOperator(mContext);
 //                Toast.makeText(mContext, color[position], Toast.LENGTH_LONG).show();
-                        if (color[position].equals("Red")) {
+                        if (color[colorPosition].equals("Red")) {
                             holder.itemView.setBackgroundColor(Color.RED);
-//                            databaseOperator.EditColor(((Note) mList.get(position)).getNoteID(), Color.RED);
-//                            ((Note) mList.get(position)).setColor(Color.RED);
+                            databaseOperator.UpdateNoteColor(((Note) mList.get(position)).getNoteID(), Color.RED);
+                            ((Note) mList.get(position)).setColor(Color.RED);
 //                            update_file();
-                        } else if (color[position].equals("White")) {
+                        } else if (color[colorPosition].equals("White")) {
                             holder.itemView.setBackgroundColor(Color.WHITE);
-//                            databaseOperator.EditColor(((Note) mList.get(position)).getNoteID(), Color.WHITE);
-                        } else if (color[position].equals("Blue")) {
+                            databaseOperator.UpdateNoteColor(((Note) mList.get(position)).getNoteID(), Color.WHITE);
+                            ((Note) mList.get(position)).setColor(Color.WHITE);
+                        } else if (color[colorPosition].equals("Blue")) {
                             holder.itemView.setBackgroundColor(Color.BLUE);
-//                            databaseOperator.EditColor(((Note) mList.get(position)).getNoteID(), Color.BLUE);
-                        } else if (color[position].equals("Orange")) {
+                            databaseOperator.UpdateNoteColor(((Note) mList.get(position)).getNoteID(), Color.BLUE);
+                            ((Note) mList.get(position)).setColor(Color.BLUE);
+                        } else if (color[colorPosition].equals("Orange")) {
                             holder.itemView.setBackgroundColor(Color.YELLOW);
-//                            databaseOperator.EditColor(((Note) mList.get(position)).getNoteID(), Color.YELLOW);
+                            databaseOperator.UpdateNoteColor(((Note) mList.get(position)).getNoteID(), Color.YELLOW);
+                            ((Note) mList.get(position)).setColor(Color.YELLOW);
                         }
                     }
 
@@ -162,7 +180,6 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                             databaseOperator = new DatabaseOperator(mContext);
                             databaseOperator.EditWord(((Note) mList.get(position)).getNoteID(), holder.note_content.getText().toString());
                             ((Note) mList.get(position)).setWords(holder.note_content.getText().toString());
-                            update_file();
                             holder.edit.setText("Edit");
                             holder.note_content.setFocusable(false);
                             holder.note_content.setFocusableInTouchMode(false);
@@ -197,27 +214,40 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                     }
                 });
 
+                //改变颜色的初始内容
+                holder.itemView.setBackgroundColor((mList.get(position)).getColor());
+                if ((mList.get(position)).getColor()==Color.WHITE)
+                    holder.spinner.setSelection(0);
+                else if (( mList.get(position)).getColor()==Color.RED)
+                    holder.spinner.setSelection(2);
+                else if (( mList.get(position)).getColor()==Color.BLUE)
+                    holder.spinner.setSelection(1);
+                else if (( mList.get(position)).getColor()==Color.YELLOW)
+                    holder.spinner.setSelection(3);
+
                 // record颜色选择器
                 holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    public void onItemSelected(AdapterView<?> parent, View view, int colorPosition, long id) {
                         String[] color = view.getResources().getStringArray(R.array.note_color);
                         databaseOperator = new DatabaseOperator(mContext);
 //                Toast.makeText(mContext, color[position], Toast.LENGTH_LONG).show();
-                        if (color[position].equals("Red")) {
+                        if (color[colorPosition].equals("Red")) {
                             holder.itemView.setBackgroundColor(Color.RED);
-//                            databaseOperator.EditColor(((Note) mList.get(position)).getNoteID(), Color.RED);
-//                            ((Note) mList.get(position)).setColor(Color.RED);
-//                            update_file();
-                        } else if (color[position].equals("White")) {
+                            databaseOperator.UpdateVoiceColor(((Voice) mList.get(position)).getVoiceID(), Color.RED);
+                            ((Voice) mList.get(position)).setColor(Color.RED);
+                        } else if (color[colorPosition].equals("White")) {
                             holder.itemView.setBackgroundColor(Color.WHITE);
-//                            databaseOperator.EditColor(((Note) mList.get(position)).getNoteID(), Color.WHITE);
-                        } else if (color[position].equals("Blue")) {
+                            databaseOperator.UpdateVoiceColor(((Voice) mList.get(position)).getVoiceID(), Color.WHITE);
+                            ((Voice) mList.get(position)).setColor(Color.WHITE);
+                        } else if (color[colorPosition].equals("Blue")) {
                             holder.itemView.setBackgroundColor(Color.BLUE);
-//                            databaseOperator.EditColor(((Note) mList.get(position)).getNoteID(), Color.BLUE);
-                        } else if (color[position].equals("Orange")) {
+                            databaseOperator.UpdateVoiceColor(((Voice) mList.get(position)).getVoiceID(), Color.BLUE);
+                            ((Voice) mList.get(position)).setColor(Color.BLUE);
+                        } else if (color[colorPosition].equals("Orange")) {
                             holder.itemView.setBackgroundColor(Color.YELLOW);
-//                            databaseOperator.EditColor(((Note) mList.get(position)).getNoteID(), Color.YELLOW);
+                            databaseOperator.UpdateVoiceColor(((Voice) mList.get(position)).getVoiceID(), Color.YELLOW);
+                            ((Voice) mList.get(position)).setColor(Color.YELLOW);
                         }
                     }
 
@@ -236,6 +266,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                         if (flag) {
                             flag = false;
                             holder.function.setVisibility(View.VISIBLE);
+                            Log.e("click",mList.get(position).getPriority()+"");
                         } else {
                             flag = true;
                             holder.function.setVisibility(View.INVISIBLE);
@@ -298,16 +329,16 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
 
     @Override
     public void onItemMove(RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {
+//        DatabaseOperator databaseOperator = new DatabaseOperator(mContext);
         int fromPosition = source.getAdapterPosition();
         int toPosition = target.getAdapterPosition();
         if (fromPosition < mList.size() && toPosition < mList.size()) {
             //交换数据位置
             Collections.swap(mList, fromPosition, toPosition);
-            Log.d("fromPosition", String.valueOf(fromPosition));
-            Log.d("toPosition", String.valueOf(toPosition));
-            update_file();
             //刷新位置交换
             notifyItemMoved(fromPosition, toPosition);
+            Log.d("fromPosition", String.valueOf(fromPosition));
+            Log.d("toPosition", String.valueOf(toPosition));
         }
         //移动过程中移除view的放大效果
         onItemClear(source);
@@ -326,8 +357,46 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
 
             deleteNote = (Note) mList.remove(position); //移除数据
             Delete_List.add(deleteNote);
-            update_file();
-            notifyItemRemoved(position);//刷新数据移除
+            //notifyItemRemoved(position);
+            // remove后更改priority
+            for (int i = position; i < mList.size(); i++) {
+                if (mList.get(i) instanceof Note) {
+                    int id = ((Note) mList.get(i)).getNoteID();
+                    ((Note) mList.get(i)).setPriority(i);
+                    databaseOperator.UpdateNotePriority(id, i);
+                    notifyItemRemoved(i);
+                }
+                else if (mList.get(i) instanceof Voice) {
+                    int id = ((Voice) mList.get(i)).getVoiceID();
+                    ((Voice) mList.get(i)).setPriority(i);
+                    databaseOperator.UpdateVoicePriority(id, i);
+                    notifyItemRemoved(i);
+                }
+            }
+//            notifyItemRemoved(position);//刷新数据移除
+        }
+
+        else if (mList.get(position) instanceof Voice) {
+            File f = new File(((Voice) mList.get(position)).getURL());
+            f.delete();
+            databaseOperator.deleteVoice(((Voice)mList.get(position)).getVoiceID());
+            mList.remove(position); //移除数据
+            //notifyItemRemoved(position);//刷新数据移除
+            for (int i = position; i < mList.size(); i++) {
+                if (mList.get(i) instanceof Note) {
+                    int id = ((Note) mList.get(i)).getNoteID();
+                    ((Note) mList.get(i)).setPriority(i);
+                    databaseOperator.UpdateNotePriority(id, i);
+                    notifyItemRemoved(i);
+                }
+                else if (mList.get(i) instanceof Voice) {
+                    int id = ((Voice) mList.get(i)).getVoiceID();
+                    ((Voice) mList.get(i)).setPriority(i);
+                    databaseOperator.UpdateVoicePriority(id, i);
+                    notifyItemRemoved(i);
+                }
+            }
+            //notifyItemRemoved(position);//刷新数据移除
         }
     }
 
@@ -343,6 +412,27 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
         viewHolder.itemView.setScaleY(1.0f);
     }
 
+    @Override
+    public void onUpdate() {
+//        Log.d("target", target.getAdapterPosition()+"");//
+        DatabaseOperator databaseOperator = new DatabaseOperator(mContext);
+        for(int i = 0; i < mList.size(); i++) {
+            if (mList.get(i) instanceof Note) {
+                int id = ((Note) mList.get(i)).getNoteID();
+                ((Note) mList.get(i)).setPriority(i);
+                databaseOperator.UpdateNotePriority(id, i);
+                notifyDataSetChanged();
+            }
+            else if (mList.get(i) instanceof Voice) {
+                int id = ((Voice) mList.get(i)).getVoiceID();
+                ((Voice) mList.get(i)).setPriority(i);
+                databaseOperator.UpdateVoicePriority(id, i);
+                notifyDataSetChanged();
+            }
+        }
+
+    }
+
     public List<Note> getDelete_List()
     {
         return Delete_List;
@@ -351,14 +441,6 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
     public void ClearList()
     {
         Delete_List.clear();
-    }
-
-    public void update_file() {
-        try {
-            SaveObjectTool.writeObject(mList, "dataset");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 }

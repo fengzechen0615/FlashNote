@@ -27,6 +27,7 @@ public class Sync {
         while(iterator.hasNext())
         {
             Note note= (Note) iterator.next();
+            Log.e("gtime4",note.getTimestamp());
             Date d=form.parse(note.getTimestamp(),new ParsePosition(0));
             SimpleDateFormat form1=new SimpleDateFormat("yyyy-MM-dd");
             SimpleDateFormat form2=new SimpleDateFormat("HH:mm:ss");

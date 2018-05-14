@@ -53,15 +53,19 @@ public class RecycleItemTouchHelper extends ItemTouchHelper.Callback {
             // 当滑动或者拖拽view的时候通过接口返回该ViewHolder
             mAdapter.onItemSelect(viewHolder);
         }
+        if (actionState != ItemTouchHelper.ACTION_STATE_DRAG && actionState != ItemTouchHelper.ACTION_STATE_SWIPE) {
+            mAdapter.onUpdate();
+        }
     }
 
     @Override
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         super.clearView(recyclerView, viewHolder);
-        if (!recyclerView.isComputingLayout()) {
-            // 当需要清除之前在onSelectedChanged或者onChildDraw,onChildDrawOver设置的状态或者动画时通过接口返回该ViewHolder
-            mAdapter.onItemClear(viewHolder);
-        }
+//        if (!recyclerView.isComputingLayout()) {
+//            // 当需要清除之前在onSelectedChanged或者onChildDraw,onChildDrawOver设置的状态或者动画时通过接口返回该ViewHolder
+//            mAdapter.onItemClear(viewHolder);
+//        }
+        mAdapter.onItemClear(viewHolder);
     }
 
     @Override
@@ -73,6 +77,7 @@ public class RecycleItemTouchHelper extends ItemTouchHelper.Callback {
             viewHolder.itemView.setAlpha(alpha);
             viewHolder.itemView.setTranslationX(dX);
         }
+
     }
 
 }
