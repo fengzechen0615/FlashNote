@@ -236,14 +236,14 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         dialog.setView(view, 0, 0, 0, 0);
         dialogWindow.setGravity(Gravity.CENTER | Gravity.BOTTOM);
 
-
         final Button create = (Button) view.findViewById(R.id.create);
         mResultText = ((EditText) view.findViewById(R.id.text));
 
         create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertTextDialog(mResultText.getText().toString());
+                createNote(mResultText.getText().toString());
+//                alertTextDialog(mResultText.getText().toString());
                 dialog.dismiss();
             }
         });
@@ -284,7 +284,8 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                         break;
                     case MotionEvent.ACTION_UP:
                         stop_speak();
-                        alertVoiceDialog(mResultVoice.getText().toString());
+                        createVoice(mResultVoice.getText().toString());
+//                        alertVoiceDialog(mResultVoice.getText().toString());
                         dialog.dismiss();
                         recordingContainer.setVisibility(View.INVISIBLE);
                         break;
@@ -322,89 +323,167 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         showTip("停止听写");
     }
 
-    private void alertTextDialog(final String note) {
+    // create note
+    private void createNote(String note) {
+        DatabaseOperator dbo = new DatabaseOperator(MainActivity.this);
+        String content = note;
+        if (!"".equals(content)) {
+            // 触发淘宝条件
+            if (note.contains("淘宝") && note.contains("搜索")) {
+                TaobaoDialog();
+            }
+            // 触发日历条件
+            else if (note.contains("日历") && note.contains("创建")) {
+                CalendarDialog();
+            }
+            else if (note.contains("打开微信")) {
+
+            }
+            else {
+                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm");
+                String time = form.format(timestamp);
+                pref = getSharedPreferences("info", MODE_PRIVATE);
+                int userid = pref.getInt("userid", 0);
+                // 插入priority
+                Note newnote = new Note(userid, note, Color.WHITE, time.toString(), list.size(), 0);
+                int i = dbo.InsertNote(newnote);
+                Log.d("i", String.valueOf(newnote.getDataType()));
+                newnote.setNoteID(i);
+                list.add(newnote);
+                mAdapter.notifyItemInserted(list.size() - 1);
+                mRecyclerView.scrollToPosition(list.size() - 1);
+            }
+        }
+    }
+
+    // create voice
+    private void createVoice(String note) {
+        DatabaseOperator dbo = new DatabaseOperator(MainActivity.this);
+        String content = note;
+        if (!"".equals(content)) {
+            // 触发淘宝条件
+            if (note.contains("淘宝") && note.contains("搜索")) {
+                TaobaoDialog();
+                new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();
+            }
+            // 触发日历条件
+            else if (note.contains("日历") && note.contains("创建")) {
+                CalendarDialog();
+                new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();
+            }
+            else if (note.contains("打开微信")) {
+                new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();
+            }
+            else {
+                pref = getSharedPreferences("info", MODE_PRIVATE);
+                int userid = pref.getInt("userid",0);
+                // 插入priority list.size
+                Voice voice = new Voice(userid, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), Color.CYAN, time_stamp, list.size(), 1);
+                list.add(voice);
+                dbo = new DatabaseOperator(MainActivity.this);
+                dbo.InsertVoice(voice);
+                Log.d("path", new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath());
+                mAdapter.notifyItemInserted(list.size() - 1);
+                mRecyclerView.scrollToPosition(list.size() - 1);
+            }
+        }
+    }
+
+    private void TaobaoDialog() {
+        final EditText editText = new EditText(this);
         new AlertDialog.Builder(MainActivity.this)
-                .setTitle("Create Confirm")
-                .setMessage("Are you confirm to create this?")
-                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                .setTitle("Open Taobao to Search")
+                .setView(editText)
+                .setPositiveButton("Search", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Datatransformer datatransformer = new Datatransformer();
-
-                        if (note.contains("淘宝")){
-                            Intent i = new Intent();
-                            i.putExtra("path", Taobao.ObjecttoSearch(note));
-                            i.setClass(MainActivity.this,TaoBaoView.class);
-                            startActivity(i);
-                        }else{
-                            datatransformer.Datatransform(MainActivity.this,note);
-                        }
-
-                        DatabaseOperator dbo = new DatabaseOperator(MainActivity.this);
-                        String content = note;
-                        if (!"".equals(content)) {
-                            Timestamp timestamp=new Timestamp(System.currentTimeMillis());
-                            SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                            SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm");
-                            String time = form.format(timestamp);
-                            pref = getSharedPreferences("info",MODE_PRIVATE);
-                            int userid=pref.getInt("userid",0);
-                            // 插入priority
-                            Note newnote =new Note(userid, note, Color.WHITE, time.toString(), list.size(), 0);
-                            int i = dbo.InsertNote(newnote);
-                            Log.d("i", String.valueOf(newnote.getDataType()));
-                            newnote.setNoteID(i);
-                            list.add(newnote);
-                            mAdapter.notifyItemInserted(list.size() - 1);
-                            mRecyclerView.scrollToPosition(list.size() - 1);
-                        }
-
+                        // input 为搜索的内容
+                        String input = editText.getText().toString();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-//                        mResultText.setText(null);
                     }
                 }).show();
     }
 
-    private void alertVoiceDialog(final String note) {
+    private void CalendarDialog() {
+        final EditText editText = new EditText(this);
         new AlertDialog.Builder(MainActivity.this)
-                .setTitle("Create Confirm")
-                .setMessage("Are you confirm to create this?")
-                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                .setTitle("Open Calendar to Create a event")
+                .setView(editText)
+                .setPositiveButton("Create", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Datatransformer datatransformer = new Datatransformer();
-                        if (note.contains("淘宝") && note.contains("搜索")){
-                            Intent i = new Intent();
-                            i.putExtra("path", Taobao.ObjecttoSearch(note));
-                            i.setClass(MainActivity.this,TaoBaoView.class);
-                            startActivity(i);
-                        } else {
-                            System.out.println(note);
-                            datatransformer.Datatransform(MainActivity.this,note);
-                            pref=getSharedPreferences("info",MODE_PRIVATE);
-                            int userid=pref.getInt("userid",0);
-                            // 插入priority list.size
-                            Voice voice = new Voice(userid, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), Color.CYAN, time_stamp, list.size(), 1);
-                            list.add(voice);
-                            dbo = new DatabaseOperator(MainActivity.this);
-                            dbo.InsertVoice(voice);
-                            Log.d("path", new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath());
-                            mAdapter.notifyItemInserted(list.size() - 1);
-                            mRecyclerView.scrollToPosition(list.size() - 1);
-                        }
+                        // input 为创建的内容
+                        String input = editText.getText().toString();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-//                        mResultText.setText(null);
                     }
                 }).show();
     }
+
+    private void WechatDialog() {
+        final EditText editText = new EditText(this);
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Open Wechat to send a message")
+                .setView(editText)
+                .setPositiveButton("Send", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // input 为发送的内容
+                        String input = editText.getText().toString();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).show();
+    }
+
+//    private void alertVoiceDialog(final String note) {
+//        new AlertDialog.Builder(MainActivity.this)
+//                .setTitle("Create Confirm")
+//                .setMessage("Are you confirm to create this?")
+//                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        Datatransformer datatransformer = new Datatransformer();
+//                        if (note.contains("淘宝") && note.contains("搜索")){
+//                            Intent i = new Intent();
+//                            i.putExtra("path", Taobao.ObjecttoSearch(note));
+//                            i.setClass(MainActivity.this,TaoBaoView.class);
+//                            startActivity(i);
+//                        } else {
+//                            System.out.println(note);
+//                            datatransformer.Datatransform(MainActivity.this,note);
+//                            pref = getSharedPreferences("info", MODE_PRIVATE);
+//                            int userid=pref.getInt("userid",0);
+//                            // 插入priority list.size
+//                            Voice voice = new Voice(userid, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), Color.CYAN, time_stamp, list.size(), 1);
+//                            list.add(voice);
+//                            dbo = new DatabaseOperator(MainActivity.this);
+//                            dbo.InsertVoice(voice);
+//                            Log.d("path", new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath());
+//                            mAdapter.notifyItemInserted(list.size() - 1);
+//                            mRecyclerView.scrollToPosition(list.size() - 1);
+//                        }
+//                    }
+//                })
+//                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+////                        mResultText.setText(null);
+//                    }
+//                }).show();
+//    }
 
     /**
      * 初始化监听器。

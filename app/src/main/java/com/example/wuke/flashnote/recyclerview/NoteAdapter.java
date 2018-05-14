@@ -118,6 +118,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                         Toast.makeText(mContext, "click" + position, Toast.LENGTH_SHORT).show();
                     }
                 });
+
                 //改变颜色的初始内容
                 holder.itemView.setBackgroundColor((mList.get(position)).getColor());
                 if ((mList.get(position)).getColor()==Color.WHITE)

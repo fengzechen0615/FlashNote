@@ -61,10 +61,6 @@ public class RecycleItemTouchHelper extends ItemTouchHelper.Callback {
     @Override
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         super.clearView(recyclerView, viewHolder);
-//        if (!recyclerView.isComputingLayout()) {
-//            // 当需要清除之前在onSelectedChanged或者onChildDraw,onChildDrawOver设置的状态或者动画时通过接口返回该ViewHolder
-//            mAdapter.onItemClear(viewHolder);
-//        }
         mAdapter.onItemClear(viewHolder);
     }
 
