@@ -25,7 +25,6 @@ public class ResetPass {
     }
 
     public class MyAsyncTask extends AsyncTask<String, Integer, String> {
-
         Log log;
 
         public MyAsyncTask() {
@@ -43,11 +42,10 @@ public class ResetPass {
             StringBuilder response = new StringBuilder();
 
             try {
-                System.setProperty("https.protocols", "TLSv1.2,TLSv1.1,SSLv3");
                 URL url = new URL(params[0]);
 
                 connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
+                connection.setRequestMethod("POST");
                 connection.setConnectTimeout(100000);
                 connection.setReadTimeout(100000);
 

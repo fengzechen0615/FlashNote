@@ -27,13 +27,13 @@ import java.text.SimpleDateFormat;
 public class Signup {
     private String url = "http://39.106.205.176:8080/artifacts/Signup";
 
-    private void signup(String a, String p,String e) {
-        String s = url + "?account=" + a + "&pass=" + p +"&email=" + e;
+    public void signup(String a, String p,String e) {
+        String s = url + "?account=" + a + "&password=" + p +"&email=" + e;
+        Log.e("result",s);
         new Signup.MyAsyncTask().execute(s);
     }
 
     public class MyAsyncTask extends AsyncTask<String, Integer, String> {
-
         Log log;
 
         public MyAsyncTask() {
@@ -51,11 +51,10 @@ public class Signup {
             StringBuilder response = new StringBuilder();
 
             try {
-                System.setProperty("https.protocols", "TLSv1.2,TLSv1.1,SSLv3");
                 URL url = new URL(params[0]);
 
                 connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
+                connection.setRequestMethod("POST");
                 connection.setConnectTimeout(100000);
                 connection.setReadTimeout(100000);
 
@@ -77,6 +76,7 @@ public class Signup {
 
         protected void onPostExecute(String s) {
             Log.e("result",s);
+
         }
     }
 

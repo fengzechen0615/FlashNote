@@ -33,6 +33,7 @@ public class Login extends AppCompatActivity {
     private EditText password;
     private TextView result;
     private Button login;
+    private Button sign;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,14 @@ public class Login extends AppCompatActivity {
                     access(a, p);
 
                 }
+            }
+        });
+
+        sign = (Button) findViewById(R.id.sign_button);
+        sign.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v){
+                Intent intent = new Intent(Login.this, Register.class);
+                startActivity(intent);
             }
         });
 
