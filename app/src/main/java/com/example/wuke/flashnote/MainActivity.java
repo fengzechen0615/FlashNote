@@ -311,6 +311,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                             recordingHint.setText("Slide up to cancel");
                             recordingHint.setBackgroundColor(Color.TRANSPARENT);
                         }
+                        break;
                     default:
                         break;
                 }
@@ -470,43 +471,6 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                     }
                 }).show();
     }
-
-//    private void alertVoiceDialog(final String note) {
-//        new AlertDialog.Builder(MainActivity.this)
-//                .setTitle("Create Confirm")
-//                .setMessage("Are you confirm to create this?")
-//                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        Datatransformer datatransformer = new Datatransformer();
-//                        if (note.contains("淘宝") && note.contains("搜索")){
-//                            Intent i = new Intent();
-//                            i.putExtra("path", Taobao.ObjecttoSearch(note));
-//                            i.setClass(MainActivity.this,TaoBaoView.class);
-//                            startActivity(i);
-//                        } else {
-//                            System.out.println(note);
-//                            datatransformer.Datatransform(MainActivity.this,note);
-//                            pref = getSharedPreferences("info", MODE_PRIVATE);
-//                            int userid=pref.getInt("userid",0);
-//                            // 插入priority list.size
-//                            Voice voice = new Voice(userid, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), Color.CYAN, time_stamp, list.size(), 1);
-//                            list.add(voice);
-//                            dbo = new DatabaseOperator(MainActivity.this);
-//                            dbo.InsertVoice(voice);
-//                            Log.d("path", new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath());
-//                            mAdapter.notifyItemInserted(list.size() - 1);
-//                            mRecyclerView.scrollToPosition(list.size() - 1);
-//                        }
-//                    }
-//                })
-//                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-////                        mResultText.setText(null);
-//                    }
-//                }).show();
-//    }
 
     /**
      * 初始化监听器。

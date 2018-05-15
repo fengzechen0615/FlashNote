@@ -403,7 +403,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
 
             deleteNote = (Note) mList.remove(position); //移除数据
             Delete_List.add(deleteNote);
-            //notifyItemRemoved(position);
+
             // remove后更改priority
             for (int i = position; i < mList.size(); i++) {
                 if (mList.get(i) instanceof Note) {
@@ -419,7 +419,6 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                     notifyItemRemoved(i);
                 }
             }
-//            notifyItemRemoved(position);//刷新数据移除
         }
 
         else if (mList.get(position) instanceof Voice) {
@@ -427,7 +426,6 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
             f.delete();
             databaseOperator.deleteVoice(((Voice)mList.get(position)).getVoiceID());
             mList.remove(position); //移除数据
-            //notifyItemRemoved(position);//刷新数据移除
             for (int i = position; i < mList.size(); i++) {
                 if (mList.get(i) instanceof Note) {
                     int id = ((Note) mList.get(i)).getNoteID();
@@ -442,7 +440,6 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                     notifyItemRemoved(i);
                 }
             }
-            //notifyItemRemoved(position);//刷新数据移除
         }
     }
 
