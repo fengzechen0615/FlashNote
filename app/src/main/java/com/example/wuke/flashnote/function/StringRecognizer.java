@@ -35,7 +35,7 @@ public class StringRecognizer {
 		
 		//
 		
-		command = command.replaceAll("��","");
+		command = command.replaceAll("，","");
 		command = command.replaceAll(",","");
 		
 		this.starttime = 0;

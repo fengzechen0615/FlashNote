@@ -42,6 +42,7 @@ import com.example.wuke.flashnote.database_storage.Voice;
 import com.example.wuke.flashnote.download_upload.Deleting;
 import com.example.wuke.flashnote.friends.Friend;
 import com.example.wuke.flashnote.function.Datatransformer;
+import com.example.wuke.flashnote.function.StringRecognizer;
 import com.example.wuke.flashnote.function.TaoBaoView;
 import com.example.wuke.flashnote.function.Taobao;
 import com.example.wuke.flashnote.recyclerview.RecycleItemTouchHelper;
@@ -331,15 +332,15 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         String content = note;
         if (!"".equals(content)) {
             // 触发淘宝条件
-            if (note.contains("淘宝") && note.contains("搜索")) {
-                TaobaoDialog();
+            if (note.contains("淘宝")) {
+                if (note.contains("搜索")){TaobaoDialog(note);}
             }
             // 触发日历条件
-            else if (note.contains("日历") && note.contains("创建")) {
-                CalendarDialog();
+            else if (note.contains("日历")) {
+                if (note.contains("创建")||note.contains("新建")||note.contains("Create")||note.contains("create")){CalendarDialog(note);}
             }
             else if (note.contains("打开微信")) {
-
+                WechatDialog(note);
             }
             else {
                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -367,15 +368,18 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         if (!"".equals(content)) {
             // 触发淘宝条件
             if (note.contains("淘宝") && note.contains("搜索")) {
-                TaobaoDialog();
+                TaobaoDialog(note);
                 new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();
             }
             // 触发日历条件
             else if (note.contains("日历") && note.contains("创建")) {
-                CalendarDialog();
-                new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();
+                if (note.contains("创建")||note.contains("新建")||note.contains("Create")||note.contains("create")){
+                    CalendarDialog(note);
+                    new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();
+                }
             }
             else if (note.contains("打开微信")) {
+                WechatDialog(note);
                 new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();
             }
             else {
@@ -393,16 +397,20 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         }
     }
 
-    private void TaobaoDialog() {
+    private void TaobaoDialog(final String note) {
         final EditText editText = new EditText(this);
+        editText.setText(Taobao.Object(note));
         new AlertDialog.Builder(MainActivity.this)
-                .setTitle("Open Taobao to Search")
+                .setTitle("Open Taobao to Search:")
                 .setView(editText)
                 .setPositiveButton("Search", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // input 为搜索的内容
+//                         input 为搜索的内容
                         String input = editText.getText().toString();
+                        Intent intent = new Intent(MainActivity.this,TaoBaoView.class);
+                        intent.putExtra("good",input);
+                        startActivity(intent);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -412,16 +420,20 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                 }).show();
     }
 
-    private void CalendarDialog() {
+    private void CalendarDialog(final String note) {
         final EditText editText = new EditText(this);
+        StringRecognizer recognizer = new StringRecognizer();
+        recognizer.Recognizer(note);
+        editText.setText(recognizer.getDiscription());
         new AlertDialog.Builder(MainActivity.this)
-                .setTitle("Open Calendar to Create a event")
+                .setTitle("Open Calendar to Create a event:")
                 .setView(editText)
                 .setPositiveButton("Create", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // input 为创建的内容
                         String input = editText.getText().toString();
+                        Datatransformer.Datatransform(MainActivity.this,input);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -431,7 +443,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                 }).show();
     }
 
-    private void WechatDialog() {
+    private void WechatDialog(final String note) {
         final EditText editText = new EditText(this);
         new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Open Wechat to send a message")
@@ -440,7 +452,8 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // input 为发送的内容
-                        String input = editText.getText().toString();
+//                        String input = editText.getText().toString();
+                        Datatransformer.Datatransform(MainActivity.this,note);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

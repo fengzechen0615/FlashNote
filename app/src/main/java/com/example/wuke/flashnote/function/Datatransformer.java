@@ -11,7 +11,7 @@ import java.util.Calendar;
 
 public class Datatransformer{
 
-    public void Datatransform(Context context, String command) {
+    public static void Datatransform(Context context, String command) {
         MessageVector messageVector = new MessageVector();
 //        System.out.println(command);
 //		  messageVector.printvector();

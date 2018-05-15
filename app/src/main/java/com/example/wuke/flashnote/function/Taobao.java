@@ -15,4 +15,12 @@ public class Taobao {
         link = Path + good;
 		return link;
 	}
+
+    public static String Object(String link){
+
+        int temp = link.indexOf("搜索");
+        temp = temp + 2;
+        String good = link.substring(temp);
+        return good;
+    }
 }
