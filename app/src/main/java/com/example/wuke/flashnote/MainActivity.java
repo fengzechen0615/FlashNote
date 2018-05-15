@@ -42,6 +42,7 @@ import com.example.wuke.flashnote.database_storage.Voice;
 import com.example.wuke.flashnote.download_upload.Deleting;
 import com.example.wuke.flashnote.friends.Friend;
 import com.example.wuke.flashnote.function.Datatransformer;
+import com.example.wuke.flashnote.function.StringRecognizer;
 import com.example.wuke.flashnote.function.TaoBaoView;
 import com.example.wuke.flashnote.function.Taobao;
 import com.example.wuke.flashnote.recyclerview.RecycleItemTouchHelper;
@@ -351,13 +352,15 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         if (!"".equals(content)) {
             // 触发淘宝条件
             if (note.contains("淘宝") && note.contains("搜索")) {
-                TaobaoDialog();
+                TaobaoDialog(note);
             }
             // 触发日历条件
             else if (note.contains("日历") && note.contains("创建")) {
-                CalendarDialog();
-            }
-            else if (note.contains("打开微信")) {
+                if (note.contains("创建") || note.contains("新建") || note.contains("Create") || note.contains("create")) {
+                    CalendarDialog(note);
+                }
+            } else if (note.contains("打开微信")) {
+                WechatDialog(note);
             }
             else {
                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -379,37 +382,37 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
     }
 
     // create voice
-    private void createVoice(String note) {
-        DatabaseOperator dbo = new DatabaseOperator(MainActivity.this);
-        String content = note;
-        if (!"".equals(content)) {
-            // 触发淘宝条件
-            if (note.contains("淘宝") && note.contains("搜索")) {
-                TaobaoDialog(note);
-                new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();
-            }
-            // 触发日历条件
-            else if (note.contains("日历") && note.contains("创建")) {
-                if (note.contains("创建")||note.contains("新建")||note.contains("Create")||note.contains("create")){
-                    CalendarDialog(note);
+    private void createVoice(String note,int i) {
+        if(i == 0){
+            DatabaseOperator dbo = new DatabaseOperator(MainActivity.this);
+            String content = note;
+            if (!"".equals(content)) {
+                // 触发淘宝条件
+                if (note.contains("淘宝") && note.contains("搜索")) {
+                    TaobaoDialog(note);
                     new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();
                 }
-            }
-            else if (note.contains("打开微信")) {
-                WechatDialog(note);
-                new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();
-            }
-            else {
-                pref = getSharedPreferences("info", MODE_PRIVATE);
-                int userid = pref.getInt("userid",0);
-                // 插入priority list.size
-                Voice voice = new Voice(userid, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), 0, time_stamp, list.size(), 1);
-                list.add(voice);
-                dbo = new DatabaseOperator(MainActivity.this);
-                dbo.InsertVoice(voice);
-                Log.d("path", new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath());
-                mAdapter.notifyItemInserted(list.size() - 1);
-                mRecyclerView.scrollToPosition(list.size() - 1);
+                // 触发日历条件
+                else if (note.contains("日历") && note.contains("创建")) {
+                    if (note.contains("创建") || note.contains("新建") || note.contains("Create") || note.contains("create")) {
+                        CalendarDialog(note);
+                        new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();
+                    }
+                } else if (note.contains("打开微信")) {
+                    WechatDialog(note);
+                    new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();
+                } else {
+                    pref = getSharedPreferences("info", MODE_PRIVATE);
+                    int userid = pref.getInt("userid", 0);
+                    // 插入priority list.size
+                    Voice voice = new Voice(userid, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), 0, time_stamp, list.size(), 1);
+                    list.add(voice);
+                    dbo = new DatabaseOperator(MainActivity.this);
+                    dbo.InsertVoice(voice);
+                    Log.d("path", new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath());
+                    mAdapter.notifyItemInserted(list.size() - 1);
+                    mRecyclerView.scrollToPosition(list.size() - 1);
+                }
             }
         } else if (i == 1) {
             // nothing 删不掉啊
