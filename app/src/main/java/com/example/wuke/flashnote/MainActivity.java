@@ -254,7 +254,6 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
             @Override
             public void onClick(View v) {
                 createNote(mResultText.getText().toString());
-//                alertTextDialog(mResultText.getText().toString());
                 dialog.dismiss();
             }
         });
@@ -283,6 +282,8 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         recording.setVisibility(View.VISIBLE);
 
         speak.setOnTouchListener(new View.OnTouchListener() {
+            float DownY;
+            float MoveY;
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch(event.getAction()) {
@@ -294,11 +295,28 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                         time_stamp = formatter.format(timestamp);
                         start_speak();
                         UpdateMicStatus();
+                        DownY = event.getY();
+                        Log.d("DownY", String.valueOf(DownY));
                         recordingContainer.setVisibility(View.VISIBLE);
                         break;
                     case MotionEvent.ACTION_UP:
-                        stop_speak();
-                        createVoice(mResultVoice.getText().toString(), 0);
+                        float y = Math.abs(MoveY - DownY);
+                        if (y > 300) {
+                            stop_speak();
+                            Log.d("Delete_record", "you cancel this message");
+                        } else {
+                            Log.d("add_message", "you add this message");
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    stop_speak();
+                                    createVoice(mResultVoice.getText().toString(), 0);
+                                }
+                            }, 1000);
+//                        stop_speak();
+//                        createVoice(mResultVoice.getText().toString(), 0);
+                        }
                         dialog.dismiss();
                         recordingContainer.setVisibility(View.INVISIBLE);
                         recording.setVisibility(View.INVISIBLE);
@@ -307,12 +325,15 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                         if (event.getY() < 0) {
                             recordingHint.setText("Loose finger to stop");
                             recordingHint.setBackgroundResource(R.drawable.ease_recording_text_hint_bg);
+                            stop_speak();
                             createVoice(mResultVoice.getText().toString(), 1);
-                            Log.d("move", "123");
+//                            MoveY = event.getY();
+                            Log.d("MoveY", String.valueOf(MoveY));
                         } else {
                             recordingHint.setText("Slide up to cancel");
                             recordingHint.setBackgroundColor(Color.TRANSPARENT);
                         }
+                        break;
                     default:
                         break;
                 }
@@ -390,14 +411,12 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                 // 触发淘宝条件
                 if (note.contains("淘宝") && note.contains("搜索")) {
                     TaobaoDialog(note);
-                    new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();
+//                    new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();
                 }
                 // 触发日历条件
                 else if (note.contains("日历") && note.contains("创建")) {
-                    if (note.contains("创建") || note.contains("新建") || note.contains("Create") || note.contains("create")) {
-                        CalendarDialog(note);
-                        new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();
-                    }
+                    if (note.contains("创建") || note.contains("新建") || note.contains("Create") || note.contains("create")) {CalendarDialog(note);
+//                    new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();}
                 } else if (note.contains("打开微信")) {
                     WechatDialog(note);
                     new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();
@@ -409,14 +428,15 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                     list.add(voice);
                     dbo = new DatabaseOperator(MainActivity.this);
                     dbo.InsertVoice(voice);
-                    Log.d("path", new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath());
+//                    Log.d("path", new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath());
                     mAdapter.notifyItemInserted(list.size() - 1);
                     mRecyclerView.scrollToPosition(list.size() - 1);
                 }
             }
-        } else if (i == 1) {
+        }
+        else if (i == 1) {
             // nothing 删不掉啊
-            File file = new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsoluteFile();
+            File file = new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav");
             file.delete();
         }
     }
