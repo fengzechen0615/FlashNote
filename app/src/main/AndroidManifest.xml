@@ -52,8 +52,12 @@
             android:value="&apos;5aa758dc&apos;" />
 
         <activity android:name=".function.TaoBaoView" />
-        <activity android:name=".login.Register"></activity>
-        <activity android:name=".friends.Friend"></activity>
+
+        <activity
+            android:name=".login.Register"
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+
+        <activity android:name=".friends.Friend" />
     </application>
 
 </manifest>

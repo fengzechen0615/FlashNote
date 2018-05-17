@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">FlashNote</string>
+    <string name="app_name">Flash Note</string>
     <string name="app_id">5aa758dc</string>
     <!-- 听写 -->
-    <string name="text_begin">请开始说话…</string>
+    <string name="text_begin">Start sparking</string>
     <string name="pref_key_iat_show">iat_show</string>
     <!-- 语言 -->
     <string-array name="language_entries">
@@ -24,4 +24,26 @@
         <item>1</item>
         <item>0</item>
     </string-array>
+    <!--nav_menu-->
+    <string name="friends">Friends</string>
+    <string name="update">Update</string>
+    <string name="trash">Trash</string>
+    <string name="setting">Setting</string>
+    <!--setting-->
+    <string name="language">Language</string>
+    <string name="punctuation">Punctuation</string>
+    <string name="upload_contact">Upload Contact</string>
+    <string name="Cloud">Wuke Cloud</string>
+    <!--activity_register-->
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="email">E-mail</string>
+    <string name="register">Register</string>
+    <!--main_activity-->
+    <string name="slide_cancel">Slide up to cancel</string>
+    <!--activity_login-->
+    <string name="login">Login</string>
+    <string name="sign_up">Sign up</string>
+    <string name="for_pass">Forget the password</string>
+
 </resources>

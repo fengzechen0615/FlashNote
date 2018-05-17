@@ -350,9 +350,9 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
             // 不显示听写对话框
             ret = mIat.startListening(mRecognizerListener);
             if (ret != ErrorCode.SUCCESS) {
-                showTip("听写失败,错误码：" + ret);
+//                showTip("听写失败,错误码：" + ret);
             } else {
-                showTip(getString(R.string.text_begin));
+//                showTip(getString(R.string.text_begin));
             }
         }
     }
@@ -501,9 +501,9 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
         @Override
         public void onInit(int code) {
-//            Log.d(TAG, "SpeechRecognizer init() code = " + code);
+            Log.d(TAG, "SpeechRecognizer init() code = " + code);
             if (code != ErrorCode.SUCCESS) {
-                showTip("初始化失败，错误码：" + code);
+//                showTip("初始化失败，错误码：" + code);
             }
         }
     };
@@ -714,12 +714,10 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         if (item.getItemId() == R.id.setting) {
             Intent intents = new Intent(MainActivity.this, Setting.class);
             startActivity(intents);
-        }else if(item.getItemId()==R.id.friends)
-        {
+        } else if(item.getItemId()==R.id.friends) {
             Intent intent = new Intent(MainActivity.this, Friend.class);
             startActivity(intent);
-        }
-        else if (item.getItemId() == R.id.trash) {
+        } else if (item.getItemId() == R.id.trash) {
 
         } else if (item.getItemId() == R.id.update) {
             if (time!=null) {

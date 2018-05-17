@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="350dp"
+    android:layout_height="270dp"
+    android:gravity="center"
     android:orientation="vertical"
     tools:context=".login.Register">
 
@@ -15,13 +16,15 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Username" />
+            android:text="@string/username" />
 
         <EditText
             android:id="@+id/register_username"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="5"/>
+            android:layout_weight="5"
+            android:maxLines="1"
+            android:singleLine="true" />
 
     </LinearLayout>
 
@@ -34,13 +37,18 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Password" />
+            android:text="@string/password" />
 
         <EditText
             android:id="@+id/register_password"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="5"/>
+            android:layout_weight="5"
+            android:imeActionId="6"
+            android:imeOptions="actionUnspecified"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:singleLine="true" />
 
     </LinearLayout>
 
@@ -53,13 +61,16 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Email" />
+            android:text="@string/email" />
 
         <EditText
             android:id="@+id/register_email"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="5" />
+            android:layout_weight="5"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:singleLine="true" />
 
     </LinearLayout>
 
@@ -67,6 +78,6 @@
         android:id="@+id/register_done"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Register" />
+        android:text="@string/register" />
 
 </LinearLayout>

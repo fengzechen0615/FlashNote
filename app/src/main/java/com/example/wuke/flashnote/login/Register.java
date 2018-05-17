@@ -39,9 +39,7 @@ public class Register extends AppCompatActivity {
                 String e_mail = email.getText().toString();
                 Log.w("1",username);
                 s.signup(username, pass, e_mail);
-                
-                Intent intent = new Intent(Register.this, Setting.class);
-                startActivity(intent);
+                finish();
             }
         });
     }

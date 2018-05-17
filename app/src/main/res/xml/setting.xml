@@ -3,7 +3,7 @@
 
     <ListPreference
         android:key="iat_language_preference"
-        android:title="Language"
+        android:title="@string/language"
         android:entries="@array/language_entries"
         android:entryValues="@array/language_values"
         android:summary="Support: Mandarin, Cantonese, English"
@@ -11,7 +11,7 @@
 
     <ListPreference
         android:key="iat_punc_preference"
-        android:title="Punctuation"
+        android:title="@string/punctuation"
         android:entries="@array/punc_entries"
         android:entryValues="@array/punc_values"
         android:summary="Default value: punctuation"
@@ -19,9 +19,9 @@
 
     <SwitchPreference
         android:key="contact"
-        android:title="Upload contact" />
+        android:title="@string/upload_contact" />
 
     <SwitchPreference
         android:key="cloud"
-        android:title="WuKe Cloud" />
+        android:title="@string/Cloud" />
 </PreferenceScreen>
