@@ -40,6 +40,8 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
     private List<Note> Delete_List = new ArrayList<>();
     Note deleteNote;
 
+    private boolean edit_state = true;
+
     private DatabaseOperator databaseOperator;
 
     // 文本
@@ -98,18 +100,20 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
 
                     @Override
                     public void onClick(View view) {
-                        if (flag) {
-                            flag = false;
-                            holder.note_content.setEllipsize(null);
-                            holder.note_content.setSingleLine(flag);
-                            holder.function.setVisibility(View.VISIBLE);
+                        if (edit_state == true) {
+                            if (flag) {
+                                flag = false;
+                                holder.note_content.setEllipsize(null);
+                                holder.note_content.setSingleLine(flag);
+                                holder.function.setVisibility(View.VISIBLE);
 
-                        } else {
-                            flag = true;
-                            holder.note_content.setEllipsize(TextUtils.TruncateAt.END);
-                            holder.note_content.setSingleLine(flag);
-                            holder.function.setVisibility(View.INVISIBLE);
-                            holder.function.setVisibility(View.GONE);
+                            } else {
+                                flag = true;
+                                holder.note_content.setEllipsize(TextUtils.TruncateAt.END);
+                                holder.note_content.setSingleLine(flag);
+                                holder.function.setVisibility(View.INVISIBLE);
+                                holder.function.setVisibility(View.GONE);
+                            }
                         }
                     }
                 });
@@ -205,7 +209,10 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                             holder.note_content.setFocusable(true);
                             holder.note_content.setFocusableInTouchMode(true);
                             holder.note_content.setCursorVisible(true);
+                            holder.note_content.setSingleLine(false);
+                            holder.delete_text.setEnabled(false);
                             edit_down = false;
+                            edit_state = edit_down;
                         } else if (edit_down == false) {
                             databaseOperator = new DatabaseOperator(mContext);
                             databaseOperator.EditWord(((Note) mList.get(position)).getNoteID(), holder.note_content.getText().toString());
@@ -215,7 +222,9 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                             holder.note_content.setFocusableInTouchMode(false);
                             holder.note_content.isCursorVisible();
                             holder.note_content.setCursorVisible(false);
+                            holder.delete_text.setEnabled(true);
                             edit_down = true;
+                            edit_state = edit_down;
                         }
                     }
                 });
@@ -457,54 +466,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
 
     @Override
     public void onItemDissmiss(int position_swipe) {
-//        int dageposition = source.getAdapterPosition();
-//        Log.d("Position", String.valueOf(position_swipe));
-//
-//        DatabaseOperator databaseOperator = new DatabaseOperator(mContext);
-//
-//        if (mList.get(position_swipe) instanceof Note) {
-//            databaseOperator.deleteNote(((Note) mList.get(position_swipe)).getNoteID());
-//
-//            deleteNote = (Note) mList.remove(position_swipe); //移除数据
-//            Delete_List.add(deleteNote);
-//
-//            // remove后更改priority
-//            for (int i = position_swipe; i < mList.size(); i++) {
-//                if (mList.get(i) instanceof Note) {
-//                    int id = ((Note) mList.get(i)).getNoteID();
-//                    ((Note) mList.get(i)).setPriority(i);
-//                    databaseOperator.UpdateNotePriority(id, i);
-//                    notifyItemRemoved(i);
-//                }
-//                else if (mList.get(i) instanceof Voice) {
-//                    int id = ((Voice) mList.get(i)).getVoiceID();
-//                    ((Voice) mList.get(i)).setPriority(i);
-//                    databaseOperator.UpdateVoicePriority(id, i);
-//                    notifyItemRemoved(i);
-//                }
-//            }
-//        }
-//
-//        else if (mList.get(position_swipe) instanceof Voice) {
-//            File f = new File(((Voice) mList.get(position_swipe)).getURL());
-//            f.delete();
-//            databaseOperator.deleteVoice(((Voice)mList.get(position_swipe)).getVoiceID());
-//            mList.remove(position_swipe); //移除数据
-//            for (int i = position_swipe; i < mList.size(); i++) {
-//                if (mList.get(i) instanceof Note) {
-//                    int id = ((Note) mList.get(i)).getNoteID();
-//                    ((Note) mList.get(i)).setPriority(i);
-//                    databaseOperator.UpdateNotePriority(id, i);
-//                    notifyItemRemoved(i);
-//                }
-//                else if (mList.get(i) instanceof Voice) {
-//                    int id = ((Voice) mList.get(i)).getVoiceID();
-//                    ((Voice) mList.get(i)).setPriority(i);
-//                    databaseOperator.UpdateVoicePriority(id, i);
-//                    notifyItemRemoved(i);
-//                }
-//            }
-//        }
+
     }
 
     @Override

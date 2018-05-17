@@ -20,7 +20,7 @@ import java.util.List;
  * Created by FrancisFeng on 2018/5/1.
  */
 
-public class FriendAdapter extends RecyclerView.Adapter implements ItemTouchHelperAdapter {
+public class FriendAdapter extends RecyclerView.Adapter implements ItemTouchHelperAdapterFriend {
 
     private List<Friends> mList;
     private Context mContext;
@@ -66,9 +66,7 @@ public class FriendAdapter extends RecyclerView.Adapter implements ItemTouchHelp
 
     @Override
     public void onItemDissmiss(int position_swipe) {
-//        int position = source.getAdapterPosition();
         DatabaseOperator databaseOperator = new DatabaseOperator(mContext);
-        Log.d("position_swipe_hhhh", String.valueOf(position_swipe));
 
         // 删除数据库
 //        databaseOperator
@@ -89,10 +87,5 @@ public class FriendAdapter extends RecyclerView.Adapter implements ItemTouchHelp
     public void onItemClear(RecyclerView.ViewHolder viewHolder) {
         viewHolder.itemView.setScaleX(1.0f);
         viewHolder.itemView.setScaleY(1.0f);
-    }
-
-    @Override
-    public void onUpdate() {
-
     }
 }
