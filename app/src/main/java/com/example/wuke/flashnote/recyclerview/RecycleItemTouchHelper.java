@@ -4,12 +4,15 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 
 import com.example.wuke.flashnote.R;
 
 public class RecycleItemTouchHelper extends ItemTouchHelper.Callback {
 
     private ItemTouchHelperAdapter mAdapter;
+
+    private int SBposition;
 
     public RecycleItemTouchHelper(ItemTouchHelperAdapter mAdapter) {
         this.mAdapter = mAdapter;
@@ -31,7 +34,7 @@ public class RecycleItemTouchHelper extends ItemTouchHelper.Callback {
 
     @Override
     public boolean isItemViewSwipeEnabled() {
-        return true; //启用拖拽删除
+        return false; //启用拖拽删除
     }
 
     @Override
@@ -43,7 +46,7 @@ public class RecycleItemTouchHelper extends ItemTouchHelper.Callback {
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
         // 移动删除回调
-        mAdapter.onItemDissmiss(viewHolder);
+//        mAdapter.onItemDissmiss(viewHolder.getAdapterPosition());
     }
 
     @Override
@@ -64,16 +67,16 @@ public class RecycleItemTouchHelper extends ItemTouchHelper.Callback {
         mAdapter.onItemClear(viewHolder);
     }
 
-    @Override
-    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-        if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
-            //滑动时改变Item的透明度
-            final float alpha = 1 - Math.abs(dX) / (float)viewHolder.itemView.getWidth();
-            viewHolder.itemView.setAlpha(alpha);
-            viewHolder.itemView.setTranslationX(dX);
-        }
-
-    }
+//    @Override
+//    public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+//        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+//        if(actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+//            //滑动时改变Item的透明度
+//            final float alpha = 1 - Math.abs(dX) / (float)viewHolder.itemView.getWidth();
+//            viewHolder.itemView.setAlpha(alpha);
+//            viewHolder.itemView.setTranslationX(dX);
+//        }
+//
+//    }
 
 }

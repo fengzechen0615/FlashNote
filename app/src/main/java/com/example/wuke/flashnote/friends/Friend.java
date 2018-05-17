@@ -60,6 +60,19 @@ public class Friend extends AppCompatActivity {
         mList.add(friends_2);
         Friends friends_3 = new Friends(5, 6);
         mList.add(friends_3);
+        Friends friends_4 = new Friends(5, 6);
+        mList.add(friends_4);
+        Friends friends_5 = new Friends(5, 6);
+        mList.add(friends_5);
+        Friends friends_6 = new Friends(5, 6);
+        mList.add(friends_6);
+        Friends friends_7 = new Friends(5, 6);
+        mList.add(friends_7);
+        Friends friends_8 = new Friends(5, 6);
+        mList.add(friends_8);
+        Friends friends_9 = new Friends(5, 6);
+        mList.add(friends_9);
+
     }
 
 }

@@ -69,7 +69,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, final int position) {
 
         ColorImages = new Drawable[] {
                 mContext.getResources().getDrawable(R.drawable.light_green),
@@ -103,7 +103,6 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                             holder.note_content.setEllipsize(null);
                             holder.note_content.setSingleLine(flag);
                             holder.function.setVisibility(View.VISIBLE);
-                            Log.e("color",""+mList.get(position).getColor());
 
                         } else {
                             flag = true;
@@ -218,6 +217,13 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                             holder.note_content.setCursorVisible(false);
                             edit_down = true;
                         }
+                    }
+                });
+
+                holder.delete_text.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        delete(viewHolder.getAdapterPosition());
                     }
                 });
             }
@@ -340,6 +346,13 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                         record.Convert(mContext, holder.record_text, fileName);
                     }
                 });
+
+                holder.delete_record.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        delete(viewHolder.getAdapterPosition());
+                    }
+                });
             }
         }
     }
@@ -373,6 +386,57 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
         return null == mList ? 1 : mList.size();
     }
 
+    private void delete(int position) {
+        DatabaseOperator databaseOperator = new DatabaseOperator(mContext);
+
+        if (mList.get(position) instanceof Note) {
+            databaseOperator.deleteNote(((Note) mList.get(position)).getNoteID());
+
+            deleteNote = (Note) mList.remove(position); //移除数据
+            Delete_List.add(deleteNote);
+
+            notifyItemRemoved(position);
+            notifyDataSetChanged();
+            // remove后更改priority
+            for (int i = position; i < mList.size(); i++) {
+                if (mList.get(i) instanceof Note) {
+                    int id = ((Note) mList.get(i)).getNoteID();
+                    ((Note) mList.get(i)).setPriority(i);
+                    databaseOperator.UpdateNotePriority(id, i);
+//                    notifyItemRemoved(i);
+                }
+                else if (mList.get(i) instanceof Voice) {
+                    int id = ((Voice) mList.get(i)).getVoiceID();
+                    ((Voice) mList.get(i)).setPriority(i);
+                    databaseOperator.UpdateVoicePriority(id, i);
+//                    notifyItemRemoved(i);
+                }
+            }
+        }
+
+        else if (mList.get(position) instanceof Voice) {
+            File f = new File(((Voice) mList.get(position)).getURL());
+            f.delete();
+            databaseOperator.deleteVoice(((Voice)mList.get(position)).getVoiceID());
+            mList.remove(position); //移除数据
+            notifyItemRemoved(position);
+            for (int i = position; i < mList.size(); i++) {
+                if (mList.get(i) instanceof Note) {
+                    int id = ((Note) mList.get(i)).getNoteID();
+                    ((Note) mList.get(i)).setPriority(i);
+                    databaseOperator.UpdateNotePriority(id, i);
+//                    notifyItemRemoved(i);
+                }
+                else if (mList.get(i) instanceof Voice) {
+                    int id = ((Voice) mList.get(i)).getVoiceID();
+                    ((Voice) mList.get(i)).setPriority(i);
+                    databaseOperator.UpdateVoicePriority(id, i);
+//                    notifyItemRemoved(i);
+                }
+            }
+        }
+    }
+
     @Override
     public void onItemMove(RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {
 //        DatabaseOperator databaseOperator = new DatabaseOperator(mContext);
@@ -392,61 +456,62 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
     }
 
     @Override
-    public void onItemDissmiss(RecyclerView.ViewHolder source) {
-        onItemClear(source);
-        int position = source.getAdapterPosition();
-
-        DatabaseOperator databaseOperator = new DatabaseOperator(mContext);
-
-        if (mList.get(position) instanceof Note) {
-            databaseOperator.deleteNote(((Note) mList.get(position)).getNoteID());
-
-            deleteNote = (Note) mList.remove(position); //移除数据
-            Delete_List.add(deleteNote);
-
-            // remove后更改priority
-            for (int i = position; i < mList.size(); i++) {
-                if (mList.get(i) instanceof Note) {
-                    int id = ((Note) mList.get(i)).getNoteID();
-                    ((Note) mList.get(i)).setPriority(i);
-                    databaseOperator.UpdateNotePriority(id, i);
-                    notifyItemRemoved(i);
-                }
-                else if (mList.get(i) instanceof Voice) {
-                    int id = ((Voice) mList.get(i)).getVoiceID();
-                    ((Voice) mList.get(i)).setPriority(i);
-                    databaseOperator.UpdateVoicePriority(id, i);
-                    notifyItemRemoved(i);
-                }
-            }
-        }
-
-        else if (mList.get(position) instanceof Voice) {
-            File f = new File(((Voice) mList.get(position)).getURL());
-            f.delete();
-            databaseOperator.deleteVoice(((Voice)mList.get(position)).getVoiceID());
-            mList.remove(position); //移除数据
-            for (int i = position; i < mList.size(); i++) {
-                if (mList.get(i) instanceof Note) {
-                    int id = ((Note) mList.get(i)).getNoteID();
-                    ((Note) mList.get(i)).setPriority(i);
-                    databaseOperator.UpdateNotePriority(id, i);
-                    notifyItemRemoved(i);
-                }
-                else if (mList.get(i) instanceof Voice) {
-                    int id = ((Voice) mList.get(i)).getVoiceID();
-                    ((Voice) mList.get(i)).setPriority(i);
-                    databaseOperator.UpdateVoicePriority(id, i);
-                    notifyItemRemoved(i);
-                }
-            }
-        }
+    public void onItemDissmiss(int position_swipe) {
+//        int dageposition = source.getAdapterPosition();
+//        Log.d("Position", String.valueOf(position_swipe));
+//
+//        DatabaseOperator databaseOperator = new DatabaseOperator(mContext);
+//
+//        if (mList.get(position_swipe) instanceof Note) {
+//            databaseOperator.deleteNote(((Note) mList.get(position_swipe)).getNoteID());
+//
+//            deleteNote = (Note) mList.remove(position_swipe); //移除数据
+//            Delete_List.add(deleteNote);
+//
+//            // remove后更改priority
+//            for (int i = position_swipe; i < mList.size(); i++) {
+//                if (mList.get(i) instanceof Note) {
+//                    int id = ((Note) mList.get(i)).getNoteID();
+//                    ((Note) mList.get(i)).setPriority(i);
+//                    databaseOperator.UpdateNotePriority(id, i);
+//                    notifyItemRemoved(i);
+//                }
+//                else if (mList.get(i) instanceof Voice) {
+//                    int id = ((Voice) mList.get(i)).getVoiceID();
+//                    ((Voice) mList.get(i)).setPriority(i);
+//                    databaseOperator.UpdateVoicePriority(id, i);
+//                    notifyItemRemoved(i);
+//                }
+//            }
+//        }
+//
+//        else if (mList.get(position_swipe) instanceof Voice) {
+//            File f = new File(((Voice) mList.get(position_swipe)).getURL());
+//            f.delete();
+//            databaseOperator.deleteVoice(((Voice)mList.get(position_swipe)).getVoiceID());
+//            mList.remove(position_swipe); //移除数据
+//            for (int i = position_swipe; i < mList.size(); i++) {
+//                if (mList.get(i) instanceof Note) {
+//                    int id = ((Note) mList.get(i)).getNoteID();
+//                    ((Note) mList.get(i)).setPriority(i);
+//                    databaseOperator.UpdateNotePriority(id, i);
+//                    notifyItemRemoved(i);
+//                }
+//                else if (mList.get(i) instanceof Voice) {
+//                    int id = ((Voice) mList.get(i)).getVoiceID();
+//                    ((Voice) mList.get(i)).setPriority(i);
+//                    databaseOperator.UpdateVoicePriority(id, i);
+//                    notifyItemRemoved(i);
+//                }
+//            }
+//        }
     }
 
     @Override
     public void onItemSelect(RecyclerView.ViewHolder viewHolder) {
         viewHolder.itemView.setScaleX(1.2f);
         viewHolder.itemView.setScaleY(1.2f);
+        Log.d("Position_hhh", String.valueOf(viewHolder.getAdapterPosition()));
     }
 
     @Override

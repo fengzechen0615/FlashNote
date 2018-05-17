@@ -1,9 +1,7 @@
 package com.example.wuke.flashnote.recyclerview;
 
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -24,6 +22,7 @@ public class TextViewHolder extends RecyclerView.ViewHolder {
     public LinearLayout function;
     public ImageButton edit;
     public ImageView ColorImage;
+    public ImageButton delete_text;
 
     public TextViewHolder(View itemView) {
         super(itemView);
@@ -36,5 +35,6 @@ public class TextViewHolder extends RecyclerView.ViewHolder {
         edit = (ImageButton) itemView.findViewById(R.id.edit);
         function= (LinearLayout) itemView.findViewById(R.id.function);
         ColorImage = (ImageView) itemView.findViewById(R.id.color_note);
+        delete_text = (ImageButton) itemView.findViewById(R.id.delete_text);
     }
 }
