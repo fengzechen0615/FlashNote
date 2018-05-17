@@ -1,13 +1,15 @@
-package com.example.wuke.flashnote.recyclerview;
+package com.example.wuke.flashnote.friends;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
-public class RecycleItemTouchHelper extends ItemTouchHelper.Callback {
+import com.example.wuke.flashnote.recyclerview.ItemTouchHelperAdapter;
 
-    private ItemTouchHelperAdapter mAdapter;
+public class RecycleItemTouchHelperFriend extends ItemTouchHelper.Callback {
 
-    public RecycleItemTouchHelper(ItemTouchHelperAdapter mAdapter) {
+    private ItemTouchHelperAdapterFriend mAdapter;
+
+    public RecycleItemTouchHelperFriend(ItemTouchHelperAdapterFriend mAdapter) {
         this.mAdapter = mAdapter;
     }
 
@@ -15,19 +17,18 @@ public class RecycleItemTouchHelper extends ItemTouchHelper.Callback {
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         // 上下滑动
         int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT;
-//        int swipeFlags = ItemTouchHelper.LEFT;
-        int swipeFlags = 0;
+        int swipeFlags = ItemTouchHelper.LEFT;
         return makeMovementFlags(dragFlags, swipeFlags);
     }
 
     @Override
     public boolean isLongPressDragEnabled() {
-        return true;//长按启用拖拽
+        return false;//长按启用拖拽
     }
 
     @Override
     public boolean isItemViewSwipeEnabled() {
-        return false; //启用拖拽删除
+        return true; //启用拖拽删除
     }
 
     @Override
@@ -48,9 +49,6 @@ public class RecycleItemTouchHelper extends ItemTouchHelper.Callback {
         if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
             // 当滑动或者拖拽view的时候通过接口返回该ViewHolder
             mAdapter.onItemSelect(viewHolder);
-        }
-        if (actionState != ItemTouchHelper.ACTION_STATE_DRAG && actionState != ItemTouchHelper.ACTION_STATE_SWIPE) {
-            mAdapter.onUpdate();
         }
     }
 

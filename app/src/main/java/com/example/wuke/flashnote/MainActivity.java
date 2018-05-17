@@ -41,10 +41,6 @@ import com.example.wuke.flashnote.database_storage.Storage;
 import com.example.wuke.flashnote.database_storage.Voice;
 import com.example.wuke.flashnote.download_upload.Deleting;
 import com.example.wuke.flashnote.friends.Friend;
-import com.example.wuke.flashnote.function.Datatransformer;
-import com.example.wuke.flashnote.function.StringRecognizer;
-import com.example.wuke.flashnote.function.TaoBaoView;
-import com.example.wuke.flashnote.function.Taobao;
 import com.example.wuke.flashnote.recyclerview.RecycleItemTouchHelper;
 import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Note;
@@ -373,15 +369,13 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         if (!"".equals(content)) {
             // 触发淘宝条件
             if (note.contains("淘宝") && note.contains("搜索")) {
-                TaobaoDialog(note);
+                TaobaoDialog();
             }
             // 触发日历条件
             else if (note.contains("日历") && note.contains("创建")) {
-                if (note.contains("创建") || note.contains("新建") || note.contains("Create") || note.contains("create")) {
-                    CalendarDialog(note);
-                }
-            } else if (note.contains("打开微信")) {
-                WechatDialog(note);
+                CalendarDialog();
+            }
+            else if (note.contains("打开微信")) {
             }
             else {
                 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
@@ -403,24 +397,25 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
     }
 
     // create voice
-    private void createVoice(String note,int i) {
-        if(i == 0){
-            DatabaseOperator dbo = new DatabaseOperator(MainActivity.this);
+    private void createVoice(String note, int i) {
+        if (i == 0) {
+            Log.d("i", "message");
+            dbo  = new DatabaseOperator(MainActivity.this);
             String content = note;
             if (!"".equals(content)) {
-                // 触发淘宝条件
+//              触发淘宝条件
                 if (note.contains("淘宝") && note.contains("搜索")) {
-                    TaobaoDialog(note);
+                    TaobaoDialog();
 //                    new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();
                 }
                 // 触发日历条件
                 else if (note.contains("日历") && note.contains("创建")) {
-                    if (note.contains("创建") || note.contains("新建") || note.contains("Create") || note.contains("create")) {CalendarDialog(note);
-//                    new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();}
+                    CalendarDialog();
+//                    new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();
                 } else if (note.contains("打开微信")) {
-                    WechatDialog(note);
-                    new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();
+//                    new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").delete();
                 } else {
+                    Log.d("enter", "enter this function");
                     pref = getSharedPreferences("info", MODE_PRIVATE);
                     int userid = pref.getInt("userid", 0);
                     // 插入priority list.size
@@ -438,23 +433,20 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
             // nothing 删不掉啊
             File file = new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav");
             file.delete();
+            Log.d("delete", "Delete");
         }
     }
 
-    private void TaobaoDialog(final String note) {
+    private void TaobaoDialog() {
         final EditText editText = new EditText(this);
-        editText.setText(Taobao.Object(note));
         new AlertDialog.Builder(MainActivity.this)
-                .setTitle("Open Taobao to Search:")
+                .setTitle("Open Taobao to Search")
                 .setView(editText)
                 .setPositiveButton("Search", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-//                         input 为搜索的内容
+                        // input 为搜索的内容
                         String input = editText.getText().toString();
-                        Intent intent = new Intent(MainActivity.this,TaoBaoView.class);
-                        intent.putExtra("good",input);
-                        startActivity(intent);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -464,13 +456,10 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                 }).show();
     }
 
-    private void CalendarDialog(final String note) {
+    private void CalendarDialog() {
         final EditText editText = new EditText(this);
-        StringRecognizer recognizer = new StringRecognizer();
-        recognizer.Recognizer(note);
-        editText.setText(recognizer.getDiscription());
         new AlertDialog.Builder(MainActivity.this)
-                .setTitle("Open Calendar to Create a event:")
+                .setTitle("Open Calendar to Create a event")
                 .setView(editText)
                 .setPositiveButton("Create", new DialogInterface.OnClickListener() {
                     @Override
@@ -486,7 +475,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                 }).show();
     }
 
-    private void WechatDialog(final String note) {
+    private void WechatDialog() {
         final EditText editText = new EditText(this);
         new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Open Wechat to send a message")
@@ -495,8 +484,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // input 为发送的内容
-//                        String input = editText.getText().toString();
-                        Datatransformer.Datatransform(MainActivity.this,note);
+                        String input = editText.getText().toString();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -505,43 +493,6 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                     }
                 }).show();
     }
-
-//    private void alertVoiceDialog(final String note) {
-//        new AlertDialog.Builder(MainActivity.this)
-//                .setTitle("Create Confirm")
-//                .setMessage("Are you confirm to create this?")
-//                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        Datatransformer datatransformer = new Datatransformer();
-//                        if (note.contains("淘宝") && note.contains("搜索")){
-//                            Intent i = new Intent();
-//                            i.putExtra("path", Taobao.ObjecttoSearch(note));
-//                            i.setClass(MainActivity.this,TaoBaoView.class);
-//                            startActivity(i);
-//                        } else {
-//                            System.out.println(note);
-//                            datatransformer.Datatransform(MainActivity.this,note);
-//                            pref = getSharedPreferences("info", MODE_PRIVATE);
-//                            int userid=pref.getInt("userid",0);
-//                            // 插入priority list.size
-//                            Voice voice = new Voice(userid, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), Color.CYAN, time_stamp, list.size(), 1);
-//                            list.add(voice);
-//                            dbo = new DatabaseOperator(MainActivity.this);
-//                            dbo.InsertVoice(voice);
-//                            Log.d("path", new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath());
-//                            mAdapter.notifyItemInserted(list.size() - 1);
-//                            mRecyclerView.scrollToPosition(list.size() - 1);
-//                        }
-//                    }
-//                })
-//                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-////                        mResultText.setText(null);
-//                    }
-//                }).show();
-//    }
 
     /**
      * 初始化监听器。
@@ -589,7 +540,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
         @Override
         public void onVolumeChanged(int volume, byte[] data) {
-            showTip("Speaking, volume: " + volume);
+//            showTip("Speaking, volume: " + volume);
             Log.d("volume", String.valueOf(volume));
             voice = volume;
 //            Log.d(TAG, "返回音频数据："+data.length);

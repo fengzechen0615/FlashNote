@@ -1,8 +1,8 @@
-package com.example.wuke.flashnote.recyclerview;
+package com.example.wuke.flashnote.friends;
 
 import android.support.v7.widget.RecyclerView;
 
-public interface ItemTouchHelperAdapter {
+public interface ItemTouchHelperAdapterFriend {
     // 数据交换
     void onItemMove(RecyclerView.ViewHolder source, RecyclerView.ViewHolder target);
 
@@ -14,8 +14,5 @@ public interface ItemTouchHelperAdapter {
 
     // 状态清除
     void onItemClear(RecyclerView.ViewHolder source);
-
-    // priority
-    void onUpdate();
 
 }

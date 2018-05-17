@@ -2,6 +2,7 @@ package com.example.wuke.flashnote.friends;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,7 @@ import java.util.List;
  * Created by FrancisFeng on 2018/5/1.
  */
 
-public class FriendAdapter extends RecyclerView.Adapter implements ItemTouchHelperAdapter {
+public class FriendAdapter extends RecyclerView.Adapter implements ItemTouchHelperAdapterFriend {
 
     private List<Friends> mList;
     private Context mContext;
@@ -64,17 +65,16 @@ public class FriendAdapter extends RecyclerView.Adapter implements ItemTouchHelp
     }
 
     @Override
-    public void onItemDissmiss(RecyclerView.ViewHolder source) {
-        int position = source.getAdapterPosition();
+    public void onItemDissmiss(int position_swipe) {
         DatabaseOperator databaseOperator = new DatabaseOperator(mContext);
 
         // 删除数据库
 //        databaseOperator
 
-        mList.remove(position);
+        mList.remove(position_swipe);
 
         // 刷新数据
-        notifyItemRemoved(position);
+        notifyItemRemoved(position_swipe);
     }
 
     @Override
@@ -87,10 +87,5 @@ public class FriendAdapter extends RecyclerView.Adapter implements ItemTouchHelp
     public void onItemClear(RecyclerView.ViewHolder viewHolder) {
         viewHolder.itemView.setScaleX(1.0f);
         viewHolder.itemView.setScaleY(1.0f);
-    }
-
-    @Override
-    public void onUpdate() {
-
     }
 }

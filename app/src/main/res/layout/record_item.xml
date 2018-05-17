@@ -92,6 +92,14 @@
                     android:layout_height="20dp"
                     android:adjustViewBounds="true" />
 
+                <ImageButton
+                    android:id="@+id/delete_record"
+                    android:background="@drawable/trash"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:adjustViewBounds="true" />
+
                 <Spinner
                     android:id="@+id/record_color"
                     android:background="@null"

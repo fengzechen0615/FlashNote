@@ -3,6 +3,7 @@ package com.example.wuke.flashnote.friends;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -46,8 +47,9 @@ public class Friend extends AppCompatActivity {
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mAdapter = new FriendAdapter(this, mList);
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
 
-        ItemTouchHelper.Callback callback = new RecycleItemTouchHelper(mAdapter);
+        ItemTouchHelper.Callback callback = new RecycleItemTouchHelperFriend(mAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(mRecyclerView);
 
@@ -60,6 +62,19 @@ public class Friend extends AppCompatActivity {
         mList.add(friends_2);
         Friends friends_3 = new Friends(5, 6);
         mList.add(friends_3);
+        Friends friends_4 = new Friends(5, 6);
+        mList.add(friends_4);
+        Friends friends_5 = new Friends(5, 6);
+        mList.add(friends_5);
+        Friends friends_6 = new Friends(5, 6);
+        mList.add(friends_6);
+        Friends friends_7 = new Friends(5, 6);
+        mList.add(friends_7);
+        Friends friends_8 = new Friends(5, 6);
+        mList.add(friends_8);
+        Friends friends_9 = new Friends(5, 6);
+        mList.add(friends_9);
+
     }
 
 }
