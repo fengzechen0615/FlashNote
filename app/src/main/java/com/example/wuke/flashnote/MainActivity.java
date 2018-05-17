@@ -419,7 +419,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                     pref = getSharedPreferences("info", MODE_PRIVATE);
                     int userid = pref.getInt("userid", 0);
                     // 插入priority list.size
-                    Voice voice = new Voice(userid, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), 0, time_stamp, list.size(), 1);
+                    Voice voice = new Voice(userid, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), 0, time_stamp, list.size(), 1,"topic");
                     list.add(voice);
                     dbo = new DatabaseOperator(MainActivity.this);
                     dbo.InsertVoice(voice);

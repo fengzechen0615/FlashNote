@@ -259,6 +259,7 @@ public class DatabaseOperator {
         int colorindex=cursor.getColumnIndex(Initial.voice_color);
         int pindex=cursor.getColumnIndex(Initial.voice_priority);
         int dataindex=cursor.getColumnIndex(Initial.datatype);
+        int topicindex=cursor.getColumnIndex(Initial.voice_topic);
         for (cursor.moveToFirst();!(cursor.isAfterLast());cursor.moveToNext())
         {
             Voice voice=new Voice(cursor.getInt(voiceIDindex)
@@ -267,7 +268,8 @@ public class DatabaseOperator {
                     ,cursor.getInt(colorindex)
                     ,cursor.getString(timeindex)
                     ,cursor.getInt(pindex)
-                    ,cursor.getInt(dataindex));
+                    ,cursor.getInt(dataindex)
+                    ,cursor.getString(topicindex));
             result.add(voice);
         }
         cursor.close();
