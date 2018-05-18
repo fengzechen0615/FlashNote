@@ -248,7 +248,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                 holder.record_content.setFocusable(false);
                 holder.record_content.setFocusableInTouchMode(false);
                 holder.record_content.setCursorVisible(false);
-                holder.record_content.setText("Record Time:" + mList.get(position).getTimestamp());
+                holder.record_content.setText("Time" + ((Voice) mList.get(position)).getTimestamp());
                 holder.record_time.setText(((Voice) mList.get(position)).getTimestamp());
 
                 holder.play_record.setOnClickListener(new View.OnClickListener() {
@@ -257,7 +257,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                         Record record = new Record();
                         record.startPlay(((Voice) mList.get(position)).getURL());
                         Toast.makeText(mContext, "play record", Toast.LENGTH_SHORT).show();
-                        Log.d("URL", ((Voice) mList.get(position)).getURL());
+//                        Log.d("URL", ((Voice) mList.get(position)).getURL());
                     }
                 });
 

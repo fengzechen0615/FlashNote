@@ -109,4 +109,12 @@ public class Voice extends Storage implements Serializable{
     public int getDataType() {
         return dataType;
     }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
 }
