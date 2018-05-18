@@ -1,0 +1,55 @@
+<resources>
+    <string name="app_name">Flash Note</string>
+    <string name="app_id">5aa758dc</string>
+    <!-- 听写 -->
+    <string name="text_begin">Start sparking</string>
+    <string name="pref_key_iat_show">iat_show</string>
+    <!-- 语言 -->
+    <string-array name="language_entries">
+        <item>简体中文</item>
+        <item>粤语</item>
+        <item>英语</item>
+    </string-array>
+    <string-array name="language_values">
+        <item>mandarin</item>
+        <item>cantonese</item>
+        <item>en_us</item>
+    </string-array>
+    <!-- 标点符号 -->
+    <string-array name="punc_entries">
+        <item>有标点</item>
+        <item>无标点</item>
+    </string-array>
+    <string-array name="punc_values">
+        <item>1</item>
+        <item>0</item>
+    </string-array>
+    <!--nav_menu-->
+    <string name="friends">朋友</string>
+    <string name="update">同步</string>
+    <string name="trash">最近删除</string>
+    <string name="setting">设置</string>
+    <!--setting-->
+    <string name="language">语言</string>
+    <string name="punctuation">标点</string>
+    <string name="upload_contact">上传联系人</string>
+    <string name="Cloud">Wuke Cloud</string>
+    <string name="support">支持：简体中文、粤语和英语</string>
+    <string name="default_punc">默认：有标点</string>
+    <!--activity_register-->
+    <string name="username">用户名</string>
+    <string name="password">密码</string>
+    <string name="email">邮箱</string>
+    <string name="register">注册</string>
+    <!--main_activity-->
+    <string name="slide_cancel">手指上滑，取消发送</string>
+    <string name="loose">松开手指，取消发送</string>
+    <string name="text">文本</string>
+    <string name="voice">语音</string>
+    <!--activity_login-->
+    <string name="login">登陆</string>
+    <string name="sign_up">注册</string>
+    <string name="for_pass">忘记密码</string>
+    <string name="stop">取消</string>
+
+</resources>

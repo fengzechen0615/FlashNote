@@ -108,7 +108,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/text"
             app:fab_colorNormal="@color/colorPrimary"
-            app:fab_label=" TEXT "
+            app:fab_label="@string/text"
             app:fab_size="mini" />
 
         <com.github.clans.fab.FloatingActionButton
@@ -117,7 +117,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/voice"
             app:fab_colorNormal="@color/colorPrimary"
-            app:fab_label="VOICE"
+            app:fab_label="@string/voice"
             app:fab_size="mini" />
 
     </com.github.clans.fab.FloatingActionMenu>
