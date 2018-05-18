@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.wuke.flashnote.R;
+import com.example.wuke.flashnote.database_storage.Initial;
 import com.example.wuke.flashnote.setting.Setting;
 
 import java.io.BufferedReader;

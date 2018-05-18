@@ -30,7 +30,7 @@
     <string name="trash">Trash</string>
     <string name="setting">Setting</string>
     <!--setting-->
-    <string name="language">Language</string>
+    <string name="language">Record Language</string>
     <string name="punctuation">Punctuation</string>
     <string name="upload_contact">Upload Contact</string>
     <string name="Cloud">Wuke Cloud</string>

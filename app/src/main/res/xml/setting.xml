@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <ListPreference
-        android:key="iat_language_preference"
+        android:key="language_preference"
         android:title="@string/language"
         android:entries="@array/language_entries"
         android:entryValues="@array/language_values"
@@ -10,7 +10,7 @@
         android:defaultValue="mandarin"  />
 
     <ListPreference
-        android:key="iat_punc_preference"
+        android:key="punc_preference"
         android:title="@string/punctuation"
         android:entries="@array/punc_entries"
         android:entryValues="@array/punc_values"
@@ -22,6 +22,7 @@
         android:title="@string/upload_contact" />
 
     <SwitchPreference
-        android:key="cloud"
+        android:key="wuke_cloud"
         android:title="@string/Cloud" />
+
 </PreferenceScreen>

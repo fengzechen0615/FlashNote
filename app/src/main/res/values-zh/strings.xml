@@ -30,7 +30,7 @@
     <string name="trash">最近删除</string>
     <string name="setting">设置</string>
     <!--setting-->
-    <string name="language">语言</string>
+    <string name="language">录音语言</string>
     <string name="punctuation">标点</string>
     <string name="upload_contact">上传联系人</string>
     <string name="Cloud">Wuke Cloud</string>

@@ -248,7 +248,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                 holder.record_content.setFocusable(false);
                 holder.record_content.setFocusableInTouchMode(false);
                 holder.record_content.setCursorVisible(false);
-                holder.record_content.setText("Time" + ((Voice) mList.get(position)).getTimestamp());
+                holder.record_content.setText("Length of Record: " + ((Voice) mList.get(position)).getDuration() + "s");
                 holder.record_time.setText(((Voice) mList.get(position)).getTimestamp());
 
                 holder.play_record.setOnClickListener(new View.OnClickListener() {

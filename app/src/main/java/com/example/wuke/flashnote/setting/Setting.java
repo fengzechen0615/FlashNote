@@ -1,10 +1,13 @@
 package com.example.wuke.flashnote.setting;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.SwitchPreference;
 import android.util.Log;
 import android.view.Window;
 import android.widget.Toast;
@@ -27,13 +30,15 @@ import com.iflytek.cloud.util.ContactManager;
 
 public class Setting extends PreferenceActivity implements Preference.OnPreferenceChangeListener {
 
-    public static final String PREFER_NAME = "com.iflytek.setting";
+    public static final String PREFER_NAME = "com.flashnote.setting";
 
     private Preference preference;
 
     private Context mContext;
 
     private SpeechRecognizer mIat;
+
+    private SharedPreferences mSharePreferences;
 
     private Toast mToast;
 
@@ -44,44 +49,40 @@ public class Setting extends PreferenceActivity implements Preference.OnPreferen
         getPreferenceManager().setSharedPreferencesName(PREFER_NAME);
         addPreferencesFromResource(R.xml.setting);
 
+        mSharePreferences = getSharedPreferences(Setting.PREFER_NAME, Activity.MODE_PRIVATE);
+
         mIat = SpeechRecognizer.createRecognizer(Setting.this, mInitListener);
 
         mToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 
-        mContext=getApplicationContext();
+        mContext = getApplicationContext();
         preference = findPreference("contact");
         preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if ((Boolean)newValue == true) {
-//                    Toast.makeText(mContext, String.format("Preference的值为%s", newValue),Toast.LENGTH_LONG).show();
+                if ((Boolean) newValue) {
                     ContactManager mgr = ContactManager.createManager(Setting.this, mContactListener);
                     mgr.asyncQueryAllContactsName();
-                } else if ((Boolean)newValue == false) {
+                } else {
                     ContactManager.destroy();
-//                    Toast.makeText(mContext, String.format("Preference的值为%s", newValue),Toast.LENGTH_LONG).show();
                 }
                 return true;
             }
         });
 
-        preference = findPreference("cloud");
+        preference = findPreference("wuke_cloud");
         preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if ((Boolean)newValue == true) {
+                if ((Boolean) newValue) {
                     Intent intent = new Intent(Setting.this, Login.class);
                     startActivity(intent);
-                } else if ((Boolean)newValue == false) {
-                    Locallogin in = new Locallogin();
-//                    Intent intent = new Intent(Setting.this, MainActivity.class);
-//                    startActivity(intent);
-                    in.delete();
+                } else {
+                    Locallogin.delete();
                 }
                 return true;
             }
         });
-
     }
 
     int ret = 0;

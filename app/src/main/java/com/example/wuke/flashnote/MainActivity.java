@@ -29,7 +29,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -107,6 +106,9 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
     private String time_record;
     private String time_stamp;
 
+    private long start_time;
+    private long end_time;
+
     private int voice = 0;
 
     //存储很多张话筒图片的数组
@@ -118,9 +120,6 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
     private RelativeLayout recording;
     private ImageButton speak;
-
-    private String topic = null;
-
 
     @SuppressLint({"ShowToast", "ClickableViewAccessibility"})
     public void onCreate(Bundle savedInstanceState) {
@@ -232,6 +231,9 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                 add.close(true);
             }
         });
+
+        // 设置参数
+        setParam();
     }
 
     private void Add_text_note() {
@@ -286,6 +288,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         time_record = form.format(timestamp);
                         time_stamp = formatter.format(timestamp);
+                        start_time = System.currentTimeMillis();
                         start_speak();
                         UpdateMicStatus();
                         DownY = event.getY();
@@ -305,6 +308,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                                 @Override
                                 public void run() {
                                     stop_speak();
+                                    end_time = System.currentTimeMillis();
                                     createVoice(mResultVoice.getText().toString(), 0);
                                 }
                             }, 1000);
@@ -336,8 +340,6 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
     private void start_speak() {
         FlowerCollector.onEvent(MainActivity.this, "iat_recognize");
         mIatResults.clear();
-        // 设置参数
-        setParam();
         boolean isShowDialog = mSharedPreferences.getBoolean(getString(R.string.pref_key_iat_show), false);
         if (isShowDialog) {
             showTip(getString(R.string.text_begin));
@@ -391,26 +393,6 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         }
     }
 
-    private void createTopic() {
-        final EditText editText = new EditText(this);
-        new AlertDialog.Builder(MainActivity.this)
-                .setTitle("New Voice Note")
-                .setView(editText)
-                .setPositiveButton("Create", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        topic = editText.getText().toString();
-                    }
-                })
-                .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        File file = new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav");
-                        file.delete();
-                    }
-                }).show();
-    }
-
     // create voice
     private void createVoice(String note, int i) {
         if (i == 0) {
@@ -434,7 +416,8 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                     int user_id = pref.getInt("userid", 0);
 //                    createTopic();
                     // 插入priority list.size
-                    Voice voice = new Voice(user_id, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), 0, time_stamp, list.size(), 1, 5);
+                    int time = (int)((end_time - start_time) /1000);
+                    Voice voice = new Voice(user_id, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), 0, time_stamp, list.size(), 1, time);
                     list.add(voice);
                     dbo = new DatabaseOperator(MainActivity.this);
                     dbo.InsertVoice(voice);
@@ -634,7 +617,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         // 设置返回结果格式
         mIat.setParameter(SpeechConstant.RESULT_TYPE, "json");
 
-        String lag = mSharedPreferences.getString("iat_language_preference", "mandarin");
+        String lag = mSharedPreferences.getString("language_preference", "mandarin");
         if (lag.equals("en_us")) {
             // 设置语言
             mIat.setParameter(SpeechConstant.LANGUAGE, "en_us");
@@ -655,7 +638,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         mIat.setParameter(SpeechConstant.VAD_EOS, "10000");
 
         // 设置标点符号,设置为"0"返回结果无标点,设置为"1"返回结果有标点
-        mIat.setParameter(SpeechConstant.ASR_PTT, mSharedPreferences.getString("iat_punc_preference", "1"));
+        mIat.setParameter(SpeechConstant.ASR_PTT, mSharedPreferences.getString("punc_preference", "1"));
 
         // 设置音频保存路径，保存音频格式支持pcm、wav，设置路径为sd卡请注意WRITE_EXTERNAL_STORAGE权限
         mIat.setParameter(SpeechConstant.AUDIO_FORMAT,"wav");
