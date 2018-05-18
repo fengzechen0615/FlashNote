@@ -6,7 +6,7 @@
         android:title="@string/language"
         android:entries="@array/language_entries"
         android:entryValues="@array/language_values"
-        android:summary="Support: Mandarin, Cantonese, English"
+        android:summary="@string/support"
         android:defaultValue="mandarin"  />
 
     <ListPreference
@@ -14,7 +14,7 @@
         android:title="@string/punctuation"
         android:entries="@array/punc_entries"
         android:entryValues="@array/punc_values"
-        android:summary="Default value: punctuation"
+        android:summary="@string/default_punc"
         android:defaultValue="1"  />
 
     <SwitchPreference

@@ -339,6 +339,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                 holder.record_text.setVisibility(View.INVISIBLE);
                 holder.record_text.setVisibility(View.GONE);
 
+                // 语音转文字
                 holder.convert.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

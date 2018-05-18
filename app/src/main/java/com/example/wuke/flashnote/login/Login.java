@@ -34,6 +34,7 @@ public class Login extends AppCompatActivity {
     private TextView result;
     private Button login;
     private Button sign;
+    private TextView cancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +74,14 @@ public class Login extends AppCompatActivity {
             public void onClick(View v){
                 Intent intent = new Intent(Login.this, Register.class);
                 startActivity(intent);
+            }
+        });
+
+        cancel = (TextView) findViewById(R.id.login_stop);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 
