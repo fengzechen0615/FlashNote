@@ -16,9 +16,9 @@ public class Voice extends Storage implements Serializable{
     private int color;
     private String timestamp;
     private int dataType;
-    private String topic;
+    private int Duration;
 
-    public Voice(int voiceID, int userID, String file, int color, String timestamp,int priority,int dataType,String topic)
+    public Voice(int voiceID, int userID, String file, int color, String timestamp,int priority,int dataType,int duration)
     {
         this.voiceID=voiceID;
         this.userID=userID;
@@ -27,10 +27,10 @@ public class Voice extends Storage implements Serializable{
         this.timestamp=timestamp;
         this.priority=priority;
         this.dataType=dataType;
-        this.topic=topic;
+        this.Duration=duration;
     }
 
-    public Voice(int userID, String url, int color, String timestamp,int priority,int dataType,String topic)
+    public Voice(int userID, String url, int color, String timestamp,int priority,int dataType,int duration)
     {
         this.userID=userID;
         this.url=url;
@@ -38,12 +38,13 @@ public class Voice extends Storage implements Serializable{
         this.timestamp=timestamp.toString();
         this.priority=priority;
         this.dataType=dataType;
-        this.topic=topic;
+        this.Duration=duration;
     }
 
     public Voice(){
 
     }
+
 
     public String getFile() {
         return url;
@@ -110,11 +111,11 @@ public class Voice extends Storage implements Serializable{
         return dataType;
     }
 
-    public String getTopic() {
-        return topic;
+    public int getDuration() {
+        return Duration;
     }
 
-    public void setTopic(String topic) {
-        this.topic = topic;
+    public void setDuration(int duration) {
+        this.Duration = duration;
     }
 }

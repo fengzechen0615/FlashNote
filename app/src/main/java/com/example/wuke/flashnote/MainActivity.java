@@ -434,7 +434,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                     int user_id = pref.getInt("userid", 0);
 //                    createTopic();
                     // 插入priority list.size
-                    Voice voice = new Voice(user_id, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), 0, time_stamp, list.size(), 1, "topic");
+                    Voice voice = new Voice(user_id, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), 0, time_stamp, list.size(), 1, 5);
                     list.add(voice);
                     dbo = new DatabaseOperator(MainActivity.this);
                     dbo.InsertVoice(voice);

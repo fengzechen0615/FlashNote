@@ -162,6 +162,7 @@ public class DatabaseOperator {
         cValue.put(Initial.voice_timestamp,voice.getTimestamp());
         cValue.put(Initial.voice_priority,voice.getPriority());
         cValue.put(Initial.datatype,voice.getDataType());
+        cValue.put(Initial.voice_duration,voice.getDuration());
         long VID=wdb.insert(Initial.table_voice,null,cValue);
         return (int)VID;
     }
@@ -259,7 +260,7 @@ public class DatabaseOperator {
         int colorindex=cursor.getColumnIndex(Initial.voice_color);
         int pindex=cursor.getColumnIndex(Initial.voice_priority);
         int dataindex=cursor.getColumnIndex(Initial.datatype);
-        int topicindex=cursor.getColumnIndex(Initial.voice_topic);
+        int topicindex=cursor.getColumnIndex(Initial.voice_duration);
         for (cursor.moveToFirst();!(cursor.isAfterLast());cursor.moveToNext())
         {
             Voice voice=new Voice(cursor.getInt(voiceIDindex)
@@ -269,7 +270,7 @@ public class DatabaseOperator {
                     ,cursor.getString(timeindex)
                     ,cursor.getInt(pindex)
                     ,cursor.getInt(dataindex)
-                    ,cursor.getString(topicindex));
+                    ,cursor.getInt(topicindex));
             result.add(voice);
         }
         cursor.close();

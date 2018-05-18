@@ -32,7 +32,7 @@ public class Initial {
     public static final String datatype="Note_datatype";
     public static final String voice_id="Voice_id";
     public static final String voice_users="User_id";
-    public static final String voice_topic="topic";
+    public static final String voice_duration="Voice_Duration";
     public static final String voice_color="Voice_color";
     public static final String voice_timestamp="Voice_timestamp";
     public static final String voice_file="Voice_file";

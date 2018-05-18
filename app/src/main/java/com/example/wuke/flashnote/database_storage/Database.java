@@ -36,8 +36,8 @@ public class Database extends SQLiteOpenHelper{
             +Initial.voice_color+" INTEGER, "
             +Initial.voice_timestamp+" TEXT, "
             +Initial.voice_priority+" INTEGER, "
-            +Initial.datatype+" INTEGER"
-            +Initial.voice_topic+" TEXT)";
+            +Initial.datatype+" INTEGER, "
+            +Initial.voice_duration+" INTEGER) ";
 
 
     private static final String sql4="Create table if not exists "+Initial.table_friend+" ( "
