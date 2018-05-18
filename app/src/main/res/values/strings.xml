@@ -41,6 +41,7 @@
     <string name="register">Register</string>
     <!--main_activity-->
     <string name="slide_cancel">Slide up to cancel</string>
+    <string name="loose">Loose finger to stop</string>
     <!--activity_login-->
     <string name="login">Login</string>
     <string name="sign_up">Sign up</string>

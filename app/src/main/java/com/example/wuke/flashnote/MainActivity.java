@@ -207,7 +207,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
             String[] user = locallogin.getaccount();
             username.setText(user[0]);
         } else {
-            username.setText("FlashNote");
+            username.setText(getString(R.string.app_name));
         }
 
         final FloatingActionMenu add = (FloatingActionMenu) findViewById(R.id.add);
@@ -315,13 +315,13 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                         break;
                     case MotionEvent.ACTION_MOVE:
                         if (event.getY() < 0) {
-                            recordingHint.setText("Loose finger to stop");
+                            recordingHint.setText(getString(R.string.loose));
                             recordingHint.setBackgroundResource(R.drawable.ease_recording_text_hint_bg);
                             stop_speak();
                             MoveY = event.getY();
                             Log.d("MoveY", String.valueOf(MoveY));
                         } else {
-                            recordingHint.setText("Slide up to cancel");
+                            recordingHint.setText(getString(R.string.slide_cancel));
                             recordingHint.setBackgroundColor(Color.TRANSPARENT);
                         }
                         break;
