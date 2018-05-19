@@ -66,5 +66,7 @@
     <string name="taobao">Open Taobao to Search</string>
     <string name="wechat">Open Wechat to send a message</string>
     <string name="calendar">Open Calendar to Create a event</string>
+    <!--enter-->
+    <string name="enter">Enter the Flash Note</string>
 
 </resources>

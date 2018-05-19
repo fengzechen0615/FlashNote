@@ -1,9 +1,13 @@
 package com.example.wuke.flashnote;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
+
+import com.example.wuke.flashnote.guide.Guide;
 
 public class Welcome extends AppCompatActivity {
 
@@ -12,26 +16,24 @@ public class Welcome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-//        // 判断是否是第一次开启应用
-//        boolean isFirstOpen = SpUtils.getBoolean(this, AppConstants.FIRST_OPEN);
-//        // 如果是第一次启动，则先进入功能引导页
-//        if (!isFirstOpen) {
-//            Intent intent = new Intent(this, WelcomeGuideActivity.class);
-//            startActivity(intent);
-//            finish();
-//            return;
-//        }
+        SharedPreferences sharedPreferences = this.getSharedPreferences("share", MODE_PRIVATE);
+        boolean isFirstRun = sharedPreferences.getBoolean("isFirstRun", true);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        if (isFirstRun) {
+            editor.putBoolean("isFirstRun", false);
+            editor.apply();
+            Intent intent = new Intent(this, Guide.class);
+            startActivity(intent);
+            finish();
+        } else {
+            new Handler().postDelayed(new Runnable() {
 
-        // 如果不是第一次启动app，则正常显示启动屏
-        setContentView(R.layout.activity_welcome);
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                enterHomeActivity();
-            }
-        }, 2000);
+                @Override
+                public void run() {
+                    enterHomeActivity();
+                }
+            }, 2000);
+        }
     }
 
     private void enterHomeActivity() {

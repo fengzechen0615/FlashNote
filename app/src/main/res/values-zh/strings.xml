@@ -66,5 +66,7 @@
     <string name="taobao">打开淘宝搜索</string>
     <string name="wechat">打开微信发送一条消息</string>
     <string name="calendar">在日历中创建一条日程</string>
+    <!--enter-->
+    <string name="enter">开始Flash Note之旅</string>
 
 </resources>
