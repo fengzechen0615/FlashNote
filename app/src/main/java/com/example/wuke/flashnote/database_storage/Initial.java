@@ -46,8 +46,14 @@ public class Initial {
     //Garbage
     public static final String Garbage_table ="Garbage";
     public static final String Litter_id ="Litter_id";
-    public static final String DeleteTime="Delete_Time";
-    public static final String OutTime="Out_Time";
+    public static final String garbage_datatype="datatype";
+    public static final String content_id = "content_id";
+    public static final String guser_id="User_id";
+    public static final String keywords="keywords";
+    public static final String previous_color="color";
+    public static final String previous_timestamp="timestamp";
+    public static final String previous_priority="priority";
+
 
 
 }

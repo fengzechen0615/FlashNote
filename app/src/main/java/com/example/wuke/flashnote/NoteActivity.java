@@ -733,8 +733,9 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                 Iterator<Storage> iterator=list.iterator();
                 List notelist=new ArrayList();
                 while(iterator.hasNext()) {
-                    if (iterator.next() instanceof Note) {
-                        notelist.add(iterator.next());
+                    Storage storage=(Storage)iterator.next();
+                    if (storage instanceof Note) {
+                        notelist.add((Note)storage);
                     }
                 }
                 //同步比较时间
