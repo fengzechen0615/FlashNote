@@ -1,8 +1,10 @@
 package com.example.wuke.flashnote.login;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +16,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.wuke.flashnote.NoteActivity;
 import com.example.wuke.flashnote.R;
+import com.example.wuke.flashnote.setting.WukeCloud;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,7 +39,7 @@ public class Login extends Fragment implements OnClickListener{
     private TextView result;
     private Button login;
     private TextView register;
-    private TextView cancel;
+    private TextView forget;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,6 +62,9 @@ public class Login extends Fragment implements OnClickListener{
 
         register = (TextView) view.findViewById(R.id.sign_button);
         register.setOnClickListener(this);
+
+        forget = (TextView) view.findViewById(R.id.forget);
+        forget.setOnClickListener(this);
 
         return view;
     }
@@ -87,9 +94,30 @@ public class Login extends Fragment implements OnClickListener{
                 transaction.addToBackStack(null);
                 transaction.commit();
                 break;
+            case R.id.forget:
+                forget();
+                break;
             default:
                 break;
         }
+    }
+    private void forget() {
+        final EditText editText = new EditText(getActivity());
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Send Email to reset the password")
+                .setView(editText)
+                .setPositiveButton("Send", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // input 为输入内容
+                        String input = editText.getText().toString();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).show();
     }
 
     private void access(String a, String p) {
