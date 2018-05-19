@@ -9,7 +9,7 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginTop="60dp"
-        android:src="@drawable/icon"/>
+        android:src="@drawable/cloud"/>
 
     <TextView
         android:id="@+id/usename_login"
