@@ -75,8 +75,8 @@
     <string name="taobao_">淘宝</string>
     <string name="wechat_">微信</string>
     <string name="calendar_">日历</string>
-    <string name="taobao_c">淘宝搜索…</string>
-    <string name="wechat_c">微信分享…</string>
-    <string name="calendar_c">创建新日历项…</string>
+    <string name="taobao_c">"淘宝搜索…"</string>
+    <string name="wechat_c">"微信分享…"</string>
+    <string name="calendar_c">"创建新日历项…"</string>
 
 </resources>
