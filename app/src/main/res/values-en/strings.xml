@@ -68,5 +68,7 @@
     <string name="calendar">Open Calendar to Create a event</string>
     <!--enter-->
     <string name="enter">Enter the Flash Note</string>
+    <string name="version">Version: 1.0.0</string>
+    <string name="author">Design By Wuke</string>
 
 </resources>

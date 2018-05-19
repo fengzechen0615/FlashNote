@@ -68,5 +68,7 @@
     <string name="calendar">在日历中创建一条日程</string>
     <!--enter-->
     <string name="enter">开始Flash Note之旅</string>
+    <string name="version">版本: 1.0.0</string>
+    <string name="author">Wuke出品</string>
 
 </resources>
