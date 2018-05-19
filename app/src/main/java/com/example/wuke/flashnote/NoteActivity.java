@@ -645,10 +645,6 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
         // 设置标点符号,设置为"0"返回结果无标点,设置为"1"返回结果有标点
         mIat.setParameter(SpeechConstant.ASR_PTT, mSharedPreferences.getString("punc_preference", "1"));
 
-//        // 设置音频保存路径，保存音频格式支持pcm、wav，设置路径为sd卡请注意WRITE_EXTERNAL_STORAGE权限
-//        mIat.setParameter(SpeechConstant.AUDIO_FORMAT,"wav");
-//        Log.e("TIMEK", time_record);
-//        mIat.setParameter(SpeechConstant.ASR_AUDIO_PATH, Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav");
     }
 
     public void setRecordPath() {

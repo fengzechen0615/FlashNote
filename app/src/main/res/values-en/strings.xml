@@ -28,7 +28,7 @@
     <string name="friends">Friends</string>
     <string name="update">Update</string>
     <string name="trash">Trash</string>
-    <string name="setting">Setting</string>
+    <string name="setting">Settings</string>
     <!--setting-->
     <string name="language">Record Language</string>
     <string name="punctuation">Punctuation</string>
@@ -36,6 +36,9 @@
     <string name="Cloud">Wuke Cloud</string>
     <string name="support">Support: Mandarin, Cantonese, English</string>
     <string name="default_punc">Default value: punctuation</string>
+    <string name="done">Done</string>
+    <string name="sign_out">Sign out</string>
+    <string name="status">Your account is active.</string>
     <!--activity_register-->
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -49,7 +52,7 @@
     <!--activity_login-->
     <string name="login">Login</string>
     <string name="sign_up">Sign up</string>
-    <string name="for_pass">Forget the password</string>
+    <string name="for_pass">Forget the password?</string>
     <string name="stop">Cancel</string>
 
 </resources>

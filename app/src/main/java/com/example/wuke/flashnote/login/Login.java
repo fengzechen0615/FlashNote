@@ -34,7 +34,7 @@ public class Login extends Fragment implements OnClickListener{
     private EditText password;
     private TextView result;
     private Button login;
-    private Button register;
+    private TextView register;
     private TextView cancel;
 
     @Override
@@ -56,7 +56,7 @@ public class Login extends Fragment implements OnClickListener{
         login = (Button) view.findViewById(R.id.login_button);
         login.setOnClickListener(this);
 
-        register = (Button) view.findViewById(R.id.sign_button);
+        register = (TextView) view.findViewById(R.id.sign_button);
         register.setOnClickListener(this);
 
         return view;

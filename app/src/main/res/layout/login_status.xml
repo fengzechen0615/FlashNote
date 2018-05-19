@@ -2,17 +2,42 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:gravity="center"
     android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="60dp"
+        android:src="@drawable/icon"/>
 
     <TextView
         android:id="@+id/usename_login"
+        android:text="@string/app_name"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="35dp"
+        android:textColor="#000000"
+        android:gravity="center"
+        android:textSize="35sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="25sp"
+        android:textColor="#000000"
+        android:text="@string/status"/>
 
     <Button
         android:id="@+id/sign_out"
-        android:layout_width="match_parent"
+        android:layout_marginTop="25dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="signout" />
+        android:background="@drawable/button_login"
+        android:textColor="#F8F8FF"
+        android:textStyle="bold"
+        android:text="@string/sign_out" />
 
 </LinearLayout>

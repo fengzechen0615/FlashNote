@@ -36,6 +36,9 @@
     <string name="Cloud">Wuke Cloud</string>
     <string name="support">支持：简体中文、粤语和英语</string>
     <string name="default_punc">默认：有标点</string>
+    <string name="done">完成</string>
+    <string name="sign_out">登出</string>
+    <string name="status">账户正在使用</string>
     <!--activity_register-->
     <string name="username">用户名</string>
     <string name="password">密码</string>
@@ -49,7 +52,7 @@
     <!--activity_login-->
     <string name="login">登陆</string>
     <string name="sign_up">注册</string>
-    <string name="for_pass">忘记密码</string>
+    <string name="for_pass">忘记密码？</string>
     <string name="stop">取消</string>
 
 </resources>
