@@ -284,16 +284,15 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
             public boolean onTouch(View v, MotionEvent event) {
                 switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        Timestamp timestamp=new Timestamp(System.currentTimeMillis());
+                        start_time = System.currentTimeMillis();
+                        Timestamp timestamp=new Timestamp(start_time);
                         SimpleDateFormat form = new SimpleDateFormat("yyyyMMddHHmmss");
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         time_record = form.format(timestamp);
                         time_stamp = formatter.format(timestamp);
-                        start_time = System.currentTimeMillis();
                         start_speak();
                         UpdateMicStatus();
                         DownY = event.getY();
-                        Log.d("DownY", String.valueOf(DownY));
                         recordingContainer.setVisibility(View.VISIBLE);
                         break;
                     case MotionEvent.ACTION_UP:
@@ -339,11 +338,14 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
     }
 
     private void start_speak() {
+        setRecordPath();
         FlowerCollector.onEvent(NoteActivity.this, "iat_recognize");
         mIatResults.clear();
         boolean isShowDialog = mSharedPreferences.getBoolean(getString(R.string.pref_key_iat_show), false);
         if (isShowDialog) {
-            showTip(getString(R.string.text_begin));
+//            showTip(getString(R.string.text_begin));
+            // 设置参数
+//            setRecordPath();
         } else {
             // 不显示听写对话框
             ret = mIat.startListening(mRecognizerListener);
@@ -380,6 +382,7 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                 @SuppressLint("SimpleDateFormat") SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm");
                 String time = form.format(timestamp);
+                Log.e("times",time);
                 pref = getSharedPreferences("info", MODE_PRIVATE);
                 int userid = pref.getInt("userid", 0);
                 // 插入priority
@@ -418,6 +421,7 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
 //                    createTopic();
                     // 插入priority list.size
                     int time = (int)((end_time - start_time) /1000);
+                    Log.e("TIMEz", time_record);
                     Voice voice = new Voice(user_id, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), 0, time_stamp, list.size(), 1, time);
                     list.add(voice);
                     dbo = new DatabaseOperator(NoteActivity.this);
@@ -641,8 +645,16 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
         // 设置标点符号,设置为"0"返回结果无标点,设置为"1"返回结果有标点
         mIat.setParameter(SpeechConstant.ASR_PTT, mSharedPreferences.getString("punc_preference", "1"));
 
+//        // 设置音频保存路径，保存音频格式支持pcm、wav，设置路径为sd卡请注意WRITE_EXTERNAL_STORAGE权限
+//        mIat.setParameter(SpeechConstant.AUDIO_FORMAT,"wav");
+//        Log.e("TIMEK", time_record);
+//        mIat.setParameter(SpeechConstant.ASR_AUDIO_PATH, Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav");
+    }
+
+    public void setRecordPath() {
         // 设置音频保存路径，保存音频格式支持pcm、wav，设置路径为sd卡请注意WRITE_EXTERNAL_STORAGE权限
         mIat.setParameter(SpeechConstant.AUDIO_FORMAT,"wav");
+        Log.e("TIMEK", time_record);
         mIat.setParameter(SpeechConstant.ASR_AUDIO_PATH, Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav");
     }
 
