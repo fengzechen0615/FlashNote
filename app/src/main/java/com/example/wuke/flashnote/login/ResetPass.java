@@ -19,9 +19,11 @@ import java.net.URL;
 public class ResetPass {
     private String url = "http://39.106.205.176:8080/artifacts/Sendemail";
 
-    private void resetpass(String a) {
+    public void resetpass(String a) {
+
         String s = url + "?username=" + a;
         new ResetPass.MyAsyncTask().execute(s);
+        Log.e("nice","yes");
     }
 
     public class MyAsyncTask extends AsyncTask<String, Integer, String> {

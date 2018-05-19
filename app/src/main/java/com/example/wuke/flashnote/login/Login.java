@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.wuke.flashnote.NoteActivity;
 import com.example.wuke.flashnote.R;
@@ -108,12 +109,17 @@ public class Login extends Fragment implements OnClickListener{
         final EditText editText = new EditText(getActivity());
         new AlertDialog.Builder(getActivity())
                 .setTitle(getString(R.string.e_mail))
+                .setTitle("Enter your username to reset password")
                 .setView(editText)
                 .setPositiveButton(getString(R.string.send), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // input 为输入内容
                         String input = editText.getText().toString();
+                        ResetPass reset = new ResetPass();
+                        reset.resetpass(input);
+                        //Toast t = Toast.makeText(this,"Send email to your email address",Toast.LENGTH_LONG);
+                        //t.show();
                     }
                 })
                 .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
