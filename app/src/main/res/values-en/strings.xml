@@ -70,5 +70,13 @@
     <string name="enter">Enter the Flash Note</string>
     <string name="version">Version: 1.0.0</string>
     <string name="author">Design By Wuke</string>
+    <string name="length">The length of Voice：</string>
+    <!--command-->
+    <string name="taobao_">TaoBao</string>
+    <string name="wechat_">Wechat</string>
+    <string name="calendar_">Calendar</string>
+    <string name="taobao_c">Search … in TaoBao</string>
+    <string name="wechat_c">Share … in Wechat</string>
+    <string name="calendar_c">Create new calendar event …</string>
 
 </resources>

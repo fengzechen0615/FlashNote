@@ -70,5 +70,13 @@
     <string name="enter">开始Flash Note之旅</string>
     <string name="version">版本: 1.0.0</string>
     <string name="author">Wuke出品</string>
+    <string name="length">录音时长：</string>
+    <!--command-->
+    <string name="taobao_">淘宝</string>
+    <string name="wechat_">微信</string>
+    <string name="calendar_">日历</string>
+    <string name="taobao_c">淘宝搜索…</string>
+    <string name="wechat_c">微信分享…</string>
+    <string name="calendar_c">创建新日历项…</string>
 
 </resources>
