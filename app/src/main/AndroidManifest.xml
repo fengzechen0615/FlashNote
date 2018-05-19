@@ -35,29 +35,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppCompat">
-        <activity android:name=".MainActivity">
+        <activity android:name=".NoteActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".setting.Setting" />
-        <activity
-            android:name=".login.Login"
-            android:theme="@style/dialogstyle" />
+        <activity android:name=".setting.RecordSetting" />
+        <!-- android:theme="@style/dialogstyle" /> -->
 
         <meta-data
             android:name="IFLYTEK_APPKEY"
             android:value="&apos;5aa758dc&apos;" />
 
         <activity android:name=".function.TaoBaoView" />
-
-        <activity
-            android:name=".login.Register"
-            android:theme="@style/dialogstyle" />
+        <!-- android:theme="@style/dialogstyle" /> -->
 
         <activity android:name=".friends.Friend" />
+        <activity android:name=".setting.WukeCloud" />
+        <activity android:name=".setting.Setting"></activity>
     </application>
 
 </manifest>

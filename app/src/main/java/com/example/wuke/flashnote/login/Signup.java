@@ -1,13 +1,7 @@
 package com.example.wuke.flashnote.login;
 
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.widget.TextView;
-
-import com.example.wuke.flashnote.setting.Setting;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,8 +11,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 
 /**
  * Created by kumbaya on 2018/5/8.

@@ -14,7 +14,7 @@ import java.io.IOException;
  */
 
 
-public class Locallogin {
+public class LocalLogin {
     public static void save(String a, String p){
         try {
             File account = Environment.getDataDirectory();

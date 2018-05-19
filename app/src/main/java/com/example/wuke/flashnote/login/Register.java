@@ -1,18 +1,19 @@
 package com.example.wuke.flashnote.login;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.example.wuke.flashnote.R;
-import com.example.wuke.flashnote.setting.Setting;
 
-public class Register extends AppCompatActivity {
+public class Register extends Fragment implements View.OnClickListener {
 
     private EditText account;
     private EditText password;
@@ -20,15 +21,16 @@ public class Register extends AppCompatActivity {
     private Button sign;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState)
+    {
+        View view = inflater.inflate(R.layout.register, container, false);
 
-        account = (EditText) findViewById(R.id.register_username);
-        password = (EditText) findViewById(R.id.register_password);
-        email = (EditText) findViewById(R.id.register_email);
+        account = (EditText) view.findViewById(R.id.register_username);
+        password = (EditText) view.findViewById(R.id.register_password);
+        email = (EditText) view.findViewById(R.id.register_email);
 
-        sign = (Button) findViewById(R.id.register_done);
+        sign = (Button) view.findViewById(R.id.register_done);
 
         sign.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,9 +40,30 @@ public class Register extends AppCompatActivity {
                 String pass = password.getText().toString();
                 String e_mail = email.getText().toString();
                 Log.w("1",username);
-                s.signup(username, pass, e_mail);
-                finish();
+//                s.signup(username, pass, e_mail);
+                Login login = new Login();
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction tx = fragmentManager.beginTransaction();
+                tx.replace(R.id.id_content, login, "Login");
+                tx.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                tx.addToBackStack(null);
+                tx.commit();
             }
         });
+        return view;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.register_done:
+                Signup s = new Signup();
+                String username = account.getText().toString();
+                String pass = password.getText().toString();
+                String e_mail = email.getText().toString();
+                Log.w("1",username);
+                s.signup(username, pass, e_mail);
+
+        }
     }
 }

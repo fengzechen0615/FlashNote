@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".setting.Setting">
+
+    <TextView
+        android:id="@+id/record_setting_button"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:gravity="center|left"
+        android:text="Record"
+        android:textSize="30dp"/>
+
+    <TextView
+        android:id="@+id/command_button"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:gravity="center|left"
+        android:text="Command"
+        android:textSize="30dp"/>
+
+    <TextView
+        android:id="@+id/cloud_button"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:gravity="center|left"
+        android:text="@string/Cloud"
+        android:textSize="30dp"/>
+
+    <TextView
+        android:id="@+id/about_button"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:gravity="center|left"
+        android:text="About"
+        android:textSize="30dp"/>
+
+</LinearLayout>

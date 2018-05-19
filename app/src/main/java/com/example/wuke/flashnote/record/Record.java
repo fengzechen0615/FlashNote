@@ -1,8 +1,6 @@
 package com.example.wuke.flashnote.record;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
@@ -11,8 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.wuke.flashnote.MainActivity;
-import com.example.wuke.flashnote.setting.Setting;
+import com.example.wuke.flashnote.NoteActivity;
 import com.example.wuke.flashnote.util.FucUtil;
 import com.example.wuke.flashnote.util.JsonParser;
 import com.iflytek.cloud.ErrorCode;
@@ -104,8 +101,6 @@ public class Record {
         mIat = SpeechRecognizer.createRecognizer(context, mInitListener);
 
         mToast = Toast.makeText(context, "", Toast.LENGTH_SHORT);
-
-        MainActivity mainActivity = new MainActivity();
 
         mIat.setParameter(SpeechConstant.VAD_BOS, "5000");
         mIat.setParameter(SpeechConstant.VAD_EOS, "10000");

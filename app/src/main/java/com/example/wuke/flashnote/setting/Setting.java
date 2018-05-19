@@ -1,147 +1,68 @@
 package com.example.wuke.flashnote.setting;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceActivity;
-import android.preference.SwitchPreference;
-import android.util.Log;
-import android.view.Window;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.TextView;
 
-import com.example.wuke.flashnote.MainActivity;
 import com.example.wuke.flashnote.R;
-import com.example.wuke.flashnote.login.Locallogin;
-import com.example.wuke.flashnote.login.Login;
-import com.iflytek.cloud.ErrorCode;
-import com.iflytek.cloud.InitListener;
-import com.iflytek.cloud.LexiconListener;
-import com.iflytek.cloud.SpeechConstant;
-import com.iflytek.cloud.SpeechError;
-import com.iflytek.cloud.SpeechRecognizer;
-import com.iflytek.cloud.util.ContactManager;
 
-/**
- * Created by francisfeng on 21/03/2018.
- */
+public class Setting extends AppCompatActivity{
 
-public class Setting extends PreferenceActivity implements Preference.OnPreferenceChangeListener {
-
-    public static final String PREFER_NAME = "com.flashnote.setting";
-
-    private Preference preference;
-
-    private Context mContext;
-
-    private SpeechRecognizer mIat;
-
-    private SharedPreferences mSharePreferences;
-
-    private Toast mToast;
-
-    @SuppressWarnings("deprecation")
-    public void onCreate(Bundle savedInstanceState) {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        super.onCreate(savedInstanceState);
-        getPreferenceManager().setSharedPreferencesName(PREFER_NAME);
-        addPreferencesFromResource(R.xml.setting);
-
-        mSharePreferences = getSharedPreferences(Setting.PREFER_NAME, Activity.MODE_PRIVATE);
-
-        mIat = SpeechRecognizer.createRecognizer(Setting.this, mInitListener);
-
-        mToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
-
-        mContext = getApplicationContext();
-        preference = findPreference("contact");
-        preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if ((Boolean) newValue) {
-                    ContactManager mgr = ContactManager.createManager(Setting.this, mContactListener);
-                    mgr.asyncQueryAllContactsName();
-                } else {
-                    ContactManager.destroy();
-                }
-                return true;
-            }
-        });
-
-        preference = findPreference("wuke_cloud");
-        preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if ((Boolean) newValue) {
-                    Intent intent = new Intent(Setting.this, Login.class);
-                    startActivity(intent);
-                } else {
-                    Locallogin.delete();
-                }
-                return true;
-            }
-        });
-    }
-
-    int ret = 0;
-
-    private ContactManager.ContactListener mContactListener = new ContactManager.ContactListener() {
-
-        @Override
-        public void onContactQueryFinish(final String contactInfos, boolean changeFlag) {
-            // 注：实际应用中除第一次上传之外，之后应该通过changeFlag判断是否需要上传，否则会造成不必要的流量.
-            // 每当联系人发生变化，该接口都将会被回调，可通过ContactManager.destroy()销毁对象，解除回调。
-             if(changeFlag == false) {
-                 // 指定引擎类型
-                 Log.d("changeFloag", String.valueOf(changeFlag));
-                 runOnUiThread(new Runnable() {
-                     public void run() {
-                         Log.d("contactinfos", contactInfos);
-                     }
-                 });
-             }
-
-            mIat.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD);
-            mIat.setParameter(SpeechConstant.TEXT_ENCODING, "utf-8");
-            ret = mIat.updateLexicon("contact", contactInfos, mLexiconListener);
-            if (ret != ErrorCode.SUCCESS) {
-                showTip("上传联系人失败：" + ret);
-            }
-        }
-    };
-
-    private LexiconListener mLexiconListener = new LexiconListener() {
-
-        @Override
-        public void onLexiconUpdated(String lexiconId, SpeechError error) {
-            if (error != null) {
-                showTip(error.toString());
-            } else {
-                showTip("上传成功");
-            }
-        }
-    };
-
-    private void showTip(final String str) {
-        mToast.setText(str);
-        mToast.show();
-    }
-
-    private InitListener mInitListener = new InitListener() {
-
-        @Override
-        public void onInit(int code) {
-            Log.d("TAG", "SpeechRecognizer init() code = " + code);
-            if (code != ErrorCode.SUCCESS) {
-                showTip("初始化失败，错误码：" + code);
-            }
-        }
-    };
+    private TextView record;
+    private TextView command;
+    private TextView cloud;
+    private TextView about;
 
     @Override
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
-        return true;
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_setting);
+
+        record = (TextView) findViewById(R.id.record_setting_button);
+        command = (TextView) findViewById(R.id.command_button);
+        cloud = (TextView) findViewById(R.id.cloud_button);
+        about = (TextView) findViewById(R.id.about_button);
+
+        record.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent setting = new Intent(getBaseContext(), RecordSetting.class);
+                startActivity(setting);
+            }
+        });
+
+        cloud.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent cloud = new Intent(getBaseContext(), WukeCloud.class);
+                startActivity(cloud);
+            }
+        });
     }
+
+//    @Override
+//    public void onClick(View view) {
+//        switch (view.getId()) {
+//            case R.id.record_setting_button:
+//                Intent setting = new Intent(getBaseContext(), RecordSetting.class);
+//                startActivity(setting);
+//                break;
+//            case R.id.command_button:
+////                Intent command = new Intent(getBaseContext(), RecordSetting.class);
+////                startActivity(command);
+//                break;
+//            case R.id.cloud_button:
+//                Intent cloud = new Intent(getBaseContext(), WukeCloud.class);
+//                startActivity(cloud);
+//                break;
+//            case R.id.about_button:
+////                Intent about = new Intent(getBaseContext(), RecordSetting.class);
+////                startActivity(about);
+//                break;
+//            default:
+//                break;
+//        }
+//    }
 }

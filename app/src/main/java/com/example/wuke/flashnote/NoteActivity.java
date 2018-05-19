@@ -40,13 +40,14 @@ import com.example.wuke.flashnote.database_storage.Storage;
 import com.example.wuke.flashnote.database_storage.Voice;
 import com.example.wuke.flashnote.download_upload.Deleting;
 import com.example.wuke.flashnote.friends.Friend;
+import com.example.wuke.flashnote.login.LocalLogin;
 import com.example.wuke.flashnote.recyclerview.RecycleItemTouchHelper;
 import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Note;
 import com.example.wuke.flashnote.database_storage.Sync;
-import com.example.wuke.flashnote.login.Locallogin;
-import com.example.wuke.flashnote.setting.Setting;
+import com.example.wuke.flashnote.setting.RecordSetting;
 import com.example.wuke.flashnote.recyclerview.NoteAdapter;
+import com.example.wuke.flashnote.setting.Setting;
 import com.example.wuke.flashnote.util.JsonParser;
 import com.example.wuke.flashnote.download_upload.Uploading;
 import com.example.wuke.flashnote.download_upload.Downloading;
@@ -76,9 +77,9 @@ import java.util.List;
  * Created by francisfeng on 21/03/2018.
  */
 
-public class MainActivity extends Activity implements NavigationView.OnNavigationItemSelectedListener {
+public class NoteActivity extends Activity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static String TAG = MainActivity.class.getSimpleName();
+    private static String TAG = NoteActivity.class.getSimpleName();
     // 语音听写对象
     private SpeechRecognizer mIat;
     // 用HashMap存储听写结果
@@ -127,9 +128,9 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
-        mIat = SpeechRecognizer.createRecognizer(MainActivity.this, mInitListener);
+        mIat = SpeechRecognizer.createRecognizer(NoteActivity.this, mInitListener);
 
-        mSharedPreferences = getSharedPreferences(Setting.PREFER_NAME, Activity.MODE_PRIVATE);
+        mSharedPreferences = getSharedPreferences(RecordSetting.PREFER_NAME, Activity.MODE_PRIVATE);
 
         mToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 
@@ -200,10 +201,10 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                 getResources().getDrawable(R.drawable.ease_record_animate_13),
                 getResources().getDrawable(R.drawable.ease_record_animate_14), };
 
-        Locallogin locallogin = new Locallogin();
+        LocalLogin localLogin = new LocalLogin();
 
-        if(locallogin.check() == true) {
-            String[] user = locallogin.getaccount();
+        if(localLogin.check() == true) {
+            String[] user = localLogin.getaccount();
             username.setText(user[0]);
         } else {
             username.setText(getString(R.string.app_name));
@@ -338,7 +339,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
     }
 
     private void start_speak() {
-        FlowerCollector.onEvent(MainActivity.this, "iat_recognize");
+        FlowerCollector.onEvent(NoteActivity.this, "iat_recognize");
         mIatResults.clear();
         boolean isShowDialog = mSharedPreferences.getBoolean(getString(R.string.pref_key_iat_show), false);
         if (isShowDialog) {
@@ -361,7 +362,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
     // create note
     private void createNote(String note) {
-        DatabaseOperator dbo = new DatabaseOperator(MainActivity.this);
+        DatabaseOperator dbo = new DatabaseOperator(NoteActivity.this);
         String content = note;
         if (!"".equals(content)) {
             // 触发淘宝条件
@@ -397,7 +398,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
     private void createVoice(String note, int i) {
         if (i == 0) {
             Log.d("i", "message");
-            dbo  = new DatabaseOperator(MainActivity.this);
+            dbo  = new DatabaseOperator(NoteActivity.this);
             String content = note;
             if (!"".equals(content)) {
 //              触发淘宝条件
@@ -419,7 +420,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                     int time = (int)((end_time - start_time) /1000);
                     Voice voice = new Voice(user_id, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), 0, time_stamp, list.size(), 1, time);
                     list.add(voice);
-                    dbo = new DatabaseOperator(MainActivity.this);
+                    dbo = new DatabaseOperator(NoteActivity.this);
                     dbo.InsertVoice(voice);
                     mAdapter.notifyItemInserted(list.size() - 1);
                     mRecyclerView.scrollToPosition(list.size() - 1);
@@ -436,7 +437,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
     private void TaobaoDialog() {
         final EditText editText = new EditText(this);
-        new AlertDialog.Builder(MainActivity.this)
+        new AlertDialog.Builder(NoteActivity.this)
                 .setTitle("Open Taobao to Search")
                 .setView(editText)
                 .setPositiveButton("Search", new DialogInterface.OnClickListener() {
@@ -455,7 +456,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
     private void CalendarDialog() {
         final EditText editText = new EditText(this);
-        new AlertDialog.Builder(MainActivity.this)
+        new AlertDialog.Builder(NoteActivity.this)
                 .setTitle("Open Calendar to Create a event")
                 .setView(editText)
                 .setPositiveButton("Create", new DialogInterface.OnClickListener() {
@@ -474,7 +475,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
 
     private void WechatDialog() {
         final EditText editText = new EditText(this);
-        new AlertDialog.Builder(MainActivity.this)
+        new AlertDialog.Builder(NoteActivity.this)
                 .setTitle("Open Wechat to send a message")
                 .setView(editText)
                 .setPositiveButton("Send", new DialogInterface.OnClickListener() {
@@ -659,7 +660,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
     @Override
     protected void onResume() {
         // 开放统计 移动数据统计分析
-        FlowerCollector.onResume(MainActivity.this);
+        FlowerCollector.onResume(NoteActivity.this);
         FlowerCollector.onPageStart(TAG);
         super.onResume();
     }
@@ -668,7 +669,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
     protected void onPause() {
         // 开放统计 移动数据统计分析
         FlowerCollector.onPageEnd(TAG);
-        FlowerCollector.onPause(MainActivity.this);
+        FlowerCollector.onPause(NoteActivity.this);
         super.onPause();
     }
 
@@ -710,10 +711,10 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.setting) {
-            Intent intents = new Intent(MainActivity.this, Setting.class);
+            Intent intents = new Intent(NoteActivity.this, Setting.class);
             startActivity(intents);
-        } else if(item.getItemId()==R.id.friends) {
-            Intent intent = new Intent(MainActivity.this, Friend.class);
+        } else if(item.getItemId() == R.id.friends) {
+            Intent intent = new Intent(NoteActivity.this, Friend.class);
             startActivity(intent);
         } else if (item.getItemId() == R.id.trash) {
 
@@ -741,7 +742,7 @@ public class MainActivity extends Activity implements NavigationView.OnNavigatio
                             ArrayList<Note> test=dl.notes;
                         }
                         else {
-                            mToast = Toast.makeText(MainActivity.this, "No", Toast.LENGTH_LONG);
+                            mToast = Toast.makeText(NoteActivity.this, "No", Toast.LENGTH_LONG);
                             mToast.show();
                         }
                     }

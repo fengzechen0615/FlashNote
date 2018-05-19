@@ -21,8 +21,4 @@
         android:key="contact"
         android:title="@string/upload_contact" />
 
-    <SwitchPreference
-        android:key="wuke_cloud"
-        android:title="@string/Cloud" />
-
 </PreferenceScreen>
