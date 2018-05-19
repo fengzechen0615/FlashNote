@@ -39,6 +39,9 @@
     <string name="done">完成</string>
     <string name="sign_out">登出</string>
     <string name="status">账户正在使用</string>
+    <string name="record">录音</string>
+    <string name="command">命令</string>
+    <string name="about">关于</string>
     <!--activity_register-->
     <string name="username">用户名</string>
     <string name="password">密码</string>

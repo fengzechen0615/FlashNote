@@ -39,6 +39,9 @@
     <string name="done">Done</string>
     <string name="sign_out">Sign out</string>
     <string name="status">Your account is active.</string>
+    <string name="record">Record</string>
+    <string name="command">Command</string>
+    <string name="about">About</string>
     <!--activity_register-->
     <string name="username">Username</string>
     <string name="password">Password</string>

@@ -54,7 +54,9 @@
 
         <activity android:name=".friends.Friend" />
         <activity android:name=".setting.WukeCloud" />
-        <activity android:name=".setting.Setting"></activity>
+        <activity android:name=".setting.Setting" />
+        <activity android:name=".setting.About" />
+        <activity android:name=".setting.Command"></activity>
     </application>
 
 </manifest>

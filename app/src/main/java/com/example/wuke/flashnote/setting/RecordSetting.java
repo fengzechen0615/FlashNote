@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Window;
 import android.widget.Toast;
 
@@ -140,4 +141,5 @@ public class RecordSetting extends PreferenceActivity implements Preference.OnPr
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         return true;
     }
+
 }
