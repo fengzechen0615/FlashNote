@@ -194,8 +194,13 @@ public class DatabaseOperator {
     {
         ContentValues cValue = new ContentValues();
         SQLiteDatabase wdb=WriteDatabase;
-        cValue.put(Initial.note_id,garbage.NID());
-        cValue.put(Initial.note_user,garbage.UID());
+        cValue.put(Initial.content_id,garbage.getContent_id());
+        cValue.put(Initial.datatype,garbage.getDatatype());
+        cValue.put(Initial.guser_id,garbage.getGuser_id());
+        cValue.put(Initial.keywords,garbage.getKeywords());
+        cValue.put(Initial.previous_color,garbage.getPrevious_color());
+        cValue.put(Initial.previous_timestamp,garbage.getPrevious_timestamp());
+        cValue.put(Initial.previous_priority,garbage.getPrevious_priority());
         wdb.insert(Initial.Garbage_table,null,cValue);
         wdb.close();
         return false;

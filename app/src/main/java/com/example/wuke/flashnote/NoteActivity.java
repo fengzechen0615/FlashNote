@@ -70,6 +70,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -136,8 +137,9 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
 
         Timestamp timestamp=new Timestamp(System.currentTimeMillis());
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        time = formatter.format(timestamp);
-        Log.e("gtime1",time);
+        pref=getSharedPreferences("info",MODE_PRIVATE);
+        time = pref.getString(time,formatter.format(timestamp));
+        Log.e("gtime1",time);//程序启动时间
 
         // 初始化列表
         init_List();
@@ -725,13 +727,19 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
             Intent intent = new Intent(NoteActivity.this, Friend.class);
             startActivity(intent);
         } else if (item.getItemId() == R.id.trash) {
-
         } else if (item.getItemId() == R.id.update) {
             if (time!=null) {
-                pref=getSharedPreferences("info",MODE_PRIVATE);
-                String newtime=pref.getString("time","0");
-                Log.e("gtime2",newtime);
-                HashMap map = Sync.CompareTimestamp(newtime, list);
+                String newtime=time;
+                Iterator<Storage> iterator=list.iterator();
+                List notelist=new ArrayList();
+                while(iterator.hasNext()) {
+                    Storage storage=(Storage)iterator.next();
+                    if (storage instanceof Note) {
+                        notelist.add((Note)storage);
+                    }
+                }
+                //同步比较时间
+                HashMap map = Sync.CompareTimestamp(newtime, notelist);
                 ArrayList before = (ArrayList<Note>) map.get("Before");//verify
                 ArrayList After = (ArrayList<Note>) map.get("After");//new content,upload to server
                 ArrayList Delete= (ArrayList) mAdapter.getDelete_List();
@@ -740,7 +748,6 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                 uploading.uploadnote(After);
                 d.deletenote(Delete);
                 final Downloading dl=new Downloading();
-
                 int userid=pref.getInt("userid",0);
                 dl.downnote(String.valueOf(userid));
                 new Handler().postDelayed(new Runnable() {
@@ -755,11 +762,14 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                         }
                     }
                 },1000);
+                //最后同步时间
                 Timestamp timestamp=new Timestamp(System.currentTimeMillis());
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String retime = formatter.format(timestamp);
-                pref.edit().putString("time",retime);
-                Log.e("gtime3",retime);
+                time=retime;
+//                pref=getSharedPreferences("info",MODE_PRIVATE);
+//                SharedPreferences.Editor editor=pref.edit();
+//                editor.putString("time",retime);
             }
 
             else
