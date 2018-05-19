@@ -3,6 +3,7 @@ package com.example.wuke.flashnote.login;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +27,8 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class Login extends Fragment implements OnClickListener{
 
@@ -153,14 +156,11 @@ public class Login extends Fragment implements OnClickListener{
                 Timestamp nowTime = new Timestamp(System.currentTimeMillis());//Login Time
                 SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String time = form.format(nowTime);
-//                SharedPreferences pref=getSharedPreferences("info",MODE_PRIVATE);
-//                SharedPreferences.Editor editor=pref.edit();
-//                editor.putString("username",a);
-//                editor.putInt("userid",Integer.parseInt(userid));
-
-//                Intent intent = new Intent(Login.this, RecordSetting.class);
-//                startActivity(intent);
-//                finish();
+                SharedPreferences pref=getActivity().getSharedPreferences("info",MODE_PRIVATE);
+                SharedPreferences.Editor editor=pref.edit();
+                editor.putString("username",a);
+                editor.putInt("userid",Integer.parseInt(userid));
+                editor.putString("time",time);
             } else {
                 tv.setText(s);
             }

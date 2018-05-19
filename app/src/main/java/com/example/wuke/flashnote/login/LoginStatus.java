@@ -18,6 +18,7 @@ public class LoginStatus extends Fragment{
     private TextView username;
     private Button logout;
     private String name;
+    static private boolean Situation;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.login_status, container, false);
@@ -27,8 +28,10 @@ public class LoginStatus extends Fragment{
         String user[] = localLogin.getaccount();
         if (!localLogin.check()) {
             username.setText(getArguments().getString("name"));
+            Situation=false;
         } else {
             username.setText(user[0]);
+            Situation=true;
         }
 
         logout = (Button) view.findViewById(R.id.sign_out);
@@ -41,6 +44,7 @@ public class LoginStatus extends Fragment{
                 transaction.replace(R.id.id_content, new Login());
                 transaction.addToBackStack(null);
                 transaction.commit();
+                Situation=false;
                 localLogin.delete();
             }
         });
