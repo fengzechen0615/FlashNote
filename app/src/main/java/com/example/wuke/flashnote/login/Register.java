@@ -13,7 +13,7 @@ import android.widget.EditText;
 
 import com.example.wuke.flashnote.R;
 
-public class Register extends Fragment implements View.OnClickListener {
+public class Register extends Fragment {
 
     private EditText account;
     private EditText password;
@@ -35,35 +35,24 @@ public class Register extends Fragment implements View.OnClickListener {
         sign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Signup s = new Signup();
-                String username = account.getText().toString();
-                String pass = password.getText().toString();
-                String e_mail = email.getText().toString();
-                Log.w("1",username);
-//                s.signup(username, pass, e_mail);
-                Login login = new Login();
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction tx = fragmentManager.beginTransaction();
-                tx.replace(R.id.id_content, login, "Login");
-                tx.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                tx.addToBackStack(null);
-                tx.commit();
+                if (account.getText() != null && password.getText() != null && email.getText() != null) {
+                    Signup s = new Signup();
+                    String username = account.getText().toString();
+                    String pass = password.getText().toString();
+                    String e_mail = email.getText().toString();
+                    Log.w("1", username);
+                    s.signup(username, pass, e_mail);
+                    Login login = new Login();
+                    FragmentManager fragmentManager = getFragmentManager();
+                    FragmentTransaction tx = fragmentManager.beginTransaction();
+                    tx.replace(R.id.id_content, login, "Login");
+                    tx.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                    tx.addToBackStack(null);
+                    tx.commit();
+                }
             }
         });
         return view;
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.register_done:
-                Signup s = new Signup();
-                String username = account.getText().toString();
-                String pass = password.getText().toString();
-                String e_mail = email.getText().toString();
-                Log.w("1",username);
-                s.signup(username, pass, e_mail);
-
-        }
-    }
 }

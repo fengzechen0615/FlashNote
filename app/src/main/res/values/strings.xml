@@ -28,7 +28,7 @@
     <string name="friends">Friends</string>
     <string name="update">Update</string>
     <string name="trash">Trash</string>
-    <string name="setting">Setting</string>
+    <string name="setting">Settings</string>
     <!--setting-->
     <string name="language">Record Language</string>
     <string name="punctuation">Punctuation</string>
@@ -36,6 +36,12 @@
     <string name="Cloud">Wuke Cloud</string>
     <string name="support">Support: Mandarin, Cantonese, English</string>
     <string name="default_punc">Default value: punctuation</string>
+    <string name="done">Done</string>
+    <string name="sign_out">Sign out</string>
+    <string name="status">Your account is active.</string>
+    <string name="record">Record</string>
+    <string name="command">Command</string>
+    <string name="about">About</string>
     <!--activity_register-->
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -49,7 +55,18 @@
     <!--activity_login-->
     <string name="login">Login</string>
     <string name="sign_up">Sign up</string>
-    <string name="for_pass">Forget the password</string>
+    <string name="for_pass">Forget the password?</string>
     <string name="stop">Cancel</string>
+    <!--Dialog-->
+    <string name="cancel">Cancel</string>
+    <string name="send">Send</string>
+    <string name="search">Search</string>
+    <string name="create">Create</string>
+    <string name="e_mail">Send Email to reset the password</string>
+    <string name="taobao">Open Taobao to Search</string>
+    <string name="wechat">Open Wechat to send a message</string>
+    <string name="calendar">Open Calendar to Create a event</string>
+    <!--enter-->
+    <string name="enter">Enter the Flash Note</string>
 
 </resources>

@@ -444,16 +444,16 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
     private void TaobaoDialog() {
         final EditText editText = new EditText(this);
         new AlertDialog.Builder(NoteActivity.this)
-                .setTitle("Open Taobao to Search")
+                .setTitle(getString(R.string.taobao))
                 .setView(editText)
-                .setPositiveButton("Search", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.search), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // input 为搜索的内容
                         String input = editText.getText().toString();
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                     }
@@ -463,16 +463,16 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
     private void CalendarDialog() {
         final EditText editText = new EditText(this);
         new AlertDialog.Builder(NoteActivity.this)
-                .setTitle("Open Calendar to Create a event")
+                .setTitle(getString(R.string.calendar))
                 .setView(editText)
-                .setPositiveButton("Create", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.create), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // input 为创建的内容
                         String input = editText.getText().toString();
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                     }
@@ -482,16 +482,16 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
     private void WechatDialog() {
         final EditText editText = new EditText(this);
         new AlertDialog.Builder(NoteActivity.this)
-                .setTitle("Open Wechat to send a message")
+                .setTitle(getString(R.string.wechat))
                 .setView(editText)
-                .setPositiveButton("Send", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.send), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // input 为发送的内容
                         String input = editText.getText().toString();
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                     }
@@ -647,10 +647,6 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
         // 设置标点符号,设置为"0"返回结果无标点,设置为"1"返回结果有标点
         mIat.setParameter(SpeechConstant.ASR_PTT, mSharedPreferences.getString("punc_preference", "1"));
 
-//        // 设置音频保存路径，保存音频格式支持pcm、wav，设置路径为sd卡请注意WRITE_EXTERNAL_STORAGE权限
-//        mIat.setParameter(SpeechConstant.AUDIO_FORMAT,"wav");
-//        Log.e("TIMEK", time_record);
-//        mIat.setParameter(SpeechConstant.ASR_AUDIO_PATH, Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav");
     }
 
     public void setRecordPath() {

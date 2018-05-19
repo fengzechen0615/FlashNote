@@ -1,9 +1,11 @@
 package com.example.wuke.flashnote.login;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +17,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.wuke.flashnote.NoteActivity;
 import com.example.wuke.flashnote.R;
+import com.example.wuke.flashnote.setting.WukeCloud;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,8 +41,8 @@ public class Login extends Fragment implements OnClickListener{
     private EditText password;
     private TextView result;
     private Button login;
-    private Button register;
-    private TextView cancel;
+    private TextView register;
+    private TextView forget;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,8 +63,11 @@ public class Login extends Fragment implements OnClickListener{
         login = (Button) view.findViewById(R.id.login_button);
         login.setOnClickListener(this);
 
-        register = (Button) view.findViewById(R.id.sign_button);
+        register = (TextView) view.findViewById(R.id.sign_button);
         register.setOnClickListener(this);
+
+        forget = (TextView) view.findViewById(R.id.forget);
+        forget.setOnClickListener(this);
 
         return view;
     }
@@ -90,9 +97,30 @@ public class Login extends Fragment implements OnClickListener{
                 transaction.addToBackStack(null);
                 transaction.commit();
                 break;
+            case R.id.forget:
+                forget();
+                break;
             default:
                 break;
         }
+    }
+    private void forget() {
+        final EditText editText = new EditText(getActivity());
+        new AlertDialog.Builder(getActivity())
+                .setTitle(getString(R.string.e_mail))
+                .setView(editText)
+                .setPositiveButton(getString(R.string.send), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // input 为输入内容
+                        String input = editText.getText().toString();
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).show();
     }
 
     private void access(String a, String p) {
@@ -156,11 +184,14 @@ public class Login extends Fragment implements OnClickListener{
                 Timestamp nowTime = new Timestamp(System.currentTimeMillis());//Login Time
                 SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String time = form.format(nowTime);
-                SharedPreferences pref=getActivity().getSharedPreferences("info",MODE_PRIVATE);
-                SharedPreferences.Editor editor=pref.edit();
-                editor.putString("username",a);
-                editor.putInt("userid",Integer.parseInt(userid));
-                editor.putString("time",time);
+//                SharedPreferences pref=getSharedPreferences("info",MODE_PRIVATE);
+//                SharedPreferences.Editor editor=pref.edit();
+//                editor.putString("username",a);
+//                editor.putInt("userid",Integer.parseInt(userid));
+
+//                Intent intent = new Intent(Login.this, RecordSetting.class);
+//                startActivity(intent);
+//                finish();
             } else {
                 tv.setText(s);
             }

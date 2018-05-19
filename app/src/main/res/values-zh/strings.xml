@@ -36,6 +36,12 @@
     <string name="Cloud">Wuke Cloud</string>
     <string name="support">支持：简体中文、粤语和英语</string>
     <string name="default_punc">默认：有标点</string>
+    <string name="done">完成</string>
+    <string name="sign_out">登出</string>
+    <string name="status">账户正在使用</string>
+    <string name="record">录音</string>
+    <string name="command">命令</string>
+    <string name="about">关于</string>
     <!--activity_register-->
     <string name="username">用户名</string>
     <string name="password">密码</string>
@@ -49,7 +55,18 @@
     <!--activity_login-->
     <string name="login">登陆</string>
     <string name="sign_up">注册</string>
-    <string name="for_pass">忘记密码</string>
+    <string name="for_pass">忘记密码？</string>
     <string name="stop">取消</string>
+    <!--dialog-->
+    <string name="cancel">取消</string>
+    <string name="send">发送</string>
+    <string name="search">搜索</string>
+    <string name="create">创建</string>
+    <string name="e_mail">发送邮件重置密码</string>
+    <string name="taobao">打开淘宝搜索</string>
+    <string name="wechat">打开微信发送一条消息</string>
+    <string name="calendar">在日历中创建一条日程</string>
+    <!--enter-->
+    <string name="enter">开始Flash Note之旅</string>
 
 </resources>

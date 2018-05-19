@@ -4,32 +4,45 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.wuke.flashnote.R;
 
 public class Setting extends AppCompatActivity{
 
-    private TextView record;
-    private TextView command;
-    private TextView cloud;
-    private TextView about;
+    private LinearLayout record;
+    private LinearLayout command;
+    private LinearLayout cloud;
+    private LinearLayout about;
+
+    private TextView done;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        record = (TextView) findViewById(R.id.record_setting_button);
-        command = (TextView) findViewById(R.id.command_button);
-        cloud = (TextView) findViewById(R.id.cloud_button);
-        about = (TextView) findViewById(R.id.about_button);
+        record = (LinearLayout) findViewById(R.id.record_setting_button);
+        command = (LinearLayout) findViewById(R.id.command_button);
+        cloud = (LinearLayout) findViewById(R.id.cloud_button);
+        about = (LinearLayout) findViewById(R.id.about_button);
+
+        done = (TextView) findViewById(R.id.setting_done);
 
         record.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent setting = new Intent(getBaseContext(), RecordSetting.class);
                 startActivity(setting);
+            }
+        });
+
+        command.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent Command = new Intent(getBaseContext(), Command.class);
+                startActivity(Command);
             }
         });
 
@@ -40,29 +53,20 @@ public class Setting extends AppCompatActivity{
                 startActivity(cloud);
             }
         });
-    }
 
-//    @Override
-//    public void onClick(View view) {
-//        switch (view.getId()) {
-//            case R.id.record_setting_button:
-//                Intent setting = new Intent(getBaseContext(), RecordSetting.class);
-//                startActivity(setting);
-//                break;
-//            case R.id.command_button:
-////                Intent command = new Intent(getBaseContext(), RecordSetting.class);
-////                startActivity(command);
-//                break;
-//            case R.id.cloud_button:
-//                Intent cloud = new Intent(getBaseContext(), WukeCloud.class);
-//                startActivity(cloud);
-//                break;
-//            case R.id.about_button:
-////                Intent about = new Intent(getBaseContext(), RecordSetting.class);
-////                startActivity(about);
-//                break;
-//            default:
-//                break;
-//        }
-//    }
+        about.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent About = new Intent(getBaseContext(), About.class);
+                startActivity(About);
+            }
+        });
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+    }
 }

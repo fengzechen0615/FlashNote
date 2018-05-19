@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Window;
 import android.widget.Toast;
 
@@ -103,7 +104,7 @@ public class RecordSetting extends PreferenceActivity implements Preference.OnPr
             mIat.setParameter(SpeechConstant.TEXT_ENCODING, "utf-8");
             ret = mIat.updateLexicon("contact", contactInfos, mLexiconListener);
             if (ret != ErrorCode.SUCCESS) {
-                showTip("上传联系人失败：" + ret);
+//                showTip("上传联系人失败：" + ret);
             }
         }
     };
@@ -115,7 +116,7 @@ public class RecordSetting extends PreferenceActivity implements Preference.OnPr
             if (error != null) {
                 showTip(error.toString());
             } else {
-                showTip("上传成功");
+//                showTip("上传成功");
             }
         }
     };
@@ -140,4 +141,5 @@ public class RecordSetting extends PreferenceActivity implements Preference.OnPr
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         return true;
     }
+
 }
