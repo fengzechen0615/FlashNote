@@ -104,7 +104,7 @@ public class RecordSetting extends PreferenceActivity implements Preference.OnPr
             mIat.setParameter(SpeechConstant.TEXT_ENCODING, "utf-8");
             ret = mIat.updateLexicon("contact", contactInfos, mLexiconListener);
             if (ret != ErrorCode.SUCCESS) {
-                showTip("上传联系人失败：" + ret);
+//                showTip("上传联系人失败：" + ret);
             }
         }
     };
@@ -116,7 +116,7 @@ public class RecordSetting extends PreferenceActivity implements Preference.OnPr
             if (error != null) {
                 showTip(error.toString());
             } else {
-                showTip("上传成功");
+//                showTip("上传成功");
             }
         }
     };

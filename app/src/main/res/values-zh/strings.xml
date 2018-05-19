@@ -57,5 +57,14 @@
     <string name="sign_up">注册</string>
     <string name="for_pass">忘记密码？</string>
     <string name="stop">取消</string>
+    <!--dialog-->
+    <string name="cancel">取消</string>
+    <string name="send">发送</string>
+    <string name="search">搜索</string>
+    <string name="create">创建</string>
+    <string name="e_mail">发送邮件重置密码</string>
+    <string name="taobao">打开淘宝搜索</string>
+    <string name="wechat">打开微信发送一条消息</string>
+    <string name="calendar">在日历中创建一条日程</string>
 
 </resources>

@@ -104,16 +104,16 @@ public class Login extends Fragment implements OnClickListener{
     private void forget() {
         final EditText editText = new EditText(getActivity());
         new AlertDialog.Builder(getActivity())
-                .setTitle("Send Email to reset the password")
+                .setTitle(getString(R.string.e_mail))
                 .setView(editText)
-                .setPositiveButton("Send", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.send), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // input 为输入内容
                         String input = editText.getText().toString();
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                     }

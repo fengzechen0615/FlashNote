@@ -57,5 +57,14 @@
     <string name="sign_up">Sign up</string>
     <string name="for_pass">Forget the password?</string>
     <string name="stop">Cancel</string>
+    <!--Dialog-->
+    <string name="cancel">Cancel</string>
+    <string name="send">Send</string>
+    <string name="search">Search</string>
+    <string name="create">Create</string>
+    <string name="e_mail">Send Email to reset the password</string>
+    <string name="taobao">Open Taobao to Search</string>
+    <string name="wechat">Open Wechat to send a message</string>
+    <string name="calendar">Open Calendar to Create a event</string>
 
 </resources>
