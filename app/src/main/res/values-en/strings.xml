@@ -75,8 +75,8 @@
     <string name="taobao_">TaoBao</string>
     <string name="wechat_">Wechat</string>
     <string name="calendar_">Calendar</string>
-    <string name="taobao_c">"Search … in TasoBao"</string>
-    <string name="wechat_c">"Share … in Wechat"</string>
-    <string name="calendar_c">"Create new calendar event …"</string>
+    <string name="taobao_c">\"Search … in TasoBao\"</string>
+    <string name="wechat_c">\"Share … in Wechat\"</string>
+    <string name="calendar_c">\"Create new calendar event …\"</string>
 
 </resources>
