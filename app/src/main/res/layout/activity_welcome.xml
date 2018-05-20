@@ -7,7 +7,7 @@
     tools:context=".Welcome">
 
     <ImageView
-        android:src="@mipmap/welcome"
+        android:background="@drawable/welcome"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

@@ -22,9 +22,13 @@ public class Welcome extends AppCompatActivity {
         if (isFirstRun) {
             editor.putBoolean("isFirstRun", false);
             editor.apply();
-            Intent intent = new Intent(this, Guide.class);
-            startActivity(intent);
-            finish();
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    enterGuideActivity();
+                }
+            }, 2000);
         } else {
             new Handler().postDelayed(new Runnable() {
 
@@ -42,4 +46,12 @@ public class Welcome extends AppCompatActivity {
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         finish();
     }
+
+    private void enterGuideActivity() {
+        Intent intent = new Intent(this, Guide.class);
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
+    }
+
 }

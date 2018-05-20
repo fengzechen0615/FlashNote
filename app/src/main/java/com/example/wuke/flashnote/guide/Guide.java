@@ -42,6 +42,7 @@ public class Guide extends AppCompatActivity implements ViewPager.OnPageChangeLi
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(Guide.this, NoteActivity.class));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish();
             }
         });
@@ -70,9 +71,9 @@ public class Guide extends AppCompatActivity implements ViewPager.OnPageChangeLi
             ivPointArray[i] = iv_point;
             //第一个页面需要设置为选中状态，这里采用两张不同的图片
             if (i == 0){
-                iv_point.setBackgroundResource(R.mipmap.empty);
+                iv_point.setBackgroundResource(R.drawable.empty);
             }else{
-                iv_point.setBackgroundResource(R.mipmap.full);
+                iv_point.setBackgroundResource(R.drawable.full);
             }
             //将数组中的ImageView加入到ViewGroup
             vg.addView(ivPointArray[i]);
@@ -88,7 +89,7 @@ public class Guide extends AppCompatActivity implements ViewPager.OnPageChangeLi
     private void initViewPager() {
         vp = (ViewPager) findViewById(R.id.guide_vp);
         //实例化图片资源
-        imageIdArray = new int[]{R.mipmap.g1,R.mipmap.g2,R.mipmap.g3};
+        imageIdArray = new int[]{R.drawable.g1,R.drawable.g2,R.drawable.g3};
         viewList = new ArrayList<>();
         //获取一个Layout参数，设置为全屏
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -127,9 +128,9 @@ public class Guide extends AppCompatActivity implements ViewPager.OnPageChangeLi
         //循环设置当前页的标记图
         int length = imageIdArray.length;
         for (int i = 0;i<length;i++){
-            ivPointArray[position].setBackgroundResource(R.mipmap.full);
+            ivPointArray[position].setBackgroundResource(R.drawable.full);
             if (position != i){
-                ivPointArray[i].setBackgroundResource(R.mipmap.empty);
+                ivPointArray[i].setBackgroundResource(R.drawable.empty);
             }
         }
 
