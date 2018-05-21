@@ -30,11 +30,12 @@ public class Sync {
             Date d=form.parse(note.getTimestamp(),new ParsePosition(0));
             SimpleDateFormat form1=new SimpleDateFormat("yyyy-MM-dd");
             SimpleDateFormat form2=new SimpleDateFormat("HH:mm:ss");
-            Log.e("before1",note.getTimestamp());
+            Log.e("before1",date+""+d);
             if(date.before(d)==true)
             {
                 note.setTimestamp(form1.format(d)+"%20"+form2.format(d));
                 afterList.add(note);
+                note.setTimestamp(form.format(d));
                 Log.e("after",note.getNoteID()+"");
             }
             else

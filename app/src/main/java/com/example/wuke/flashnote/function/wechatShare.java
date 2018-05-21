@@ -34,6 +34,7 @@ public class wechatShare {
         SendMessageToWX.Req req = new SendMessageToWX.Req();
         req.transaction = String.valueOf(System.currentTimeMillis());
         req.message = mediaMessage;
+        req.scene = SendMessageToWX.Req.WXSceneSession;
 
         iwxapi.sendReq(req);
 
@@ -45,7 +46,7 @@ public class wechatShare {
 
     public void shareInwechat(Context context, String message){
         regtoWX(context);
-        SMTOWX(shapeTheword(message));
+        SMTOWX(message);
     }
 
 }
