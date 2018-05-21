@@ -45,7 +45,7 @@ public class Trash extends AppCompatActivity {
         if(mList == null){
             mList = new ArrayList<Garbage>();
             db = new DatabaseOperator(this);
-            mList = db.getGarbage(0);
+            mList = db.getGarbage();
             // 测试数据
 //            init_data();
         }

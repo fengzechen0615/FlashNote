@@ -206,11 +206,11 @@ public class DatabaseOperator {
         return false;
     }
 
-    public List<Garbage> getGarbage(int userID)
+    public List<Garbage> getGarbage()
     {
         ArrayList list=new ArrayList();
         SQLiteDatabase rdb=ReadDatabase;
-        Cursor cursor=rdb.rawQuery("SELECT * FROM "+Initial.Garbage_table+"WHERE User_id=?",new String[]{String.valueOf(userID)});
+        Cursor cursor=rdb.rawQuery("SELECT * FROM "+Initial.Garbage_table,null);
         int lidindex = cursor.getColumnIndex(Initial.Litter_id);
         int dataindex = cursor.getColumnIndex(Initial.garbage_datatype);
         int userindex = cursor.getColumnIndex(Initial.guser_id);
