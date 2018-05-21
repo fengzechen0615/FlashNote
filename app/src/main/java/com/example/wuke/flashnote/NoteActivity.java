@@ -79,6 +79,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by francisfeng on 21/03/2018.
@@ -370,14 +372,23 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
 //        showTip("停止听写");
     }
 
+    public static boolean isContainChinese(String command) {
+        Pattern pattern = Pattern.compile("[\u4e00-\u9fa5]");
+        Matcher matcher = pattern.matcher(command);
+        if (matcher.find()) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     // create note
     private void createNote(String note) {
         DatabaseOperator dbo = new DatabaseOperator(NoteActivity.this);
         String content = note;
-        StringRecognizer stringRecognizer = new StringRecognizer();
         if (!"".equals(content)) {
             // 触发淘宝条件
-            if (stringRecognizer.isContainChinese(note)){
+            if (isContainChinese(note)){
                 if (note.contains("淘宝") && note.contains("搜索")) {
                     TaobaoDialog(note,NoteActivity.this);
                 }
@@ -444,10 +455,9 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
             Log.d("i", "message");
             dbo  = new DatabaseOperator(NoteActivity.this);
             String content = note;
-            StringRecognizer stringRecognizer = new StringRecognizer();
             if (!"".equals(content)) {
                 // 触发淘宝条件
-                if (stringRecognizer.isContainChinese(note)){
+                if (isContainChinese(note)){
                     if (note.contains("淘宝") && note.contains("搜索")) {
                         TaobaoDialog(note,NoteActivity.this);
                     }
@@ -458,7 +468,21 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                     else if (note.contains("微信分享")) {
                         WechatDialog(note,NoteActivity.this);
                     }
-                }else if (!stringRecognizer.isContainChinese(note)){
+                    else {
+                        pref = getSharedPreferences("info", MODE_PRIVATE);
+                        int user_id = pref.getInt("userid", 0);
+//                    createTopic();
+                        // 插入priority list.size
+                        int time = (int)((end_time - start_time) /1000);
+                        Log.e("TIMEz", time_record);
+                        Voice voice = new Voice(user_id, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), 0, time_stamp, list.size(), 1, time);
+                        list.add(voice);
+                        dbo = new DatabaseOperator(NoteActivity.this);
+                        dbo.InsertVoice(voice);
+                        mAdapter.notifyItemInserted(list.size() - 1);
+                        mRecyclerView.scrollToPosition(list.size() - 1);
+                    }
+                }else{
                     if (note.contains("in Taobao")) {
                         TaobaoDialog(note,NoteActivity.this);
                     }
@@ -469,20 +493,20 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                     else if (note.contains("in Wechat")) {
                         WechatDialog(note,NoteActivity.this);
                     }
-                } else {
-                    pref = getSharedPreferences("info", MODE_PRIVATE);
-                    int user_id = pref.getInt("userid", 0);
+                    else {
+                        pref = getSharedPreferences("info", MODE_PRIVATE);
+                        int user_id = pref.getInt("userid", 0);
 //                    createTopic();
-                    // 插入priority list.size
-                    int time = (int)((end_time - start_time) /1000);
-                    Log.e("TIMEz", time_record);
-                    Voice voice = new Voice(user_id, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), 0, time_stamp, list.size(), 1, time);
-                    list.add(voice);
-                    dbo = new DatabaseOperator(NoteActivity.this);
-                    dbo.InsertVoice(voice);
-                    mAdapter.notifyItemInserted(list.size() - 1);
-                    mRecyclerView.scrollToPosition(list.size() - 1);
-
+                        // 插入priority list.size
+                        int time = (int)((end_time - start_time) /1000);
+                        Log.e("TIMEz", time_record);
+                        Voice voice = new Voice(user_id, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), 0, time_stamp, list.size(), 1, time);
+                        list.add(voice);
+                        dbo = new DatabaseOperator(NoteActivity.this);
+                        dbo.InsertVoice(voice);
+                        mAdapter.notifyItemInserted(list.size() - 1);
+                        mRecyclerView.scrollToPosition(list.size() - 1);
+                    }
                 }
             }
         }
