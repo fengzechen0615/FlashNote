@@ -387,7 +387,25 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                 else if (note.contains("微信分享")) {
                     WechatDialog(note,NoteActivity.this);
                 }
-            }else if (!stringRecognizer.isContainChinese(note)){
+                else {
+                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                    @SuppressLint("SimpleDateFormat") SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm");
+                    String time = form.format(timestamp);
+                    Log.e("times",time);
+                    pref = getSharedPreferences("info", MODE_PRIVATE);
+                    int userid = pref.getInt("userid", 0);
+                    // 插入priority
+                    Note newnote = new Note(userid, note, 0, time, list.size(), 0);
+                    int i = dbo.InsertNote(newnote);
+                    Log.d("i", String.valueOf(newnote.getDataType()));
+                    newnote.setNoteID(i);
+                    list.add(newnote);
+                    mAdapter.notifyItemInserted(list.size() - 1);
+                    mRecyclerView.scrollToPosition(list.size() - 1);
+                }
+            }
+            else{
                 if (note.contains("in Taobao")) {
                     TaobaoDialog(note,NoteActivity.this);
                 }
@@ -398,24 +416,23 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                 else if (note.contains("in Wechat")) {
                     WechatDialog(note,NoteActivity.this);
                 }
-            }
-
-            else {
-                Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-                @SuppressLint("SimpleDateFormat") SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm");
-                String time = form.format(timestamp);
-                Log.e("times",time);
-                pref = getSharedPreferences("info", MODE_PRIVATE);
-                int userid = pref.getInt("userid", 0);
-                // 插入priority
-                Note newnote = new Note(userid, note, 0, time, list.size(), 0);
-                int i = dbo.InsertNote(newnote);
-                Log.d("i", String.valueOf(newnote.getDataType()));
-                newnote.setNoteID(i);
-                list.add(newnote);
-                mAdapter.notifyItemInserted(list.size() - 1);
-                mRecyclerView.scrollToPosition(list.size() - 1);
+                else {
+                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                    @SuppressLint("SimpleDateFormat") SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm");
+                    String time = form.format(timestamp);
+                    Log.e("times",time);
+                    pref = getSharedPreferences("info", MODE_PRIVATE);
+                    int userid = pref.getInt("userid", 0);
+                    // 插入priority
+                    Note newnote = new Note(userid, note, 0, time, list.size(), 0);
+                    int i = dbo.InsertNote(newnote);
+                    Log.d("i", String.valueOf(newnote.getDataType()));
+                    newnote.setNoteID(i);
+                    list.add(newnote);
+                    mAdapter.notifyItemInserted(list.size() - 1);
+                    mRecyclerView.scrollToPosition(list.size() - 1);
+                }
             }
         }
     }
