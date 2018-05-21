@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Flash Note</string>
+    <string name="app_name">FlashNote</string>
     <string name="app_id">5aa758dc</string>
     <!-- 听写 -->
     <string name="text_begin">Start sparking</string>
