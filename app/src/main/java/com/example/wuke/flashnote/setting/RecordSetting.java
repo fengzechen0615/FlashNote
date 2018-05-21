@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.util.Log;
@@ -20,6 +21,8 @@ import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechRecognizer;
 import com.iflytek.cloud.util.ContactManager;
 
+import java.util.Locale;
+
 /**
  * Created by francisfeng on 21/03/2018.
  */
@@ -30,11 +33,7 @@ public class RecordSetting extends PreferenceActivity implements Preference.OnPr
 
     private Preference preference;
 
-    private Context mContext;
-
     private SpeechRecognizer mIat;
-
-    private SharedPreferences mSharePreferences;
 
     private Toast mToast;
 
@@ -45,13 +44,21 @@ public class RecordSetting extends PreferenceActivity implements Preference.OnPr
         getPreferenceManager().setSharedPreferencesName(PREFER_NAME);
         addPreferencesFromResource(R.xml.setting);
 
-        mSharePreferences = getSharedPreferences(RecordSetting.PREFER_NAME, Activity.MODE_PRIVATE);
-
         mIat = SpeechRecognizer.createRecognizer(RecordSetting.this, mInitListener);
 
         mToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 
-        mContext = getApplicationContext();
+        ListPreference listPreference = (ListPreference) findPreference("language_preference");
+
+        Locale locale = Locale.getDefault();
+        String language = locale.getLanguage();
+
+        if (language.equals("en")) {
+            listPreference.setValue("en_us");
+        } else {
+            listPreference.setValue("mandarin");
+        }
+
         preference = findPreference("contact");
         preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -65,21 +72,6 @@ public class RecordSetting extends PreferenceActivity implements Preference.OnPr
                 return true;
             }
         });
-
-//        preference = findPreference("wuke_cloud");
-//        preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-//            @Override
-//            public boolean onPreferenceChange(Preference preference, Object newValue) {
-//                if ((Boolean) newValue) {
-////                    Intent intent = new Intent(RecordSetting.this, Login.class);
-//                    Intent intent = new Intent(RecordSetting.this, WukeCloud.class);
-//                    startActivity(intent);
-//                } else {
-//                    LocalLogin.delete();
-//                }
-//                return true;
-//            }
-//        });
     }
 
     int ret = 0;
