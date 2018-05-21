@@ -8,6 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import com.example.wuke.flashnote.R;
 import com.example.wuke.flashnote.database_storage.DatabaseOperator;
@@ -25,6 +27,8 @@ public class Friend extends AppCompatActivity {
     private DatabaseOperator dbo;
     private RecyclerView mRecyclerView;
     private FriendAdapter mAdapter;
+
+    private android.support.design.widget.FloatingActionButton floatingActionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,14 @@ public class Friend extends AppCompatActivity {
         mAdapter = new FriendAdapter(this, mList);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+
+        floatingActionButton = (android.support.design.widget.FloatingActionButton) findViewById(R.id.add_friends);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("dage", "pi");
+            }
+        });
 
         ItemTouchHelper.Callback callback = new RecycleItemTouchHelperFriend(mAdapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
