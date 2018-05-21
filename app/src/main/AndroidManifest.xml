@@ -44,7 +44,11 @@
 
         <activity android:name=".function.TaoBaoView" />
         <activity android:name=".friends.Friend" />
-        <activity android:name=".setting.WukeCloud" />
+
+        <activity
+            android:name=".setting.WukeCloud"
+            android:windowSoftInputMode="stateHidden|stateAlwaysHidden"/>
+
         <activity android:name=".setting.Setting" />
         <activity android:name=".setting.About" />
         <activity android:name=".setting.Command" />

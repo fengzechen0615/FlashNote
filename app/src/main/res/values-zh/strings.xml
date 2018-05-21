@@ -84,7 +84,7 @@
     <string name="fail_init">初始化失败</string>
     <string name="fail_listen">听写失败</string>
     <!--friend-->
-    <string name="add_friend">输入朋友的Wuke账号ID</string>
+    <string name="add_friend">输入朋友的Wuke用户名</string>
     <string name="add">添加</string>
 
 </resources>
