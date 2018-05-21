@@ -14,4 +14,11 @@ public class Wechat {
         intent.setComponent(cmp);  
         return intent;
 	}
+
+	public static String wordsToshare(String message){
+        int temp = message.indexOf("分享");
+        temp = temp + 2;
+        String good = message.substring(temp);
+        return good;
+    }
 }
