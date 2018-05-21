@@ -24,7 +24,7 @@ public class TrashTextViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         trash_layout = (LinearLayout) itemView.findViewById(R.id.trash_recycle_note);
         trash_note_content = (TextView) itemView.findViewById(R.id.trash_note_content);
-        trash_note_time = (TextView) itemView.findViewById(R.id.note_time);
+        trash_note_time = (TextView) itemView.findViewById(R.id.trash_note_time);
         text_back = (ImageButton) itemView.findViewById(R.id.trash_back_text);
         trash_function= (LinearLayout) itemView.findViewById(R.id.trash_function);
         trash_color_text = (ImageView) itemView.findViewById(R.id.trash_color_note);

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.wuke.flashnote.R;
+import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Friends;
 import com.example.wuke.flashnote.database_storage.Garbage;
 import com.example.wuke.flashnote.friends.FriendAdapter;
@@ -21,8 +22,8 @@ public class Trash extends AppCompatActivity {
     private List mList;
     private TrashAdapter mAdapter;
     private RecyclerView mRecyclerView;
-
     private TextView done;
+    private DatabaseOperator db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +44,10 @@ public class Trash extends AppCompatActivity {
     private void init_list() {
         if(mList == null){
             mList = new ArrayList<Garbage>();
+            db = new DatabaseOperator(this);
+            mList = db.getGarbage(0);
             // 测试数据
-            init_data();
+//            init_data();
         }
 
         mRecyclerView = (RecyclerView) findViewById(R.id.trash_recycler_view);
@@ -55,10 +58,4 @@ public class Trash extends AppCompatActivity {
 
     }
 
-    private void init_data() {
-        Garbage garbage_0 = new Garbage(1, 1, 0, 0, "大哥你好棒哦！", "2018-1-2 23:59:59", 0, "1");
-        mList.add(garbage_0);
-        Garbage garbage_1 = new Garbage(2, 2, 1, 0, "Record: 10s", "2018-1-3 23:59:59", 1, "2");
-        mList.add(garbage_1);
-    }
 }
