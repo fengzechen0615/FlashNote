@@ -869,7 +869,7 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
     }
 
     private void update() {
-        if (time!=null) {
+        if (time!=null && userid!=0) {
             String newtime=time;
             Iterator<Storage> iterator=list.iterator();
             List notelist=new ArrayList();

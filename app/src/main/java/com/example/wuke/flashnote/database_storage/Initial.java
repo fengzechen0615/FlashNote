@@ -53,7 +53,7 @@ public class Initial {
     public static final String previous_color="color";
     public static final String previous_timestamp="timestamp";
     public static final String previous_priority="priority";
-
+    public static final String extra="extra";
 
 
 }

@@ -190,20 +190,48 @@ public class DatabaseOperator {
         return false;
     }
 
-    private boolean addGarbage(Garbage garbage)
+    public boolean addGarbage(Garbage garbage)
     {
         ContentValues cValue = new ContentValues();
         SQLiteDatabase wdb=WriteDatabase;
         cValue.put(Initial.content_id,garbage.getContent_id());
-        cValue.put(Initial.datatype,garbage.getDatatype());
+        cValue.put(Initial.garbage_datatype,garbage.getDatatype());
         cValue.put(Initial.guser_id,garbage.getGuser_id());
         cValue.put(Initial.keywords,garbage.getKeywords());
         cValue.put(Initial.previous_color,garbage.getPrevious_color());
         cValue.put(Initial.previous_timestamp,garbage.getPrevious_timestamp());
         cValue.put(Initial.previous_priority,garbage.getPrevious_priority());
+        cValue.put(Initial.extra,garbage.getExtra());
         wdb.insert(Initial.Garbage_table,null,cValue);
-        wdb.close();
         return false;
+    }
+
+    public List<Garbage> getGarbage(int userID)
+    {
+        ArrayList list=new ArrayList();
+        SQLiteDatabase rdb=ReadDatabase;
+        Cursor cursor=rdb.rawQuery("SELECT * FROM "+Initial.Garbage_table+"WHERE User_id=?",new String[]{String.valueOf(userID)});
+        int lidindex = cursor.getColumnIndex(Initial.Litter_id);
+        int dataindex = cursor.getColumnIndex(Initial.garbage_datatype);
+        int userindex = cursor.getColumnIndex(Initial.guser_id);
+        int keyindex = cursor.getColumnIndex(Initial.keywords);
+        int ptdindex = cursor.getColumnIndex(Initial.previous_timestamp);
+        int pcdindex = cursor.getColumnIndex(Initial.previous_color);
+        int ppdindex = cursor.getColumnIndex(Initial.previous_priority);
+        int eindex = cursor.getColumnIndex(Initial.extra);
+        for (cursor.moveToFirst();!(cursor.isAfterLast());cursor.moveToNext()) {
+            Garbage garbage = new Garbage(cursor.getInt(lidindex)
+                    , cursor.getInt(dataindex)
+                    , cursor.getInt(userindex)
+                    , cursor.getString(keyindex)
+                    , cursor.getString(ptdindex)
+                    , cursor.getInt(pcdindex)
+                    , cursor.getInt(ppdindex)
+                    , cursor.getInt(eindex));
+            list.add(garbage);
+        }
+        cursor.close();
+        return list;
     }
 
 

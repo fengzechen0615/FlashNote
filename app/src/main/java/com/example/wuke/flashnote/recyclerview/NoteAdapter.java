@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.wuke.flashnote.R;
 import com.example.wuke.flashnote.database_storage.DatabaseOperator;
+import com.example.wuke.flashnote.database_storage.Garbage;
 import com.example.wuke.flashnote.database_storage.Note;
 import com.example.wuke.flashnote.database_storage.Storage;
 import com.example.wuke.flashnote.database_storage.Voice;
@@ -404,8 +405,11 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
         DatabaseOperator databaseOperator = new DatabaseOperator(mContext);
 
         if (mList.get(position) instanceof Note) {
+            Note note = (Note)mList.get(position);
             databaseOperator.deleteNote(((Note) mList.get(position)).getNoteID());
-
+            Garbage garbage = new Garbage(note.getNoteID(),note.getDataType(),note.getUserID(),note.getWords(),
+                    note.getTimestamp(), note.getColor(), note.getPriority(), -1);
+            databaseOperator.addGarbage(garbage);
             deleteNote = (Note) mList.remove(position); //移除数据
             Delete_List.add(deleteNote);
 
@@ -430,8 +434,14 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
 
         else if (mList.get(position) instanceof Voice) {
             File f = new File(((Voice) mList.get(position)).getURL());
+            Voice voice = (Voice)mList.get(position);
             f.delete();
             databaseOperator.deleteVoice(((Voice)mList.get(position)).getVoiceID());
+
+            Garbage garbage = new Garbage(voice.getVoiceID(), voice.getDataType(), voice.getUserID(),voice.getURL(),
+                    voice.getTimestamp(), voice.getColor(), voice.getPriority(), voice.getDuration());
+            databaseOperator.addGarbage(garbage);
+
             mList.remove(position); //移除数据
             notifyItemRemoved(position);
             for (int i = position; i < mList.size(); i++) {

@@ -57,8 +57,9 @@ public class Database extends SQLiteOpenHelper{
             +Initial.keywords+ " TEXT, "
             +Initial.previous_color+" INTEGER, "
             +Initial.previous_timestamp+" TEXT, "
-            +Initial.previous_priority+" INTEGER, "+
-            Initial.garbage_datatype+" INTEGER)" ;
+            +Initial.previous_priority+" INTEGER, "
+            +Initial.extra+" INTEGER, "
+            +Initial.garbage_datatype+" INTEGER)" ;
 
 
     public Database(Context context) {

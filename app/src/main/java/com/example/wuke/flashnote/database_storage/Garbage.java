@@ -12,9 +12,10 @@ public class Garbage {
     private String keywords;
     private String previous_timestamp;
     private int previous_color;
-    private String previous_priority;
+    private int previous_priority;
+    private int extra;
 
-    public Garbage(int LID,int CID,int datatype,int guser_id,String key,String pt,int pc,String pp)
+    public Garbage(int LID,int CID,int datatype,int guser_id,String key,String pt,int pc,int pp,int extra)
     {
         this.Litter_id=LID;
         this.Content_id=CID;
@@ -24,6 +25,19 @@ public class Garbage {
         this.previous_timestamp=pt;
         this.previous_color=pc;
         this.previous_priority=pp;
+        this.extra=extra;
+    }
+
+    public Garbage(int CID,int datatype,int guser_id,String key,String pt,int pc,int pp,int extra)
+    {
+        this.Content_id=CID;
+        this.datatype=datatype;
+        this.guser_id=guser_id;
+        this.keywords=key;
+        this.previous_timestamp=pt;
+        this.previous_color=pc;
+        this.previous_priority=pp;
+        this.extra = extra;
     }
 
     public int getLitter_id(){
@@ -54,11 +68,11 @@ public class Garbage {
         return previous_color;
     }
 
-    public String getPrevious_priority(){
+    public int getPrevious_priority(){
         return previous_priority;
     }
 
-
+    public int getExtra() {return extra;}
 
 
 }

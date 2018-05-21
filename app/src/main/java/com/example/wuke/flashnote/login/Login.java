@@ -211,7 +211,6 @@ public class Login extends Fragment implements OnClickListener{
             }
             return response.toString();
         }
-
         protected void onPostExecute(String s) {
             if (s.contains("resCode=201")) {
                 rightCode = "resCode=201";
@@ -220,7 +219,6 @@ public class Login extends Fragment implements OnClickListener{
                 String p = password.getText().toString();
                 int id=s.indexOf("userID=");
                 String userid = s.substring(id+7);
-
                 l.save(a, p);
                 Log.e("post1", a + " " + p);
                 Timestamp nowTime = new Timestamp(System.currentTimeMillis());//Login Time
