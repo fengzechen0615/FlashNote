@@ -847,57 +847,66 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
             Intent intent = new Intent(NoteActivity.this, Friend.class);
             startActivity(intent);
         } else if (item.getItemId() == R.id.trash) {
+
         } else if (item.getItemId() == R.id.update) {
-            if (time!=null) {
-                String newtime=time;
-                Iterator<Storage> iterator=list.iterator();
-                List notelist=new ArrayList();
-                while(iterator.hasNext()) {
-                    Storage storage=(Storage)iterator.next();
-                    if (storage instanceof Note) {
-                        notelist.add((Note)storage);
-                    }
-                }
-                //同步比较时间
-                HashMap map = Sync.CompareTimestamp(newtime, notelist);
-                ArrayList before = (ArrayList<Note>) map.get("Before");//verify
-                ArrayList After = (ArrayList<Note>) map.get("After");//new content,upload to server
-                ArrayList Delete= (ArrayList) mAdapter.getDelete_List();
-                Uploading uploading=new Uploading();
-                Deleting d=new Deleting();
-                uploading.uploadnote(After);
-                d.deletenote(Delete);
-                final Downloading dl=new Downloading();
-                int userid=pref.getInt("userid",0);
-                dl.downnote(String.valueOf(userid));
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(dl.notes!=null) {
-                            ArrayList<Note> test=dl.notes;
-                        }
-                        else {
-                            mToast = Toast.makeText(NoteActivity.this, "No", Toast.LENGTH_LONG);
-                            mToast.show();
-                        }
-                    }
-                },1000);
-                //最后同步时间
-                Timestamp timestamp=new Timestamp(System.currentTimeMillis());
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String retime = formatter.format(timestamp);
-                time=retime;
-//                pref=getSharedPreferences("info",MODE_PRIVATE);
-//                SharedPreferences.Editor editor=pref.edit();
-//                editor.putString("time",retime);
+            LocalLogin localLogin = new LocalLogin();
+            if(localLogin.check() == true) {
+                update();
+            } else {
+                Toast.makeText(getBaseContext(), getString(R.string.up_login), Toast.LENGTH_SHORT).show();
             }
-
-            else
-                Log.e("sync", "Empty");
-
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void update() {
+        if (time!=null) {
+            String newtime=time;
+            Iterator<Storage> iterator=list.iterator();
+            List notelist=new ArrayList();
+            while(iterator.hasNext()) {
+                Storage storage=(Storage)iterator.next();
+                if (storage instanceof Note) {
+                    notelist.add((Note)storage);
+                }
+            }
+            //同步比较时间
+            HashMap map = Sync.CompareTimestamp(newtime, notelist);
+            ArrayList before = (ArrayList<Note>) map.get("Before");//verify
+            ArrayList After = (ArrayList<Note>) map.get("After");//new content,upload to server
+            ArrayList Delete= (ArrayList) mAdapter.getDelete_List();
+            Uploading uploading=new Uploading();
+            Deleting d=new Deleting();
+            uploading.uploadnote(After);
+            d.deletenote(Delete);
+            final Downloading dl=new Downloading();
+            int userid=pref.getInt("userid",0);
+            dl.downnote(String.valueOf(userid));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if(dl.notes!=null) {
+                        ArrayList<Note> test=dl.notes;
+                    }
+                    else {
+                        mToast = Toast.makeText(NoteActivity.this, "No", Toast.LENGTH_LONG);
+                        mToast.show();
+                    }
+                }
+            },1000);
+            //最后同步时间
+            Timestamp timestamp=new Timestamp(System.currentTimeMillis());
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String retime = formatter.format(timestamp);
+            time=retime;
+//                pref=getSharedPreferences("info",MODE_PRIVATE);
+//                SharedPreferences.Editor editor=pref.edit();
+//                editor.putString("time",retime);
+        }
+
+        else
+            Log.e("sync", "Empty");
     }
 }

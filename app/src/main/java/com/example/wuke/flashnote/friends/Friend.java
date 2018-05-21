@@ -12,7 +12,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.wuke.flashnote.NoteActivity;
@@ -35,6 +37,7 @@ public class Friend extends AppCompatActivity {
     private FriendAdapter mAdapter;
 
     private android.support.design.widget.FloatingActionButton floatingActionButton;
+    private TextView done;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +68,14 @@ public class Friend extends AppCompatActivity {
             public void onClick(View view) {
                 Log.d("dage", "pi");
                 Add_friend();
+            }
+        });
+
+        done = (TextView) findViewById(R.id.friend_done);
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 

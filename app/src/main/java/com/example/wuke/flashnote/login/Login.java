@@ -89,35 +89,37 @@ public class Login extends Fragment implements OnClickListener{
                 tx.commit();
                 break;
             case R.id.login_button:
-                if (account.getText().toString() != null && password.getText().toString() != null) {
+                if (account.length() != 0 && password.length() != 0) {
+                    Log.d("login", "Login");
                     String a = account.getText().toString();
                     String p = password.getText().toString();
                     access(a, p);
-                }
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (rightCode.equals("resCode=201")) {
-                            FragmentManager fragmentManager = getFragmentManager();
-                            FragmentTransaction transaction = fragmentManager.beginTransaction();
-                            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-                            transaction.replace(R.id.id_content, new LoginStatus().newInstance(account.getText().toString()));
-                            transaction.addToBackStack(null);
-                            transaction.commit();
-                        } else {
 
+                    login.setEnabled(false);
+
+                    Toast.makeText(getActivity(), getActivity().getString(R.string.login_p), Toast.LENGTH_SHORT).show();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (rightCode.equals("resCode=201")) {
+                                login.setEnabled(true);
+                                FragmentManager fragmentManager = getFragmentManager();
+                                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+                                transaction.replace(R.id.id_content, new LoginStatus().newInstance(account.getText().toString()));
+                                transaction.addToBackStack(null);
+                                transaction.commit();
+                            } else {
+                                login.setEnabled(true);
+                                wrongDialog();
+                            }
                         }
-                    }
-                }, 1000);
-//                if (rightCode.equals("resCode=201")) {
-//                    FragmentManager fragmentManager = getFragmentManager();
-//                    FragmentTransaction transaction = fragmentManager.beginTransaction();
-//                    transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-//                    transaction.replace(R.id.id_content, new LoginStatus().newInstance(account.getText().toString()));
-//                    transaction.addToBackStack(null);
-//                    transaction.commit();
-//                }
+                    }, 2000);
+                } else {
+                    wrongDialog();
+                }
+
                 break;
             case R.id.forget:
                 forget();
@@ -126,6 +128,17 @@ public class Login extends Fragment implements OnClickListener{
                 break;
         }
     }
+
+    private void wrongDialog() {
+        new AlertDialog.Builder(getActivity())
+                .setTitle(getString(R.string.wrong))
+                .setNegativeButton(getString(R.string.back), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).show();
+    }
+
     private void forget() {
         final EditText editText = new EditText(getActivity());
         new AlertDialog.Builder(getActivity())
@@ -221,18 +234,10 @@ public class Login extends Fragment implements OnClickListener{
 //                startActivity(intent);
 //                finish();
             } else {
-                tv.setText(s);
-                rightCode = "anything";
+//                tv.setText(s);
+                rightCode = "wrong";
             }
         }
     }
 
-//
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (keyCode == KeyEvent.KEYCODE_BACK) {
-//            return true;
-//        }
-//        return super.onKeyDown(keyCode, event);
-//    }
 }

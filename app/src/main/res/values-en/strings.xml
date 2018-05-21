@@ -53,11 +53,13 @@
     <string name="text">TEXT</string>
     <string name="voice">VOICE</string>
     <string name="play_record">Play Record</string>
+    <string name="up_login">You have not log in</string>
     <!--activity_login-->
     <string name="login">Login</string>
     <string name="sign_up">Sign up</string>
     <string name="for_pass">Forget the password?</string>
     <string name="stop">Cancel</string>
+    <string name="login_p">Accessing</string>
     <!--dialog-->
     <string name="cancel">Cancel</string>
     <string name="send">Send</string>
@@ -67,6 +69,7 @@
     <string name="taobao">Open Taobao to Search</string>
     <string name="wechat">Open Wechat to send a message</string>
     <string name="calendar">Open Calendar to Create a event</string>
+    <string name="wrong_re">Please enter all information</string>
     <!--enter-->
     <string name="enter">Enter the Flash Note</string>
     <string name="version">Version: 1.0.0</string>
@@ -83,8 +86,11 @@
     <string name="fail_read">Fail to load record</string>
     <string name="fail_init">failed to initialize</string>
     <string name="fail_listen">Dictation failure</string>
+    <string name="wrong">Username does not exist or password error.</string>
+    <string name="back">Back</string>
     <!--friend-->
     <string name="add_friend">Type your friend Wuke\'s username</string>
     <string name="add">Add</string>
+    <string name="friend">Friend</string>
 
 </resources>
