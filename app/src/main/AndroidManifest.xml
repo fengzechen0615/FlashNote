@@ -41,18 +41,15 @@
         <meta-data
             android:name="IFLYTEK_APPKEY"
             android:value="&apos;5aa758dc&apos;" />
-
         <meta-data
             android:name="APP_ID"
             android:value="wx8e10c61a51b672b1" />
 
         <activity android:name=".function.TaoBaoView" />
         <activity android:name=".friends.Friend" />
-
         <activity
             android:name=".setting.WukeCloud"
-            android:windowSoftInputMode="stateHidden|stateAlwaysHidden"/>
-
+            android:windowSoftInputMode="stateHidden|stateAlwaysHidden" />
         <activity android:name=".setting.Setting" />
         <activity android:name=".setting.About" />
         <activity android:name=".setting.Command" />
@@ -63,7 +60,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".guide.Guide"></activity>
+        <activity android:name=".guide.Guide" />
+        <activity android:name=".trash.Trash"></activity>
     </application>
 
 </manifest>
