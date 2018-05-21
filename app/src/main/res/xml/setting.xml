@@ -6,8 +6,7 @@
         android:title="@string/language"
         android:entries="@array/language_entries"
         android:entryValues="@array/language_values"
-        android:summary="@string/support"
-        android:defaultValue="mandarin"  />
+        android:summary="@string/support" />
 
     <ListPreference
         android:key="punc_preference"

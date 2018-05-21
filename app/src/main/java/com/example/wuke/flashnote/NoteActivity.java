@@ -78,6 +78,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by francisfeng on 21/03/2018.
@@ -667,17 +668,37 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
         // 设置返回结果格式
         mIat.setParameter(SpeechConstant.RESULT_TYPE, "json");
 
-        String lag = mSharedPreferences.getString("language_preference", "mandarin");
-        if (lag.equals("en_us")) {
-            // 设置语言
-            mIat.setParameter(SpeechConstant.LANGUAGE, "en_us");
-            mIat.setParameter(SpeechConstant.ACCENT, null);
+        Locale locale = Locale.getDefault();
+        String language = locale.getLanguage();
 
+        if (language.equals("en")) {
+            String lag = mSharedPreferences.getString("language_preference", "en_us");
+            if (lag.equals("en_us")) {
+                // 设置语言
+                mIat.setParameter(SpeechConstant.LANGUAGE, "en_us");
+                mIat.setParameter(SpeechConstant.ACCENT, null);
+
+            } else {
+                // 设置语言
+                mIat.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
+                // 设置语言区域
+                mIat.setParameter(SpeechConstant.ACCENT, lag);
+
+            }
         } else {
-            // 设置语言
-            mIat.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
-            // 设置语言区域
-            mIat.setParameter(SpeechConstant.ACCENT, lag);
+            String lag = mSharedPreferences.getString("language_preference", "mandarin");
+            if (lag.equals("en_us")) {
+                // 设置语言
+                mIat.setParameter(SpeechConstant.LANGUAGE, "en_us");
+                mIat.setParameter(SpeechConstant.ACCENT, null);
+
+            } else {
+                // 设置语言
+                mIat.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
+                // 设置语言区域
+                mIat.setParameter(SpeechConstant.ACCENT, lag);
+
+            }
 
         }
 
