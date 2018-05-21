@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.wuke.flashnote.NoteActivity;
+import com.example.wuke.flashnote.R;
 import com.example.wuke.flashnote.util.FucUtil;
 import com.example.wuke.flashnote.util.JsonParser;
 import com.iflytek.cloud.ErrorCode;
@@ -38,6 +39,12 @@ public class Record {
     private static String TAG = "Convert";
     private Toast mToast;
     private HashMap<String, String> mIatResults = new LinkedHashMap<String, String>();
+    private Context hhContext;
+
+    public Record(Context mContext) {
+        this.hhContext = mContext;
+        mIat = SpeechRecognizer.createRecognizer(mContext, mInitListener);
+    }
 
     public void startPlay(String url) {
         try {
@@ -98,7 +105,6 @@ public class Record {
     private TextView textView;
 
     public void Convert(Context context, TextView textView, String filename) {
-        mIat = SpeechRecognizer.createRecognizer(context, mInitListener);
 
         mToast = Toast.makeText(context, "", Toast.LENGTH_SHORT);
 
@@ -108,6 +114,8 @@ public class Record {
 
         this.textView = textView;
 
+        textView.setText("");
+
         RecordText(context, filename);
     }
 
@@ -116,7 +124,7 @@ public class Record {
         mIat.setParameter(SpeechConstant.AUDIO_SOURCE, "-1");
         ret = mIat.startListening(mRecognizerListener);
         if (ret != ErrorCode.SUCCESS) {
-            showTip("识别失败,错误码：" + ret);
+//            showTip("识别失败,错误码：" + ret);
         } else {
             byte[] audioData = FucUtil.readAudioFile(context, Environment.getExternalStorageDirectory() + "/msc/" + filename + ".wav");
             Log.d("audioData", String.valueOf(audioData));
@@ -126,8 +134,7 @@ public class Record {
                 mIat.stopListening();
             } else {
                 mIat.cancel();
-                textView.setText("Unable to convert");
-//                showTip("读取音频流失败");
+                showTip(hhContext.getString(R.string.fail_read));
             }
         }
 
@@ -139,7 +146,7 @@ public class Record {
         public void onInit(int code) {
             Log.d(TAG, "SpeechRecognizer init() code = " + code);
             if (code != ErrorCode.SUCCESS) {
-                showTip("初始化失败，错误码：" + code);
+                showTip(hhContext.getString(R.string.fail_init));
             }
         }
     };
@@ -172,7 +179,7 @@ public class Record {
 
         @Override
         public void onVolumeChanged(int volume, byte[] data) {
-            Log.d(TAG, "返回音频数据："+data.length);
+            Log.d(TAG, "返回音频数据：" + data.length);
         }
 
         @Override
@@ -209,5 +216,13 @@ public class Record {
     private void showTip(final String str) {
         mToast.setText(str);
         mToast.show();
+    }
+
+    public void destory () {
+        if( mIat != null){
+            // 退出时释放连接
+            mIat.cancel();
+            mIat.destroy();
+        }
     }
 }

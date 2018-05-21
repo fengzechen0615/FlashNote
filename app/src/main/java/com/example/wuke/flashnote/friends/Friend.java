@@ -14,7 +14,6 @@ import android.widget.Toast;
 import com.example.wuke.flashnote.R;
 import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Friends;
-import com.example.wuke.flashnote.recyclerview.RecycleItemTouchHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;

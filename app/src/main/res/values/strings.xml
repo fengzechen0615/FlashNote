@@ -52,6 +52,8 @@
     <string name="loose">Loose finger to stop</string>
     <string name="text">TEXT</string>
     <string name="voice">VOICE</string>
+    <string name="play_record">Play Record</string>
+    "读取音频流失败"
     <!--activity_login-->
     <string name="login">Login</string>
     <string name="sign_up">Sign up</string>
@@ -78,6 +80,9 @@
     <string name="taobao_c">\"Search … in TasoBao\"</string>
     <string name="wechat_c">\"Share … in Wechat\"</string>
     <string name="calendar_c">\"Create new calendar event …\"</string>
+    <!--fail-->
+    <string name="fail_read">Fail to load record</string>
+    <string name="fail_init">failed to initialize</string>
 
 
 </resources>

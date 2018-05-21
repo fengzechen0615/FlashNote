@@ -71,7 +71,6 @@
         </RelativeLayout>
     </RelativeLayout>
 
-
     <RelativeLayout
         android:id="@+id/recording"
         android:layout_width="wrap_content"

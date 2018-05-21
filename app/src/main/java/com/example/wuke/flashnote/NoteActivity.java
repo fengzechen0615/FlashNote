@@ -86,6 +86,30 @@ import java.util.regex.Pattern;
  * Created by francisfeng on 21/03/2018.
  */
 
+/**
+ *                    _ooOoo_
+ *                   o8888888o
+ *                   88" . "88
+ *                   (| -_- |)
+ *                    O\ = /O
+ *                ____/`---'\____
+ *              .   ' \\| |// `.
+ *               / \\||| : |||// \
+ *             / _||||| -:- |||||- \
+ *               | | \\\ - /// | |
+ *             | \_| ''\---/'' | |
+ *              \ .-\__ `-` ___/-. /
+ *           ___`. .' /--.--\ `. . __
+ *        ."" '< `.___\_<|>_/___.' >'"".
+ *       | | : `- \`.;`\ _ /`;.`/ - ` : | |
+ *         \ \ `-. \_ __\ /__ _/ .-` / /
+ * ======`-.____`-.___\_____/___.-`____.-'======
+ *                    `=---='
+ *
+ * .............................................
+ *          佛祖保佑             永无BUG
+ */
+
 public class NoteActivity extends Activity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static String TAG = NoteActivity.class.getSimpleName();
@@ -471,7 +495,6 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                     else {
                         pref = getSharedPreferences("info", MODE_PRIVATE);
                         int user_id = pref.getInt("userid", 0);
-//                    createTopic();
                         // 插入priority list.size
                         int time = (int)((end_time - start_time) /1000);
                         Log.e("TIMEz", time_record);
@@ -496,7 +519,6 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                     else {
                         pref = getSharedPreferences("info", MODE_PRIVATE);
                         int user_id = pref.getInt("userid", 0);
-//                    createTopic();
                         // 插入priority list.size
                         int time = (int)((end_time - start_time) /1000);
                         Log.e("TIMEz", time_record);
@@ -592,7 +614,7 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
         public void onInit(int code) {
             Log.d(TAG, "SpeechRecognizer init() code = " + code);
             if (code != ErrorCode.SUCCESS) {
-//                showTip("初始化失败，错误码：" + code);
+                showTip(getString(R.string.fail_init));
             }
         }
     };
@@ -619,7 +641,6 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
 
         @Override
         public void onResult(RecognizerResult results, boolean isLast) {
-//            Log.d(TAG, results.getResultString());
             printResult(results);
 
             if (isLast) {
@@ -629,10 +650,8 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
 
         @Override
         public void onVolumeChanged(int volume, byte[] data) {
-//            showTip("Speaking, volume: " + volume);
             Log.d("volume", String.valueOf(volume));
             voice = volume;
-//            Log.d(TAG, "返回音频数据："+data.length);
         }
 
         @Override
@@ -669,7 +688,6 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
 
     private void printResult(RecognizerResult results) {
         String text = JsonParser.parseIatResult(results.getResultString());
-//        System.out.println("mark3")
 
         String sn = null;
         try {

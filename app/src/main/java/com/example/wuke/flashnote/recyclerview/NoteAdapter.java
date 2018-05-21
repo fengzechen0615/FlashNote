@@ -22,6 +22,7 @@ import com.example.wuke.flashnote.database_storage.Storage;
 import com.example.wuke.flashnote.database_storage.Voice;
 import com.example.wuke.flashnote.download_upload.Uploading;
 import com.example.wuke.flashnote.record.Record;
+import com.iflytek.cloud.SpeechRecognizer;
 
 import java.io.File;
 import java.io.IOException;
@@ -254,10 +255,9 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                 holder.play_record.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Record record = new Record();
+                        Record record = new Record(mContext);
                         record.startPlay(((Voice) mList.get(position)).getURL());
-                        Toast.makeText(mContext, "play record", Toast.LENGTH_SHORT).show();
-//                        Log.d("URL", ((Voice) mList.get(position)).getURL());
+                        Toast.makeText(mContext, mContext.getString(R.string.play_record), Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -328,10 +328,14 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                             flag = false;
                             holder.function.setVisibility(View.VISIBLE);
                             Log.e("click",mList.get(position).getPriority()+"");
+                            Record record = new Record(mContext);
+                            record.destory();
                         } else {
                             flag = true;
                             holder.function.setVisibility(View.INVISIBLE);
                             holder.function.setVisibility(View.GONE);
+                            Record record = new Record(mContext);
+                            record.destory();
                         }
                     }
                 });
@@ -352,7 +356,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                             fileName = pathName.substring(start + 1,end);
                         }
 
-                        Record record = new Record();
+                        Record record = new Record(mContext);
                         record.Convert(mContext, holder.record_text, fileName);
                     }
                 });
