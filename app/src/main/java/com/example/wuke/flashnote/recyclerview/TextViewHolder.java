@@ -21,7 +21,7 @@ public class TextViewHolder extends RecyclerView.ViewHolder {
     public Spinner spinner;
     public LinearLayout function;
     public ImageButton edit;
-    public ImageView ColorImage;
+    public ImageView color_text;
     public ImageButton delete_text;
 
     public TextViewHolder(View itemView) {
@@ -34,7 +34,7 @@ public class TextViewHolder extends RecyclerView.ViewHolder {
         spinner = (Spinner) itemView.findViewById(R.id.color);
         edit = (ImageButton) itemView.findViewById(R.id.edit);
         function= (LinearLayout) itemView.findViewById(R.id.function);
-        ColorImage = (ImageView) itemView.findViewById(R.id.color_note);
+        color_text = (ImageView) itemView.findViewById(R.id.color_note);
         delete_text = (ImageButton) itemView.findViewById(R.id.delete_text);
     }
 }

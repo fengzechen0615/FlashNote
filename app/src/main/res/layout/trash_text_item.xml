@@ -41,7 +41,7 @@
                     android:layout_gravity="center"
                     android:src="@drawable/text"/>
 
-                <EditText
+                <TextView
                     android:id="@+id/trash_note_content"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -49,7 +49,6 @@
                     android:layout_marginStart="5dp"
                     android:layout_gravity="center|left"
                     android:background="@null"
-                    android:inputType="textNoSuggestions"
                     android:textSize="20sp"
                     tools:ignore="RtlHardcoded" />
 
