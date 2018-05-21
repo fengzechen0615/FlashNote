@@ -205,8 +205,9 @@ public class Login extends Fragment implements OnClickListener{
                 LocalLogin l = new LocalLogin();
                 String a = account.getText().toString();
                 String p = password.getText().toString();
-                int id = s.indexOf("resCode=201 Login in succeeduserID=");
-                String userid = s.substring(id+35);
+                int id=s.indexOf("userID=");
+                String userid = s.substring(id+7);
+
                 l.save(a, p);
                 Log.e("post1", a + " " + p);
                 Timestamp nowTime = new Timestamp(System.currentTimeMillis());//Login Time
@@ -216,7 +217,8 @@ public class Login extends Fragment implements OnClickListener{
                 SharedPreferences.Editor editor=pref.edit();
                 editor.putString("username",a);
                 editor.putInt("userid",Integer.parseInt(userid));
-
+                editor.commit();
+                Log.e("fk",pref.getInt("userid",0)+"");
 //                Intent intent = new Intent(Login.this, RecordSetting.class);
 //            startActivity(intent);
 //                finish();

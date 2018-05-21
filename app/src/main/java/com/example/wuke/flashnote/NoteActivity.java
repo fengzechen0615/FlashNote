@@ -173,9 +173,9 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
         Timestamp timestamp=new Timestamp(System.currentTimeMillis());
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         pref=getSharedPreferences("info",MODE_PRIVATE);
-        time = pref.getString(time,formatter.format(timestamp));
         userid=pref.getInt("userid",0);
-        Log.e("gtime1",time);//程序启动时间
+        time=formatter.format(timestamp);
+        Log.e("gtime1",pref.getInt("userid",0)+"");//程序启动时间
 
         // 初始化列表
         init_List();
@@ -430,9 +430,8 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                     @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm");
                     String time = form.format(timestamp);
                     Log.e("times",time);
-                    pref = getSharedPreferences("info", MODE_PRIVATE);
-                    int userid = pref.getInt("userid", 0);
                     // 插入priority
+                    userid=pref.getInt("userid",0);
                     Note newnote = new Note(userid, note, 0, time, list.size(), 0);
                     int i = dbo.InsertNote(newnote);
                     Log.d("i", String.valueOf(newnote.getDataType()));
@@ -459,9 +458,8 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                     @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm");
                     String time = form.format(timestamp);
                     Log.e("times",time);
-                    pref = getSharedPreferences("info", MODE_PRIVATE);
-                    int userid = pref.getInt("userid", 0);
                     // 插入priority
+                    userid=pref.getInt("userid",0);
                     Note newnote = new Note(userid, note, 0, time, list.size(), 0);
                     int i = dbo.InsertNote(newnote);
                     Log.d("i", String.valueOf(newnote.getDataType()));
@@ -494,12 +492,12 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                         WechatDialog(note,NoteActivity.this);
                     }
                     else {
-                        pref = getSharedPreferences("info", MODE_PRIVATE);
-                        int user_id = pref.getInt("userid", 0);
+
                         // 插入priority list.size
                         int time = (int)((end_time - start_time) /1000);
                         Log.e("TIMEz", time_record);
-                        Voice voice = new Voice(user_id, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), 0, time_stamp, list.size(), 1, time);
+                        userid=pref.getInt("userid",0);
+                        Voice voice = new Voice(userid, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), 0, time_stamp, list.size(), 1, time);
                         list.add(voice);
                         dbo = new DatabaseOperator(NoteActivity.this);
                         dbo.InsertVoice(voice);
@@ -518,12 +516,11 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                         WechatDialog(note,NoteActivity.this);
                     }
                     else {
-                        pref = getSharedPreferences("info", MODE_PRIVATE);
-                        int user_id = pref.getInt("userid", 0);
                         // 插入priority list.size
                         int time = (int)((end_time - start_time) /1000);
                         Log.e("TIMEz", time_record);
-                        Voice voice = new Voice(user_id, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), 0, time_stamp, list.size(), 1, time);
+                        userid=pref.getInt("userid",0);
+                        Voice voice = new Voice(userid, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), 0, time_stamp, list.size(), 1, time);
                         list.add(voice);
                         dbo = new DatabaseOperator(NoteActivity.this);
                         dbo.InsertVoice(voice);
@@ -855,6 +852,7 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
             startActivity(intent);
         } else if (item.getItemId() == R.id.trash) {
         } else if (item.getItemId() == R.id.update) {
+            Log.e("msg",time);
             if (time!=null) {
                 String newtime=time;
                 Iterator<Storage> iterator=list.iterator();
@@ -876,9 +874,20 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                 d.deletenote(Delete);
                 final Downloading dl=new Downloading();
                 LocalLogin localLogin = new LocalLogin();
-                String[] user = localLogin.getaccount();
-                Username=user[0];
-                dl.downnote(String.valueOf(Username));
+                if(localLogin.check() == true) {
+                    String[] user = localLogin.getaccount();
+                    Username=user[0];
+                } else {
+                    Username=null;
+                }
+                userid=pref.getInt("userid",0);
+                Log.e("msg",""+userid+Username);
+                if (Username!=null) {
+                    dl.downnote(String.valueOf(Username));
+                }
+                else {
+                    Log.e("kongkong","未登录");
+                }
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
