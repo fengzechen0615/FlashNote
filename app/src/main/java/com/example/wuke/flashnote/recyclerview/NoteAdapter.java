@@ -142,23 +142,23 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
 //                holder.itemView.setBackgroundColor((mList.get(position)).getColor());
                 if ((mList.get(position)).getColor()==0) {
                     holder.spinner.setSelection(0);
-                    holder.ColorImage.setImageDrawable(ColorImages[0]);
+                    holder.color_text.setImageDrawable(ColorImages[0]);
                 }
                 else if (( mList.get(position)).getColor()==1) {
                     holder.spinner.setSelection(1);
-                    holder.ColorImage.setImageDrawable(ColorImages[1]);
+                    holder.color_text.setImageDrawable(ColorImages[1]);
                 }
                 else if (( mList.get(position)).getColor()==2) {
                     holder.spinner.setSelection(2);
-                    holder.ColorImage.setImageDrawable(ColorImages[2]);
+                    holder.color_text.setImageDrawable(ColorImages[2]);
                 }
                 else if (( mList.get(position)).getColor()==3) {
                     holder.spinner.setSelection(3);
-                    holder.ColorImage.setImageDrawable(ColorImages[3]);
+                    holder.color_text.setImageDrawable(ColorImages[3]);
                 }
                 else if (( mList.get(position)).getColor()==4) {
                     holder.spinner.setSelection(4);
-                    holder.ColorImage.setImageDrawable(ColorImages[4]);
+                    holder.color_text.setImageDrawable(ColorImages[4]);
                 }
 
                 // note颜色选择器
@@ -168,23 +168,23 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                         String[] color = view.getResources().getStringArray(R.array.note_color);
                         databaseOperator = new DatabaseOperator(mContext);
                         if (color[colorPosition].equals("White")) {
-                            holder.ColorImage.setImageDrawable(ColorImages[0]);
+                            holder.color_text.setImageDrawable(ColorImages[0]);
                             databaseOperator.UpdateNoteColor(((Note) mList.get(position)).getNoteID(), 0);
                             ((Note) mList.get(position)).setColor(0);
                         } else if (color[colorPosition].equals("Blue")) {
-                            holder.ColorImage.setImageDrawable(ColorImages[1]);
+                            holder.color_text.setImageDrawable(ColorImages[1]);
                             databaseOperator.UpdateNoteColor(((Note) mList.get(position)).getNoteID(), 1);
                             ((Note) mList.get(position)).setColor(1);
                         } else if (color[colorPosition].equals("Red")) {
-                            holder.ColorImage.setImageDrawable(ColorImages[2]);
+                            holder.color_text.setImageDrawable(ColorImages[2]);
                             databaseOperator.UpdateNoteColor(((Note) mList.get(position)).getNoteID(), 2);
                             ((Note) mList.get(position)).setColor(2);
                         } else if (color[colorPosition].equals("Orange")) {
-                            holder.ColorImage.setImageDrawable(ColorImages[3]);
+                            holder.color_text.setImageDrawable(ColorImages[3]);
                             databaseOperator.UpdateNoteColor(((Note) mList.get(position)).getNoteID(), 3);
                             ((Note) mList.get(position)).setColor(3);
                         } else if (color[colorPosition].equals("Green")) {
-                            holder.ColorImage.setImageDrawable(ColorImages[4]);
+                            holder.color_text.setImageDrawable(ColorImages[4]);
                             databaseOperator.UpdateNoteColor(((Note) mList.get(position)).getNoteID(), 4);
                             ((Note) mList.get(position)).setColor(4);
                         }
