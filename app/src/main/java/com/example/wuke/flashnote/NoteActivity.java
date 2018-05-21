@@ -377,16 +377,13 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
         mIatResults.clear();
         boolean isShowDialog = mSharedPreferences.getBoolean(getString(R.string.pref_key_iat_show), false);
         if (isShowDialog) {
-//            showTip(getString(R.string.text_begin));
-            // 设置参数
-//            setRecordPath();
+
         } else {
             // 不显示听写对话框
             ret = mIat.startListening(mRecognizerListener);
             if (ret != ErrorCode.SUCCESS) {
-//                showTip("听写失败,错误码：" + ret);
+                showTip(getString(R.string.fail_listen));
             } else {
-//                showTip(getString(R.string.text_begin));
             }
         }
     }

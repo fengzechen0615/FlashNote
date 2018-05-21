@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +45,8 @@ public class Login extends Fragment implements OnClickListener{
     private Button login;
     private TextView register;
     private TextView forget;
+
+    private String rightCode;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -91,12 +94,30 @@ public class Login extends Fragment implements OnClickListener{
                     String p = password.getText().toString();
                     access(a, p);
                 }
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-                transaction.replace(R.id.id_content, new LoginStatus().newInstance(account.getText().toString()));
-                transaction.addToBackStack(null);
-                transaction.commit();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (rightCode.equals("resCode=201")) {
+                            FragmentManager fragmentManager = getFragmentManager();
+                            FragmentTransaction transaction = fragmentManager.beginTransaction();
+                            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+                            transaction.replace(R.id.id_content, new LoginStatus().newInstance(account.getText().toString()));
+                            transaction.addToBackStack(null);
+                            transaction.commit();
+                        } else {
+
+                        }
+                    }
+                }, 1000);
+//                if (rightCode.equals("resCode=201")) {
+//                    FragmentManager fragmentManager = getFragmentManager();
+//                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+//                    transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+//                    transaction.replace(R.id.id_content, new LoginStatus().newInstance(account.getText().toString()));
+//                    transaction.addToBackStack(null);
+//                    transaction.commit();
+//                }
                 break;
             case R.id.forget:
                 forget();
@@ -180,6 +201,7 @@ public class Login extends Fragment implements OnClickListener{
 
         protected void onPostExecute(String s) {
             if (s.contains("resCode=201")) {
+                rightCode = "resCode=201";
                 LocalLogin l = new LocalLogin();
                 String a = account.getText().toString();
                 String p = password.getText().toString();
@@ -200,6 +222,7 @@ public class Login extends Fragment implements OnClickListener{
 //                finish();
             } else {
                 tv.setText(s);
+                rightCode = "anything";
             }
         }
     }

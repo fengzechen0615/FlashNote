@@ -83,6 +83,10 @@
     <!--fail-->
     <string name="fail_read">Fail to load record</string>
     <string name="fail_init">failed to initialize</string>
+    <string name="fail_listen">Dictation failure</string>
+    <!--friend-->
+    <string name="add_friend">Type your friend Wuke\' ID</string>
+    <string name="add">Add</string>
 
 
 </resources>

@@ -1,5 +1,8 @@
 package com.example.wuke.flashnote.friends;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -9,11 +12,15 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.wuke.flashnote.NoteActivity;
 import com.example.wuke.flashnote.R;
 import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Friends;
+import com.example.wuke.flashnote.function.Datatransformer;
+import com.example.wuke.flashnote.function.StringRecognizer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,6 +64,7 @@ public class Friend extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d("dage", "pi");
+                Add_friend();
             }
         });
 
@@ -64,6 +72,25 @@ public class Friend extends AppCompatActivity {
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(mRecyclerView);
 
+    }
+
+    private void Add_friend() {
+        final EditText editText = new EditText(this);
+        new AlertDialog.Builder(Friend.this)
+                .setTitle(getString(R.string.add_friend))
+                .setView(editText)
+                .setPositiveButton(getString(R.string.add), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // input 为创建的内容
+                        String input = editText.getText().toString();
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).show();
     }
 
     private void init_data() {
