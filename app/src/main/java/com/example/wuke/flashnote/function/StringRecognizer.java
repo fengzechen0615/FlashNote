@@ -219,7 +219,7 @@ public class StringRecognizer {
 		return this.alarm;
 	}
 	
-	private static boolean isContainChinese(String command) {
+	public static boolean isContainChinese(String command) {
 		Pattern pattern = Pattern.compile("[\u4e00-\u9fa5]");
 		Matcher matcher = pattern.matcher(command);
 		if (matcher.find()) {
