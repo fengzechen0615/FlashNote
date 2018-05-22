@@ -179,15 +179,18 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
         userid=pref.getInt("userid",0);
         Log.e("gtime1",time);//程序启动时间
 
-
+        // 初始化列表
+        init_List();
+        // 初始化布局
+        init_View();
     }
 
     private void init_List() {
-        if(list == null){
+//        if(list == null){
             list = new ArrayList<Storage>();
             dbo = new DatabaseOperator(this);
             list = dbo.getAllStorage(userid);
-        }
+//        }
         mRecyclerView = (RecyclerView) findViewById(R.id.note_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -825,10 +828,6 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
         // 开放统计 移动数据统计分析
         FlowerCollector.onResume(NoteActivity.this);
         FlowerCollector.onPageStart(TAG);
-        // 初始化列表
-        init_List();
-        // 初始化布局
-        init_View();
         super.onResume();
     }
 
@@ -839,6 +838,13 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
         FlowerCollector.onPause(NoteActivity.this);
         super.onPause();
     }
+
+//    @Override
+//    protected void onRestart() {
+//        super.onRestart();
+//        list.clear();
+//        init_List();
+//    }
 
     @Override
     public void onAttachedToWindow() {
