@@ -92,5 +92,6 @@
     <string name="add_friend">Type your friend Wuke\'s username</string>
     <string name="add">Add</string>
     <string name="friend">Friend</string>
+    <string name="no_friend">Cannot find this friend</string>
 
 </resources>

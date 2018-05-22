@@ -3,6 +3,7 @@ package com.example.wuke.flashnote.friends;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
@@ -24,6 +25,7 @@ import com.example.wuke.flashnote.NoteActivity;
 import com.example.wuke.flashnote.R;
 import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Friends;
+import com.example.wuke.flashnote.download_upload.Uploading;
 import com.example.wuke.flashnote.function.Datatransformer;
 import com.example.wuke.flashnote.function.StringRecognizer;
 
@@ -38,7 +40,7 @@ public class Friend extends AppCompatActivity {
     private DatabaseOperator dbo;
     private RecyclerView mRecyclerView;
     private FriendAdapter mAdapter;
-
+    private SharedPreferences pref;
     private android.support.design.widget.FloatingActionButton floatingActionButton;
     private TextView done;
 
@@ -106,6 +108,19 @@ public class Friend extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         // input 为创建的内容
                         String input = editText.getText().toString();
+                        dbo = new DatabaseOperator(Friend.this);
+                        int fid = dbo.finduser(input);
+                        if(fid == -1){
+                            Toast.makeText(getApplication(), getString(R.string.no_friend), Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            pref=getSharedPreferences("info",MODE_PRIVATE);
+                            int userid=pref.getInt("userid",0);
+                            Log.e("friend",userid+" "+fid);
+                            Uploading up=new Uploading();
+                            up.upfriend(String.valueOf(userid),String.valueOf(fid));
+                        }
+
                     }
                 })
                 .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {

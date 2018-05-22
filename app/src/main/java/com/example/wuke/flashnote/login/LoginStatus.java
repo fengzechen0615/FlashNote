@@ -3,6 +3,7 @@ package com.example.wuke.flashnote.login;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.wuke.flashnote.R;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class LoginStatus extends Fragment{
 
@@ -44,6 +47,10 @@ public class LoginStatus extends Fragment{
                 transaction.replace(R.id.id_content, new Login());
                 transaction.addToBackStack(null);
                 transaction.commit();
+                SharedPreferences pref=getActivity().getSharedPreferences("info",MODE_PRIVATE);
+                SharedPreferences.Editor editor=pref.edit();
+                editor.putInt("userid",0);
+                editor.commit();
                 Situation=false;
                 localLogin.delete();
             }

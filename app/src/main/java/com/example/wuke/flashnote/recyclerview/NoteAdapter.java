@@ -126,12 +126,11 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                         Log.d("share", "click share");
                         Uploading uploading=new Uploading();
                         if (mList.get(position) instanceof Note){
-                            uploading.upsharednote(String.valueOf(2),String.valueOf(1));
-                            //uploading.upsharednote(String.valueOf(((Note) mList.get(position)).getUserID()),String.valueOf(((Note) mList.get(position)).getNoteID()));
+                            uploading.upsharednote(String.valueOf(((Note) mList.get(position)).getUserID()),String.valueOf(((Note) mList.get(position)).getNoteID()));
                             Log.e("share",((Note) mList.get(position)).getUserID()+" "+((Note) mList.get(position)).getNoteID());
                         }
                         else {
-                            uploading.upsharevoice(String.valueOf(((Voice) mList.get(position)).getUserID()),String.valueOf(((Voice) mList.get(position)).getVoiceID()));
+                            //uploading.upsharevoice(String.valueOf(((Voice) mList.get(position)).getUserID()),String.valueOf(((Voice) mList.get(position)).getVoiceID()));
                         }
 
                         Toast.makeText(mContext, "click" + position, Toast.LENGTH_SHORT).show();
@@ -426,7 +425,6 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
             databaseOperator.addGarbage(garbage);
             deleteNote = (Note) mList.remove(position); //移除数据
             Delete_List.add(deleteNote);
-
             notifyItemRemoved(position);
             notifyDataSetChanged();
             // remove后更改priority
@@ -447,15 +445,13 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
         }
 
         else if (mList.get(position) instanceof Voice) {
-            File f = new File(((Voice) mList.get(position)).getURL());
+            //File f = new File(((Voice) mList.get(position)).getURL());
+            //f.delete();
             Voice voice = (Voice)mList.get(position);
-            f.delete();
             databaseOperator.deleteVoice(((Voice)mList.get(position)).getVoiceID());
-
             Garbage garbage = new Garbage(voice.getVoiceID(), voice.getDataType(), voice.getUserID(),voice.getURL(),
                     voice.getTimestamp(), voice.getColor(), voice.getPriority(), voice.getDuration());
             databaseOperator.addGarbage(garbage);
-
             mList.remove(position); //移除数据
             notifyItemRemoved(position);
             for (int i = position; i < mList.size(); i++) {

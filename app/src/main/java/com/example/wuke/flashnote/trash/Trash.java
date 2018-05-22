@@ -24,6 +24,7 @@ public class Trash extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private TextView done;
     private DatabaseOperator db;
+    private int userid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +45,10 @@ public class Trash extends AppCompatActivity {
     private void init_list() {
         if(mList == null){
             mList = new ArrayList<Garbage>();
+            userid=getIntent().getIntExtra("userid",0);
+            Log.e("g",userid+"");
             db = new DatabaseOperator(this);
-            mList = db.getGarbage();
+            mList = db.getGarbage(userid);
             // 测试数据
 //            init_data();
         }
