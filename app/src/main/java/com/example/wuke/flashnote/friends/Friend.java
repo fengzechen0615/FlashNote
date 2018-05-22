@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -13,6 +14,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -68,8 +71,16 @@ public class Friend extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("dage", "pi");
-                Add_friend();
+                RotateAnimation ra = new RotateAnimation(0,90, Animation.RELATIVE_TO_SELF,0.5f, Animation.RELATIVE_TO_SELF,0.5f);
+                ra.setDuration(500);
+                view.startAnimation(ra);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Add_friend();
+                    }
+                }, 500);
             }
         });
 

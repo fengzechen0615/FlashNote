@@ -102,7 +102,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
 
                     @Override
                     public void onClick(View view) {
-                        if (edit_state == true) {
+                        if (edit_state) {
                             if (flag) {
                                 flag = false;
                                 holder.note_content.setEllipsize(null);
@@ -236,6 +236,13 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                         delete(viewHolder.getAdapterPosition());
                     }
                 });
+
+                holder.share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
             }
         }
 
@@ -365,6 +372,13 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                     @Override
                     public void onClick(View view) {
                         delete(viewHolder.getAdapterPosition());
+                    }
+                });
+
+                holder.record_share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
                     }
                 });
             }

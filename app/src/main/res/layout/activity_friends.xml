@@ -62,6 +62,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="10dp"
         android:layout_marginEnd="10dp"
+        app:fab_size="normal"
         app:borderWidth="0dp"
         app:rippleColor="#33728dff"
         app:elevation="8dp"

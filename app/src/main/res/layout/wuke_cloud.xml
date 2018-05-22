@@ -32,6 +32,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:textSize="20sp"
+            android:background="@drawable/button_text"
             android:text="@string/done"/>
 
     </LinearLayout>

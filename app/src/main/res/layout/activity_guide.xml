@@ -29,7 +29,7 @@
         android:layout_centerHorizontal="true"
         android:text="@string/enter"
         android:layout_above="@+id/guide_ll_point"
-        android:background="@drawable/button_login"
+        android:background="@drawable/button"
         android:visibility="gone"/>
 
 </RelativeLayout>
