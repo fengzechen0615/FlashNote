@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -281,6 +282,8 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
         final AlertDialog dialog = builder.create();
 
         Window dialogWindow = dialog.getWindow();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
 
         View view = View.inflate(this, R.layout.add_text_note, null);
         dialog.setView(view, 0, 0, 0, 0);

@@ -102,7 +102,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
 
                     @Override
                     public void onClick(View view) {
-                        if (edit_state == true) {
+                        if (edit_state) {
                             if (flag) {
                                 flag = false;
                                 holder.note_content.setEllipsize(null);
