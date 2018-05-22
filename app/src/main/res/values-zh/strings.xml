@@ -92,5 +92,6 @@
     <string name="add_friend">输入朋友的Wuke用户名</string>
     <string name="add">添加</string>
     <string name="friend">好友</string>
+    <string name="no_friend">找不到此好友</string>
 
 </resources>

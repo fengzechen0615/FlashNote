@@ -1,6 +1,7 @@
 package com.example.wuke.flashnote.trash;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -10,16 +11,25 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.wuke.flashnote.R;
+import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Garbage;
+import com.example.wuke.flashnote.database_storage.Note;
+import com.example.wuke.flashnote.database_storage.Voice;
 import com.example.wuke.flashnote.record.Record;
 
+import java.io.File;
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class TrashAdapter extends RecyclerView.Adapter{
 
     private Context mContext;
     private List<Garbage> mList;
     private Drawable[] ColorImages;
+    private DatabaseOperator dbo;
+    private int userid;
+    private SharedPreferences pref;
 
     // 文本
     private static final int TYPE_TEXT = 0;
@@ -116,14 +126,28 @@ public class TrashAdapter extends RecyclerView.Adapter{
             holder.trash_delete_text.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mList.remove(position);
+                    Garbage g=mList.remove(position);
+                    Log.e("g",g.getKeywords()+"");
+                    Log.e("g",g.getLitter_id()+"");
+                    dbo=new DatabaseOperator(mContext);
+                    dbo.deleteGarbage(g.getLitter_id());
+                    notifyItemRemoved(position);
+                    notifyDataSetChanged();
                 }
             });
 
             holder.text_back.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    Garbage g = mList.get(position);
+                    Note note = new Note(g.getContent_id(),g.getGuser_id(),g.getKeywords(),g.getPrevious_color(),g.getPrevious_timestamp()
+                    , g.getPrevious_priority(),g.getDatatype());
+                    dbo=new DatabaseOperator(mContext);
+                    dbo.InsertNote(note);
+                    mList.remove(position);
+                    dbo.deleteGarbage(g.getLitter_id());
+                    notifyItemRemoved(position);
+                    notifyDataSetChanged();
                 }
             });
         }
@@ -177,14 +201,30 @@ public class TrashAdapter extends RecyclerView.Adapter{
             holder.trash_delete_record.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mList.remove(position);
+                    Garbage g=mList.remove(position);
+                    Log.e("g",g.getKeywords()+"");
+                    Log.e("g",g.getLitter_id()+"");
+                    File f = new File(g.getKeywords());
+                    f.delete();
+                    dbo=new DatabaseOperator(mContext);
+                    dbo.deleteGarbage(g.getLitter_id());
+                    notifyItemRemoved(position);
+                    notifyDataSetChanged();
                 }
             });
 
             holder.trash_back_voice.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    Garbage g = mList.get(position);
+                    Voice voice = new Voice(g.getContent_id(),g.getGuser_id(),g.getKeywords(),g.getPrevious_color(),g.getPrevious_timestamp()
+                            , g.getPrevious_priority(),g.getDatatype(),g.getExtra());
+                    dbo=new DatabaseOperator(mContext);
+                    dbo.InsertVoice(voice);
+                    mList.remove(position);
+                    dbo.deleteGarbage(g.getLitter_id());
+                    notifyItemRemoved(position);
+                    notifyDataSetChanged();
                 }
             });
 

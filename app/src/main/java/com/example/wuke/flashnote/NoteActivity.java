@@ -178,17 +178,14 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
         userid=pref.getInt("userid",0);
         Log.e("gtime1",time);//程序启动时间
 
-        // 初始化列表
-        init_List();
-        // 初始化布局
-        init_View();
+
     }
 
     private void init_List() {
         if(list == null){
             list = new ArrayList<Storage>();
             dbo = new DatabaseOperator(this);
-            list = dbo.getAllStorage();
+            list = dbo.getAllStorage(userid);
         }
         mRecyclerView = (RecyclerView) findViewById(R.id.note_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -245,8 +242,14 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
         if(localLogin.check() == true) {
             String[] user = localLogin.getaccount();
             username.setText(user[0]);
+            Log.e("resume",userid+"");
+            userid=pref.getInt("userid",0);
+            Log.e("resume",userid+"");
         } else {
             username.setText(getString(R.string.app_name));
+            Log.e("resume",userid+"");
+            userid=0;
+            Log.e("resume",userid+"");
         }
 
         final FloatingActionMenu add = (FloatingActionMenu) findViewById(R.id.add);
@@ -464,9 +467,9 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                     int userid = pref.getInt("userid", 0);
                     // 插入priority
                     Note newnote = new Note(userid, note, 0, time, list.size(), 0);
-                    int i = dbo.InsertNote(newnote);
+                    int nid = dbo.InsertNote(newnote);
                     Log.d("i", String.valueOf(newnote.getDataType()));
-                    newnote.setNoteID(i);
+                    newnote.setNoteID(nid);
                     list.add(newnote);
                     mAdapter.notifyItemInserted(list.size() - 1);
                     mRecyclerView.scrollToPosition(list.size() - 1);
@@ -501,9 +504,11 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                         int time = (int)((end_time - start_time) /1000);
                         Log.e("TIMEz", time_record);
                         Voice voice = new Voice(user_id, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), 0, time_stamp, list.size(), 1, time);
-                        list.add(voice);
+
                         dbo = new DatabaseOperator(NoteActivity.this);
-                        dbo.InsertVoice(voice);
+                        int vid=dbo.InsertVoice(voice);
+                        voice.setVoiceID(vid);
+                        list.add(voice);
                         mAdapter.notifyItemInserted(list.size() - 1);
                         mRecyclerView.scrollToPosition(list.size() - 1);
                     }
@@ -525,9 +530,10 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                         int time = (int)((end_time - start_time) /1000);
                         Log.e("TIMEz", time_record);
                         Voice voice = new Voice(user_id, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), 0, time_stamp, list.size(), 1, time);
-                        list.add(voice);
                         dbo = new DatabaseOperator(NoteActivity.this);
-                        dbo.InsertVoice(voice);
+                        int vid=dbo.InsertVoice(voice);
+                        voice.setVoiceID(vid);
+                        list.add(voice);
                         mAdapter.notifyItemInserted(list.size() - 1);
                         mRecyclerView.scrollToPosition(list.size() - 1);
                     }
@@ -800,6 +806,10 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
         // 开放统计 移动数据统计分析
         FlowerCollector.onResume(NoteActivity.this);
         FlowerCollector.onPageStart(TAG);
+        // 初始化列表
+        init_List();
+        // 初始化布局
+        init_View();
         super.onResume();
     }
 
@@ -856,6 +866,7 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
             startActivity(intent);
         } else if (item.getItemId() == R.id.trash) {
             Intent intent = new Intent(NoteActivity.this, Trash.class);
+            intent.putExtra("userid",userid);
             startActivity(intent);
         } else if (item.getItemId() == R.id.update) {
             LocalLogin localLogin = new LocalLogin();

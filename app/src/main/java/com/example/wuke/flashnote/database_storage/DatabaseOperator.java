@@ -190,6 +190,12 @@ public class DatabaseOperator {
         return false;
     }
 
+    public boolean deleteGarbage(int id){
+        SQLiteDatabase wdb=WriteDatabase;
+        wdb.delete(Initial.Garbage_table,Initial.Litter_id+"=?",new String[]{String.valueOf(id)});
+        return false;
+    }
+
     public boolean addGarbage(Garbage garbage)
     {
         ContentValues cValue = new ContentValues();
@@ -206,12 +212,13 @@ public class DatabaseOperator {
         return false;
     }
 
-    public List<Garbage> getGarbage()
+    public List<Garbage> getGarbage(int userid)
     {
         ArrayList list=new ArrayList();
         SQLiteDatabase rdb=ReadDatabase;
-        Cursor cursor=rdb.rawQuery("SELECT * FROM "+Initial.Garbage_table,null);
+        Cursor cursor=rdb.rawQuery("SELECT * FROM "+Initial.Garbage_table+" WHERE "+Initial.guser_id+" =?",new String[]{String.valueOf(userid)});
         int lidindex = cursor.getColumnIndex(Initial.Litter_id);
+        int contentindex = cursor.getColumnIndex(Initial.content_id);
         int dataindex = cursor.getColumnIndex(Initial.garbage_datatype);
         int userindex = cursor.getColumnIndex(Initial.guser_id);
         int keyindex = cursor.getColumnIndex(Initial.keywords);
@@ -221,6 +228,7 @@ public class DatabaseOperator {
         int eindex = cursor.getColumnIndex(Initial.extra);
         for (cursor.moveToFirst();!(cursor.isAfterLast());cursor.moveToNext()) {
             Garbage garbage = new Garbage(cursor.getInt(lidindex)
+                    , cursor.getInt(contentindex)
                     , cursor.getInt(dataindex)
                     , cursor.getInt(userindex)
                     , cursor.getString(keyindex)
@@ -234,11 +242,23 @@ public class DatabaseOperator {
         return list;
     }
 
+    public int finduser(String username) {
+        int id=-1;
+        SQLiteDatabase rdb=ReadDatabase;
+        Cursor cursor=rdb.rawQuery("SELECT User_id FROM User WHERE Username=?", new String[]{String.valueOf(username)});
+        int userIDindex=cursor.getColumnIndex("User_id");
+        for (cursor.moveToFirst();!(cursor.isAfterLast());cursor.moveToNext()) {
+            id=cursor.getInt(userIDindex);
+            Log.e("friend",id+"");
+        }
+        return id;
+    }
+
 
     public List getAllFriends(int userID){
         ArrayList<Friends> result = new ArrayList<>();
         SQLiteDatabase rdb=ReadDatabase;
-        Cursor cursor=rdb.rawQuery("SELECT * FROM Friends WHERE User_id=?",new String[]{String.valueOf(userID)});
+        Cursor cursor=rdb.rawQuery("SELECT * FROM Friends WHERE User_id =?",new String[]{String.valueOf(userID)});
         int FriendsIDindex=cursor.getColumnIndex(Initial.friend_fid);
         int userIDindex=cursor.getColumnIndex(Initial.friend_user_id);
         for (cursor.moveToFirst();!(cursor.isAfterLast());cursor.moveToNext()) {
@@ -252,11 +272,11 @@ public class DatabaseOperator {
     }
 
 
-    public List getAllNote() //Later,priority order
+    public List getAllNote(int userID) //Later,priority order
     {
         ArrayList<Note> result = new ArrayList<>();
         SQLiteDatabase rdb=ReadDatabase;
-        Cursor cursor=rdb.rawQuery("SELECT * FROM "+Initial.table_note,null);
+        Cursor cursor=rdb.rawQuery("SELECT * FROM "+Initial.table_note+" WHERE "+Initial.note_user+" =?",new String[]{String.valueOf(userID)});
         int noteIDindex=cursor.getColumnIndex(Initial.note_id);
         int userIDindex=cursor.getColumnIndex(Initial.note_user);
         int wordsindex=cursor.getColumnIndex(Initial.note_words);
@@ -280,12 +300,12 @@ public class DatabaseOperator {
         return result;
     }
 
-    public List getAllVoice() //Later,priority order
+    public List getAllVoice(int userID) //Later,priority order
     {
         ArrayList<Voice> result = new ArrayList<>();
         SQLiteDatabase rdb=ReadDatabase;
-
-        Cursor cursor=rdb.rawQuery("SELECT * FROM "+Initial.table_voice,null);
+        Log.e("get",userID+"");
+        Cursor cursor=rdb.rawQuery("SELECT * FROM "+Initial.table_voice+" WHERE "+Initial.voice_users+" =?",new String[]{String.valueOf(userID)});
         int voiceIDindex=cursor.getColumnIndex(Initial.voice_id);
         int userIDindex=cursor.getColumnIndex(Initial.voice_users);
         int fileindex=cursor.getColumnIndex(Initial.voice_file);
@@ -310,19 +330,19 @@ public class DatabaseOperator {
         return result;
     }
 
-    public HashMap<String,List> getAll()
+    public HashMap<String,List> getAll(int userID)
     {
         HashMap<String,List> map=new HashMap<>();
-        map.put("NOTE",getAllNote());
-        map.put("VOICE",getAllVoice());
+        map.put("NOTE",getAllNote(userID));
+        map.put("VOICE",getAllVoice(userID));
         return map;
     }
 
-    public List<Storage> getAllStorage()
+    public List<Storage> getAllStorage(int userID)
     {
         List<Storage> AlList=new ArrayList<>();
-        AlList.addAll(getAllNote());
-        AlList.addAll(getAllVoice());
+        AlList.addAll(getAllNote(userID));
+        AlList.addAll(getAllVoice(userID));
         Storage s=new Storage();
         Collections.sort(AlList,s);
         return AlList;
