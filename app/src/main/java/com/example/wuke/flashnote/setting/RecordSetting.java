@@ -8,8 +8,10 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.util.Log;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.wuke.flashnote.R;
@@ -43,6 +45,13 @@ public class RecordSetting extends PreferenceActivity implements Preference.OnPr
         super.onCreate(savedInstanceState);
         getPreferenceManager().setSharedPreferencesName(PREFER_NAME);
         addPreferencesFromResource(R.xml.setting);
+
+        WindowManager m = getWindowManager();
+        Display d = m.getDefaultDisplay(); // 为获取屏幕宽、高
+        android.view.WindowManager.LayoutParams p = getWindow().getAttributes();
+        p.height = (int) (d.getHeight() * 0.8); // 高度设置为屏幕的0.3
+        p.width = (int) (d.getWidth() * 0.95); // 宽度设置为屏幕的0.7
+        getWindow().setAttributes(p);
 
         mIat = SpeechRecognizer.createRecognizer(RecordSetting.this, mInitListener);
 

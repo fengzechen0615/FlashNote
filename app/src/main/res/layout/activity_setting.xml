@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:gravity="center"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="#000000"
             android:text="@string/setting"/>
@@ -33,14 +33,15 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:textSize="20sp"
+            android:textSize="15sp"
+            android:background="@drawable/button_text"
             android:text="@string/done"/>
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/record_setting_button"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -58,7 +59,7 @@
             android:layout_weight="3"
             android:gravity="center|left"
             android:text="@string/record"
-            android:textSize="30sp"
+            android:textSize="20sp"
             tools:ignore="RtlHardcoded" />
         
         <ImageView
@@ -74,7 +75,7 @@
 
     <View
         android:layout_width="fill_parent"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_height="1dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
@@ -82,7 +83,7 @@
 
     <LinearLayout
         android:id="@+id/command_button"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -100,7 +101,7 @@
             android:layout_weight="3"
             android:gravity="center|left"
             android:text="@string/command"
-            android:textSize="30sp"
+            android:textSize="20sp"
             tools:ignore="RtlHardcoded" />
 
         <ImageView
@@ -116,7 +117,7 @@
 
     <View
         android:layout_width="fill_parent"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_height="1dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
@@ -124,8 +125,7 @@
 
     <LinearLayout
         android:id="@+id/cloud_button"
-
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
@@ -143,7 +143,7 @@
             android:layout_weight="3"
             android:gravity="center|left"
             android:text="@string/Cloud"
-            android:textSize="30sp"
+            android:textSize="20sp"
             tools:ignore="RtlHardcoded" />
 
         <ImageView
@@ -159,7 +159,7 @@
 
     <View
         android:layout_width="fill_parent"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_height="1dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
@@ -167,7 +167,7 @@
 
     <LinearLayout
         android:id="@+id/about_button"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -185,7 +185,7 @@
             android:layout_weight="3"
             android:gravity="center|left"
             android:text="@string/about"
-            android:textSize="30sp"
+            android:textSize="20sp"
             tools:ignore="RtlHardcoded" />
 
         <ImageView
@@ -201,7 +201,7 @@
 
     <View
         android:layout_width="fill_parent"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_height="1dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
