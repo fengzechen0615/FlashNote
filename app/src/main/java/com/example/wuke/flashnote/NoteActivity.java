@@ -206,6 +206,7 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
 
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void init_View() {
         // 侧滑菜单
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -261,7 +262,6 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
             @Override
             public void onClick(View v) {
                 Add_text_note();
-                recording.setVisibility(View.INVISIBLE);
                 add.close(true);
             }
         });
@@ -270,6 +270,22 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
             public void onClick(View v) {
                 Add_voice_note();
                 add.close(true);
+            }
+        });
+
+        drawerLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                recording.setVisibility(View.INVISIBLE);
+                return false;
+            }
+        });
+
+        mRecyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                recording.setVisibility(View.INVISIBLE);
+                return false;
             }
         });
 
