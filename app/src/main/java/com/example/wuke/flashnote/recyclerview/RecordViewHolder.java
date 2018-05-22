@@ -23,6 +23,7 @@ public class RecordViewHolder extends RecyclerView.ViewHolder {
     public ImageView color_voice;
     public ImageView play_record;
     public ImageButton delete_record;
+    public ImageButton record_share;
 
     public RecordViewHolder(View itemView) {
         super(itemView);
@@ -36,5 +37,6 @@ public class RecordViewHolder extends RecyclerView.ViewHolder {
         color_voice = (ImageView) itemView.findViewById(R.id.color_voice);
         play_record = (ImageView) itemView.findViewById(R.id.play);
         delete_record = (ImageButton) itemView.findViewById(R.id.delete_record);
+        record_share = (ImageButton) itemView.findViewById(R.id.record_share);
     }
 }

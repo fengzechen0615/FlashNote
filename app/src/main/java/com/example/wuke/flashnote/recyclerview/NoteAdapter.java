@@ -237,6 +237,13 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                         delete(viewHolder.getAdapterPosition());
                     }
                 });
+
+                holder.share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
             }
         }
 
@@ -366,6 +373,13 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                     @Override
                     public void onClick(View view) {
                         delete(viewHolder.getAdapterPosition());
+                    }
+                });
+
+                holder.record_share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
                     }
                 });
             }
