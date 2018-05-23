@@ -1,5 +1,6 @@
 package com.example.wuke.flashnote.setting;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -13,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.wuke.flashnote.NoteActivity;
 import com.example.wuke.flashnote.R;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
@@ -98,7 +100,13 @@ public class RecordSetting extends PreferenceActivity implements Preference.OnPr
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(getBaseContext(), NoteActivity.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish();
+                NoteActivity.mNoteActivity.finish();
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                Setting.Setting.finish();
             }
         });
     }

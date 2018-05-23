@@ -1,5 +1,6 @@
 package com.example.wuke.flashnote.setting;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.example.wuke.flashnote.NoteActivity;
 import com.example.wuke.flashnote.R;
 
 public class Command extends AppCompatActivity {
@@ -40,7 +42,13 @@ public class Command extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(getBaseContext(), NoteActivity.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish();
+                NoteActivity.mNoteActivity.finish();
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                Setting.Setting.finish();
             }
         });
     }
