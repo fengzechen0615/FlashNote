@@ -14,6 +14,7 @@ import com.example.wuke.flashnote.R;
 public class About extends AppCompatActivity {
 
     private TextView done;
+    private TextView back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +29,17 @@ public class About extends AppCompatActivity {
         getWindow().setAttributes(p);
 
         done = (TextView) findViewById(R.id.about_done);
+        done = (TextView) findViewById(R.id.done);
         done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Setting.Setting.finish();
+                finish();
+            }
+        });
+
+        back = (TextView) findViewById(R.id.about_done);
+        back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();

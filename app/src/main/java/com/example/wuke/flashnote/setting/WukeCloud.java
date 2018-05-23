@@ -19,6 +19,7 @@ import com.example.wuke.flashnote.login.LoginStatus;
 public class WukeCloud extends AppCompatActivity {
 
     private TextView done;
+    private TextView back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,15 @@ public class WukeCloud extends AppCompatActivity {
 
         done = (TextView) findViewById(R.id.done);
         done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Setting.Setting.finish();
+                finish();
+            }
+        });
+
+        back = (TextView) findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();

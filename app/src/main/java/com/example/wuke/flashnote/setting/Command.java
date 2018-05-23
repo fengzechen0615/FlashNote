@@ -13,6 +13,7 @@ import com.example.wuke.flashnote.R;
 public class Command extends AppCompatActivity {
 
     private TextView done;
+    private TextView back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +29,15 @@ public class Command extends AppCompatActivity {
 
         done = (TextView) findViewById(R.id.command_done);
         done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Setting.Setting.finish();
+                finish();
+            }
+        });
+
+        back = (TextView) findViewById(R.id.command_back);
+        back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
