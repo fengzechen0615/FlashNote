@@ -74,7 +74,6 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/email"
                     android:imeActionId="6"
-                    android:imeActionLabel="Sign in"
                     android:imeOptions="actionUnspecified"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"

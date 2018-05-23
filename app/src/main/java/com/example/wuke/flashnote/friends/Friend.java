@@ -63,7 +63,6 @@ public class Friend extends AppCompatActivity {
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mAdapter = new FriendAdapter(this, mList);
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
 
         floatingActionButton = (android.support.design.widget.FloatingActionButton) findViewById(R.id.add_friends);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -85,7 +84,7 @@ public class Friend extends AppCompatActivity {
                     String[] user = localLogin.getaccount();
                     username=user[0];
                 } else {
-                    username="Flashnote";
+                    username="Wuke";
                 }
             }
         });

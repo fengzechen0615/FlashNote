@@ -1,5 +1,7 @@
 package com.example.wuke.flashnote.database_storage;
 
+import com.example.wuke.flashnote.friends.Friend;
+
 /**
  * Created by recur on 2018/3/27.
  */
@@ -7,6 +9,7 @@ package com.example.wuke.flashnote.database_storage;
 public class Friends {
     private int userID;
     private int friendsID;
+    private String name;
     public Friends (int FID,int UID)
     {
         this.friendsID=FID;
