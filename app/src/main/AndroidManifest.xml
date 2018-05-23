@@ -57,8 +57,7 @@
             android:theme="@style/dialogstyle" />
 
         <activity
-            android:name=".setting.Setting"
-            android:theme="@style/dialogstyle"/>
+            android:name=".setting.Setting" />
 
         <activity
             android:name=".setting.About"

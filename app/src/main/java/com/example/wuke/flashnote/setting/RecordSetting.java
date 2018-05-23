@@ -81,6 +81,15 @@ public class RecordSetting extends PreferenceActivity implements Preference.OnPr
                 return true;
             }
         });
+
+        Preference button = findPreference("aaaaaa");
+        button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                finish();
+                return true;
+            }
+        });
     }
 
     int ret = 0;
@@ -141,6 +150,13 @@ public class RecordSetting extends PreferenceActivity implements Preference.OnPr
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         return true;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode,KeyEvent event){
+        if(keyCode== KeyEvent.KEYCODE_BACK)
+            return true;//不执行父类点击事件
+        return super.onKeyDown(keyCode, event);//继续执行父类其他点击事件
     }
 
 }

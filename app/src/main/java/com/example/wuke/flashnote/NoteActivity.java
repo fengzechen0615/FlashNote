@@ -160,6 +160,8 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
     private RelativeLayout recording;
     private ImageButton speak;
 
+    public static Activity mNoteActivity;
+
     @SuppressLint({"ShowToast", "ClickableViewAccessibility"})
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,6 +173,8 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
         mSharedPreferences = getSharedPreferences(RecordSetting.PREFER_NAME, Activity.MODE_PRIVATE);
 
         mToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+
+        mNoteActivity = this;
 
         Timestamp timestamp=new Timestamp(System.currentTimeMillis());
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -186,11 +190,10 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
     }
 
     private void init_List() {
-//        if(list == null){
-            list = new ArrayList<Storage>();
-            dbo = new DatabaseOperator(this);
-            list = dbo.getAllStorage(userid);
-//        }
+        list = new ArrayList<Storage>();
+        dbo = new DatabaseOperator(this);
+        list = dbo.getAllStorage(userid);
+
         mRecyclerView = (RecyclerView) findViewById(R.id.note_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -842,9 +845,24 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
 //    @Override
 //    protected void onRestart() {
 //        super.onRestart();
-//        list.clear();
-//        init_List();
+//        init_List_again();
 //    }
+
+    private void init_List_again() {
+        list.clear();
+        list = new ArrayList<Storage>();
+        dbo = new DatabaseOperator(this);
+        list = dbo.getAllStorage(userid);
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.note_recycler_view);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mAdapter = new NoteAdapter(this, list);
+        mRecyclerView.setAdapter(mAdapter);
+        if (list.size() != 0) {
+            mRecyclerView.smoothScrollToPosition(list.size() - 1);
+        }
+    }
 
     @Override
     public void onAttachedToWindow() {
