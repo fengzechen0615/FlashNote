@@ -28,6 +28,7 @@ import com.example.wuke.flashnote.database_storage.Friends;
 import com.example.wuke.flashnote.download_upload.Uploading;
 import com.example.wuke.flashnote.function.Datatransformer;
 import com.example.wuke.flashnote.function.StringRecognizer;
+import com.example.wuke.flashnote.login.LocalLogin;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,6 +44,7 @@ public class Friend extends AppCompatActivity {
     private SharedPreferences pref;
     private android.support.design.widget.FloatingActionButton floatingActionButton;
     private TextView done;
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,7 @@ public class Friend extends AppCompatActivity {
             mList = new ArrayList<Friends>();
             // 测试数据
             init_data();
+
 //            dbo = new DatabaseOperator(this);
 //            mList = dbo.getAllFriends();
         }
@@ -81,6 +84,14 @@ public class Friend extends AppCompatActivity {
                         Add_friend();
                     }
                 }, 500);
+                LocalLogin localLogin = new LocalLogin();
+
+                if(localLogin.check() == true) {
+                    String[] user = localLogin.getaccount();
+                    username=user[0];
+                } else {
+                    username="Flashnote";
+                }
             }
         });
 
@@ -108,18 +119,9 @@ public class Friend extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         // input 为创建的内容
                         String input = editText.getText().toString();
-                        dbo = new DatabaseOperator(Friend.this);
-                        int fid = dbo.finduser(input);
-                        if(fid == -1){
-                            Toast.makeText(getApplication(), getString(R.string.no_friend), Toast.LENGTH_SHORT).show();
-                        }
-                        else{
-                            pref=getSharedPreferences("info",MODE_PRIVATE);
-                            int userid=pref.getInt("userid",0);
-                            Log.e("friend",userid+" "+fid);
-                            Uploading up=new Uploading();
-                            up.upfriend(String.valueOf(userid),String.valueOf(fid));
-                        }
+                        Log.e("Friends",username+"  "+input);
+                        Addfriend af=new Addfriend();
+                        af.addfriend(username,input);
 
                     }
                 })
