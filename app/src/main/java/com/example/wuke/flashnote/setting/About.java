@@ -1,5 +1,6 @@
 package com.example.wuke.flashnote.setting;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
@@ -9,11 +10,13 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.wuke.flashnote.NoteActivity;
 import com.example.wuke.flashnote.R;
 
 public class About extends AppCompatActivity {
 
     private TextView done;
+    private TextView back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,10 +31,25 @@ public class About extends AppCompatActivity {
         getWindow().setAttributes(p);
 
         done = (TextView) findViewById(R.id.about_done);
+        done = (TextView) findViewById(R.id.done);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(getBaseContext(), NoteActivity.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish();
+                NoteActivity.mNoteActivity.finish();
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            }
+        });
+
+        back = (TextView) findViewById(R.id.about_done);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getBaseContext(), Setting.class);
+                startActivity(intent);
             }
         });
     }

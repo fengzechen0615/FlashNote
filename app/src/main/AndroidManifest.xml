@@ -53,11 +53,12 @@
 
         <activity
             android:name=".setting.WukeCloud"
-            android:windowSoftInputMode="stateHidden|stateAlwaysHidden"
+            android:windowSoftInputMode="adjustPan|stateHidden"
             android:theme="@style/dialogstyle" />
 
         <activity
-            android:name=".setting.Setting" />
+            android:name=".setting.Setting"
+            android:theme="@style/dialogstyle" />
 
         <activity
             android:name=".setting.About"

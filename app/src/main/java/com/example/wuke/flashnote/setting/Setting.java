@@ -1,5 +1,6 @@
 package com.example.wuke.flashnote.setting;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,12 +23,21 @@ public class Setting extends AppCompatActivity{
 
     private TextView done;
 
+    public static Activity Setting;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        NoteActivity.mNoteActivity.finish();
+        Setting = this;
+
+        WindowManager m = getWindowManager();
+        Display d = m.getDefaultDisplay(); // 为获取屏幕宽、高
+        android.view.WindowManager.LayoutParams p = getWindow().getAttributes();
+        p.height = (int) (d.getHeight() * 0.8); // 高度设置为屏幕的0.3
+        p.width = (int) (d.getWidth() * 0.95); // 宽度设置为屏幕的0.7
+        getWindow().setAttributes(p);
 
         record = (LinearLayout) findViewById(R.id.record_setting_button);
         command = (LinearLayout) findViewById(R.id.command_button);
@@ -41,6 +51,7 @@ public class Setting extends AppCompatActivity{
             public void onClick(View view) {
                 Intent setting = new Intent(getBaseContext(), RecordSetting.class);
                 startActivity(setting);
+                finish();
             }
         });
 
@@ -49,6 +60,7 @@ public class Setting extends AppCompatActivity{
             public void onClick(View view) {
                 Intent Command = new Intent(getBaseContext(), Command.class);
                 startActivity(Command);
+                finish();
             }
         });
 
@@ -57,6 +69,7 @@ public class Setting extends AppCompatActivity{
             public void onClick(View view) {
                 Intent cloud = new Intent(getBaseContext(), WukeCloud.class);
                 startActivity(cloud);
+                finish();
             }
         });
 
@@ -65,6 +78,7 @@ public class Setting extends AppCompatActivity{
             public void onClick(View view) {
                 Intent About = new Intent(getBaseContext(), About.class);
                 startActivity(About);
+                finish();
             }
         });
 
@@ -75,6 +89,7 @@ public class Setting extends AppCompatActivity{
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish();
+                NoteActivity.mNoteActivity.finish();
             }
         });
     }

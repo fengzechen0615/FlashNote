@@ -57,18 +57,12 @@ public class Friend extends AppCompatActivity {
     private void init_List() {
         if(mList == null){
             mList = new ArrayList<Friends>();
-            // 测试数据
-            init_data();
-
-//            dbo = new DatabaseOperator(this);
-//            mList = dbo.getAllFriends();
         }
         mRecyclerView = (RecyclerView) findViewById(R.id.friend_recycler_view);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mAdapter = new FriendAdapter(this, mList);
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
 
         floatingActionButton = (android.support.design.widget.FloatingActionButton) findViewById(R.id.add_friends);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -90,7 +84,7 @@ public class Friend extends AppCompatActivity {
                     String[] user = localLogin.getaccount();
                     username=user[0];
                 } else {
-                    username="Flashnote";
+                    username="Wuke";
                 }
             }
         });
@@ -130,28 +124,6 @@ public class Friend extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 }).show();
-    }
-
-    private void init_data() {
-        Friends friends_1 = new Friends(1, 2);
-        mList.add(friends_1);
-        Friends friends_2 = new Friends(3, 4);
-        mList.add(friends_2);
-        Friends friends_3 = new Friends(5, 6);
-        mList.add(friends_3);
-        Friends friends_4 = new Friends(5, 6);
-        mList.add(friends_4);
-        Friends friends_5 = new Friends(5, 6);
-        mList.add(friends_5);
-        Friends friends_6 = new Friends(5, 6);
-        mList.add(friends_6);
-        Friends friends_7 = new Friends(5, 6);
-        mList.add(friends_7);
-        Friends friends_8 = new Friends(5, 6);
-        mList.add(friends_8);
-        Friends friends_9 = new Friends(5, 6);
-        mList.add(friends_9);
-
     }
 
 }

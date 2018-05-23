@@ -56,6 +56,7 @@ import com.example.wuke.flashnote.database_storage.Sync;
 import com.example.wuke.flashnote.setting.RecordSetting;
 import com.example.wuke.flashnote.recyclerview.NoteAdapter;
 import com.example.wuke.flashnote.setting.Setting;
+import com.example.wuke.flashnote.setting.WukeCloud;
 import com.example.wuke.flashnote.trash.Trash;
 import com.example.wuke.flashnote.util.JsonParser;
 import com.example.wuke.flashnote.download_upload.Uploading;
@@ -913,6 +914,8 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                 Intent intent = new Intent(NoteActivity.this, Friend.class);
                 startActivity(intent);
             } else {
+                Intent intent = new Intent(getBaseContext(), WukeCloud.class);
+                startActivity(intent);
                 Toast.makeText(getBaseContext(), getString(R.string.up_login), Toast.LENGTH_SHORT).show();;
             }
         } else if (item.getItemId() == R.id.trash) {
@@ -924,6 +927,8 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
             if(localLogin.check()) {
                 update();
             } else {
+                Intent intent = new Intent(getBaseContext(), WukeCloud.class);
+                startActivity(intent);
                 Toast.makeText(getBaseContext(), getString(R.string.up_login), Toast.LENGTH_SHORT).show();;
             }
         }

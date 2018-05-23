@@ -1,8 +1,6 @@
 package com.example.wuke.flashnote.setting;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -10,10 +8,13 @@ import android.preference.PreferenceActivity;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.wuke.flashnote.NoteActivity;
 import com.example.wuke.flashnote.R;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
@@ -39,11 +40,15 @@ public class RecordSetting extends PreferenceActivity implements Preference.OnPr
 
     private Toast mToast;
 
+    private TextView done;
+    private TextView back;
+
     @SuppressWarnings("deprecation")
     public void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
         getPreferenceManager().setSharedPreferencesName(PREFER_NAME);
+        setContentView(R.layout.activity_record_setting);
         addPreferencesFromResource(R.xml.setting);
 
         WindowManager m = getWindowManager();
@@ -82,12 +87,25 @@ public class RecordSetting extends PreferenceActivity implements Preference.OnPr
             }
         });
 
-        Preference button = findPreference("aaaaaa");
-        button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+        done = (TextView) findViewById(R.id.record_setting_done);
+        done.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onPreferenceClick(Preference preference) {
+            public void onClick(View view) {
+                Intent intent = new Intent(getBaseContext(), NoteActivity.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish();
-                return true;
+                NoteActivity.mNoteActivity.finish();
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            }
+        });
+
+        back = (TextView) findViewById(R.id.record_setting_back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getBaseContext(), Setting.class);
+                startActivity(intent);
             }
         });
     }
