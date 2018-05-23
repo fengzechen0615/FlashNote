@@ -62,7 +62,6 @@ public class WukeCloud extends AppCompatActivity {
                 finish();
                 NoteActivity.mNoteActivity.finish();
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                Setting.Setting.finish();
             }
         });
 
@@ -70,6 +69,8 @@ public class WukeCloud extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(getBaseContext(), Setting.class);
+                startActivity(intent);
                 finish();
             }
         });

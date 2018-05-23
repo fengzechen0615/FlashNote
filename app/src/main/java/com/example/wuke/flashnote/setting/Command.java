@@ -33,8 +33,12 @@ public class Command extends AppCompatActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Setting.Setting.finish();
+                Intent intent = new Intent(getBaseContext(), NoteActivity.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish();
+                NoteActivity.mNoteActivity.finish();
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 
@@ -42,13 +46,8 @@ public class Command extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getBaseContext(), NoteActivity.class);
+                Intent intent = new Intent(getBaseContext(), Setting.class);
                 startActivity(intent);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                finish();
-                NoteActivity.mNoteActivity.finish();
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                Setting.Setting.finish();
             }
         });
     }

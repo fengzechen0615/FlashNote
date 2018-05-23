@@ -51,7 +51,7 @@ public class Setting extends AppCompatActivity{
             public void onClick(View view) {
                 Intent setting = new Intent(getBaseContext(), RecordSetting.class);
                 startActivity(setting);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                finish();
             }
         });
 
@@ -60,6 +60,7 @@ public class Setting extends AppCompatActivity{
             public void onClick(View view) {
                 Intent Command = new Intent(getBaseContext(), Command.class);
                 startActivity(Command);
+                finish();
             }
         });
 
@@ -68,6 +69,7 @@ public class Setting extends AppCompatActivity{
             public void onClick(View view) {
                 Intent cloud = new Intent(getBaseContext(), WukeCloud.class);
                 startActivity(cloud);
+                finish();
             }
         });
 
@@ -76,6 +78,7 @@ public class Setting extends AppCompatActivity{
             public void onClick(View view) {
                 Intent About = new Intent(getBaseContext(), About.class);
                 startActivity(About);
+                finish();
             }
         });
 
