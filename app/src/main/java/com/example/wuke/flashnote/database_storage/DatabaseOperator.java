@@ -152,6 +152,22 @@ public class DatabaseOperator {
         return (int)NID;
     }
 
+    public int RevertNote(Note note)
+    {
+        ContentValues cValue = new ContentValues();
+        SQLiteDatabase wdb=WriteDatabase;
+        cValue.put(Initial.note_id,note.getNoteID());
+        cValue.put(Initial.note_user,note.getUserID());
+        cValue.put(Initial.note_words,note.getWords());
+        cValue.put(Initial.note_color,note.getColor());
+        cValue.put(Initial.note_timestamp,note.getTimestamp());
+        cValue.put(Initial.note_priority,note.getPriority());
+        cValue.put(Initial.datatype,note.getDataType());
+        long NID=wdb.insert(Initial.table_note,null,cValue);
+        Log.d("database","Insert successfully");
+        return (int)NID;
+    }
+
     public int InsertVoice(Voice voice)
     {
         ContentValues cValue = new ContentValues();
@@ -184,6 +200,13 @@ public class DatabaseOperator {
         return false;
     }
 
+    public boolean deleteAllNote(int userid){
+        SQLiteDatabase wdb=WriteDatabase;
+        wdb.delete(Initial.table_note,Initial.note_user+"=?",new String[]{String.valueOf(userid)});
+        return false;
+    }
+
+
     public boolean deleteVoice(int id){
         SQLiteDatabase wdb=WriteDatabase;
         wdb.delete(Initial.table_voice,"voice_id=?",new String[]{String.valueOf(id)});
@@ -195,6 +218,8 @@ public class DatabaseOperator {
         wdb.delete(Initial.Garbage_table,Initial.Litter_id+"=?",new String[]{String.valueOf(id)});
         return false;
     }
+
+
 
     public boolean addGarbage(Garbage garbage)
     {
@@ -216,7 +241,7 @@ public class DatabaseOperator {
     {
         ArrayList list=new ArrayList();
         SQLiteDatabase rdb=ReadDatabase;
-        Cursor cursor=rdb.rawQuery("SELECT * FROM "+Initial.Garbage_table+" WHERE "+Initial.guser_id+" =?",new String[]{String.valueOf(userid)});
+        Cursor cursor=rdb.rawQuery("SELECT * FROM "+Initial.Garbage_table+" WHERE "+Initial.guser_id+"=0 or "+Initial.guser_id+" =?",new String[]{String.valueOf(userid)});
         int lidindex = cursor.getColumnIndex(Initial.Litter_id);
         int contentindex = cursor.getColumnIndex(Initial.content_id);
         int dataindex = cursor.getColumnIndex(Initial.garbage_datatype);
@@ -276,7 +301,7 @@ public class DatabaseOperator {
     {
         ArrayList<Note> result = new ArrayList<>();
         SQLiteDatabase rdb=ReadDatabase;
-        Cursor cursor=rdb.rawQuery("SELECT * FROM "+Initial.table_note+" WHERE "+Initial.note_user+" =?",new String[]{String.valueOf(userID)});
+        Cursor cursor=rdb.rawQuery("SELECT * FROM "+Initial.table_note+" WHERE "+Initial.note_user+"=0 or "+Initial.note_user+" =?",new String[]{String.valueOf(userID)});
         int noteIDindex=cursor.getColumnIndex(Initial.note_id);
         int userIDindex=cursor.getColumnIndex(Initial.note_user);
         int wordsindex=cursor.getColumnIndex(Initial.note_words);
@@ -305,7 +330,7 @@ public class DatabaseOperator {
         ArrayList<Voice> result = new ArrayList<>();
         SQLiteDatabase rdb=ReadDatabase;
         Log.e("get",userID+"");
-        Cursor cursor=rdb.rawQuery("SELECT * FROM "+Initial.table_voice+" WHERE "+Initial.voice_users+" =?",new String[]{String.valueOf(userID)});
+        Cursor cursor=rdb.rawQuery("SELECT * FROM "+Initial.table_voice+" WHERE "+Initial.voice_users+"=0 or "+Initial.voice_users+"=?",new String[]{String.valueOf(userID)});
         int voiceIDindex=cursor.getColumnIndex(Initial.voice_id);
         int userIDindex=cursor.getColumnIndex(Initial.voice_users);
         int fileindex=cursor.getColumnIndex(Initial.voice_file);

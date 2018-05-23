@@ -35,6 +35,7 @@ public class Downloading {
     public static ArrayList<Voice> voices = new ArrayList<>();
 
     public void downnote(String user){
+        Log.e("down",user);
         String s = note + "?user="+ user;
         final MyAsyncTask connect = new MyAsyncTask();
         connect.execute(s);
@@ -43,6 +44,7 @@ public class Downloading {
             public void onDataReceivedSuccess(List<String> listData) {
                 subsn = (ArrayList<String>) listData;
                 notes = transnote(subsn);
+                Log.e("down",notes.size()+"");
             }
 
             public void onDataReceivedFailed() {

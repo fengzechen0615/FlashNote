@@ -130,7 +130,7 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
     // 引擎类型
     private String mEngineType = SpeechConstant.TYPE_CLOUD;
     private int dt=-1;
-
+    private ArrayList test = new ArrayList();
     int ret = 0;
 
     private RecyclerView mRecyclerView;
@@ -178,9 +178,14 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
 
         Timestamp timestamp=new Timestamp(System.currentTimeMillis());
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd%20HH:mm:ss");
         pref=getSharedPreferences("info",MODE_PRIVATE);
-        time = pref.getString(time,formatter.format(timestamp));
+        time = pref.getString("time",formatter.format(timestamp));
         userid=pref.getInt("userid",0);
+        pref=getSharedPreferences("info",MODE_PRIVATE);
+        SharedPreferences.Editor editor=pref.edit();
+        editor.putString("time",time);
+        editor.commit();
         Log.e("gtime1",time);//程序启动时间
 
         // 初始化列表
@@ -487,7 +492,6 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                     @SuppressLint("SimpleDateFormat") SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm");
                     String time = form.format(timestamp);
-                    Log.e("times",time);
                     pref = getSharedPreferences("info", MODE_PRIVATE);
                     int userid = pref.getInt("userid", 0);
                     // 插入priority
@@ -818,7 +822,6 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         if( null != mIat ){
             // 退出时释放连接
             mIat.cancel();
@@ -842,11 +845,11 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
         super.onPause();
     }
 
-//    @Override
-//    protected void onRestart() {
-//        super.onRestart();
-//        init_List_again();
-//    }
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        init_List_again();
+    }
 
     private void init_List_again() {
         list.clear();
@@ -933,47 +936,61 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
         if (time!=null && userid!=0) {
             String newtime=time;
             Iterator<Storage> iterator=list.iterator();
-            List notelist=new ArrayList();
+            final List notelist=new ArrayList();
             while(iterator.hasNext()) {
                 Storage storage=(Storage)iterator.next();
-                if (storage instanceof Note) {
+                if (storage instanceof Note && storage.getUserID()==userid) {
                     notelist.add((Note)storage);
                 }
             }
-            //同步比较时间
+            //同步比较时间,准备工作
             HashMap map = Sync.CompareTimestamp(newtime, notelist);
             ArrayList before = (ArrayList<Note>) map.get("Before");//verify
             ArrayList After = (ArrayList<Note>) map.get("After");//new content,upload to server
-            ArrayList Delete= (ArrayList) mAdapter.getDelete_List();
-            Uploading uploading=new Uploading();
+
+            //delete 部分
             Deleting d=new Deleting();
-            uploading.uploadnote(After);
-            d.deletenote(Delete);
+            d.deletenote((ArrayList<Note>) before);
+
+            //Uploading部分
+            Uploading uploading=new Uploading();
+            uploading.uploadnote((ArrayList<Note>) notelist);
+
+            //Down部分
             final Downloading dl=new Downloading();
-            LocalLogin localLogin = new LocalLogin();
-            String[] user = localLogin.getaccount();
-            Username=user[0];
-            dl.downnote(String.valueOf(Username));
+            dl.downnote(String.valueOf(userid));
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if(dl.notes!=null) {
-                        ArrayList<Note> test=dl.notes;
+                    dbo=new DatabaseOperator(NoteActivity.this);
+                    dbo.deleteAllNote(userid);
+                    if(dl.notes != null) {
+                        test = dl.notes;
+                        Iterator it = test.iterator();
+                        while (it.hasNext()){
+                            Note t=(Note)it.next();
+                            dbo.InsertNote(t);
+                        }
+                        notelist.clear();
                     }
                     else {
                         mToast = Toast.makeText(NoteActivity.this, "No", Toast.LENGTH_LONG);
                         mToast.show();
                     }
                 }
-            },1000);
+            },100);
+            init_List_again();
+
+
             //最后同步时间
             Timestamp timestamp=new Timestamp(System.currentTimeMillis());
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String retime = formatter.format(timestamp);
             time=retime;
-//                pref=getSharedPreferences("info",MODE_PRIVATE);
-//                SharedPreferences.Editor editor=pref.edit();
-//                editor.putString("time",retime);
+            pref=getSharedPreferences("info",MODE_PRIVATE);
+            SharedPreferences.Editor editor=pref.edit();
+            editor.putString("time",retime);
+            editor.commit();
         }
         else {
             Log.e("sync", "Empty");

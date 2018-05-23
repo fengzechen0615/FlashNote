@@ -1,5 +1,6 @@
 package com.example.wuke.flashnote.trash;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -18,6 +19,8 @@ import com.example.wuke.flashnote.database_storage.Voice;
 import com.example.wuke.flashnote.record.Record;
 
 import java.io.File;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -140,10 +143,13 @@ public class TrashAdapter extends RecyclerView.Adapter{
                 @Override
                 public void onClick(View view) {
                     Garbage g = mList.get(position);
-                    Note note = new Note(g.getContent_id(),g.getGuser_id(),g.getKeywords(),g.getPrevious_color(),g.getPrevious_timestamp()
+                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                    @SuppressLint("SimpleDateFormat") SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String time = form.format(timestamp);
+                    Note note = new Note(g.getContent_id(),g.getGuser_id(),g.getKeywords(),g.getPrevious_color(),time
                     , g.getPrevious_priority(),g.getDatatype());
                     dbo=new DatabaseOperator(mContext);
-                    dbo.InsertNote(note);
+                    dbo.RevertNote(note);
                     mList.remove(position);
                     dbo.deleteGarbage(g.getLitter_id());
                     notifyItemRemoved(position);
@@ -164,7 +170,6 @@ public class TrashAdapter extends RecyclerView.Adapter{
             holder.trash_record_content.setEllipsize(TextUtils.TruncateAt.END);
             holder.trash_record_content.setSingleLine(true);
             holder.trash_record_content.setOnClickListener(new View.OnClickListener() {
-
                 Boolean flag = true;
 
                 @Override

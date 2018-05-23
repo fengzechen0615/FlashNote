@@ -21,12 +21,15 @@ import com.example.wuke.flashnote.database_storage.Garbage;
 import com.example.wuke.flashnote.database_storage.Note;
 import com.example.wuke.flashnote.database_storage.Storage;
 import com.example.wuke.flashnote.database_storage.Voice;
+import com.example.wuke.flashnote.download_upload.Deleting;
 import com.example.wuke.flashnote.download_upload.Uploading;
+import com.example.wuke.flashnote.login.LocalLogin;
 import com.example.wuke.flashnote.record.Record;
 import com.iflytek.cloud.SpeechRecognizer;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -123,17 +126,18 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                 holder.share.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("share", "click share");
-                        Uploading uploading=new Uploading();
-                        if (mList.get(position) instanceof Note){
-                            uploading.upsharednote(String.valueOf(((Note) mList.get(position)).getUserID()),String.valueOf(((Note) mList.get(position)).getNoteID()));
-                            Log.e("share",((Note) mList.get(position)).getUserID()+" "+((Note) mList.get(position)).getNoteID());
+                        Log.e("share", "click share");
+                        LocalLogin l=new LocalLogin();
+                        if (l.check()==true) {
+                            Uploading uploading = new Uploading();
+                            uploading.upsharednote(String.valueOf(((Note) mList.get(position)).getUserID()), String.valueOf(((Note) mList.get(position)).getNoteID()));
+                            Log.e("share", ((Note) mList.get(position)).getUserID() + " " + ((Note) mList.get(position)).getNoteID());
+                            Toast.makeText(mContext, "click" + position, Toast.LENGTH_SHORT).show();
                         }
-                        else {
-                            //uploading.upsharevoice(String.valueOf(((Voice) mList.get(position)).getUserID()),String.valueOf(((Voice) mList.get(position)).getVoiceID()));
+                        else
+                        {
+                            Toast.makeText(mContext, "click without login" + position, Toast.LENGTH_SHORT).show();
                         }
-
-                        Toast.makeText(mContext, "click" + position, Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -424,7 +428,8 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                     note.getTimestamp(), note.getColor(), note.getPriority(), -1);
             databaseOperator.addGarbage(garbage);
             deleteNote = (Note) mList.remove(position); //移除数据
-            Delete_List.add(deleteNote);
+            Deleting deleting=new Deleting();
+            deleting.denote(String.valueOf(deleteNote.getUserID()),String.valueOf(deleteNote.getNoteID()));
             notifyItemRemoved(position);
             notifyDataSetChanged();
             // remove后更改priority
