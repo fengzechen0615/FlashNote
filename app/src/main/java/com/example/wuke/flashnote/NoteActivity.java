@@ -887,8 +887,13 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
             Intent intents = new Intent(NoteActivity.this, Setting.class);
             startActivity(intents);
         } else if(item.getItemId() == R.id.friends) {
-            Intent intent = new Intent(NoteActivity.this, Friend.class);
-            startActivity(intent);
+            LocalLogin localLogin = new LocalLogin();
+            if(localLogin.check()) {
+                Intent intent = new Intent(NoteActivity.this, Friend.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(getBaseContext(), getString(R.string.up_login), Toast.LENGTH_SHORT).show();;
+            }
         } else if (item.getItemId() == R.id.trash) {
             Intent intent = new Intent(NoteActivity.this, Trash.class);
             intent.putExtra("userid",userid);
