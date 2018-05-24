@@ -144,7 +144,9 @@ public class Friend extends AppCompatActivity {
                         Log.e("Friends",username+"  "+input);
                         Addfriend af=new Addfriend();
                         af.addfriend(username,input);
-
+                        mList.add(input);
+                        mAdapter.notifyItemInserted(mList.size() - 1);
+                        mRecyclerView.scrollToPosition(mList.size() - 1);
                     }
                 })
                 .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {

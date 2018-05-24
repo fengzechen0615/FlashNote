@@ -1,5 +1,6 @@
 package com.example.wuke.flashnote.moment;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,11 +21,21 @@ public class Moment extends AppCompatActivity {
     private TextView done;
     private MomentAdapter mAdapter;
     private RecyclerView mRecyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_monent);
+
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh_list();
+            }
+        });
 
         done = (TextView) findViewById(R.id.moment_done);
         done.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +71,10 @@ public class Moment extends AppCompatActivity {
         mList.add(momentDetail_1);
         MomentDetail momentDetail_2 = new MomentDetail("Gong Linghua", "I fall in Love with WeiYuan", "2015-4-27 13:00:00");
         mList.add(momentDetail_2);
+    }
+
+    private void refresh_list() {
+        
     }
 
     @Override

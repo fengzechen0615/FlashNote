@@ -62,16 +62,16 @@ public class RecordSetting extends PreferenceActivity implements Preference.OnPr
 
         mToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
 
-        ListPreference listPreference = (ListPreference) findPreference("language_preference");
+//        ListPreference listPreference = (ListPreference) findPreference("language_preference");
 
-        Locale locale = Locale.getDefault();
-        String language = locale.getLanguage();
+//        Locale locale = Locale.getDefault();
+//        String language = locale.getLanguage();
 
-        if (language.equals("en")) {
-            listPreference.setValue("en_us");
-        } else {
-            listPreference.setValue("mandarin");
-        }
+//        if (language.equals("en")) {
+//            listPreference.setValue("en_us");
+//        } else {
+//            listPreference.setValue("mandarin");
+//        }
 
         preference = findPreference("contact");
         preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {

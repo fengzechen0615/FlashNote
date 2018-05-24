@@ -49,6 +49,7 @@ import com.example.wuke.flashnote.function.Taobao;
 import com.example.wuke.flashnote.function.Wechat;
 import com.example.wuke.flashnote.function.wechatShare;
 import com.example.wuke.flashnote.login.LocalLogin;
+import com.example.wuke.flashnote.moment.Moment;
 import com.example.wuke.flashnote.recyclerview.RecycleItemTouchHelper;
 import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Note;
@@ -777,6 +778,7 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                 // 设置语言
                 mIat.setParameter(SpeechConstant.LANGUAGE, "en_us");
                 mIat.setParameter(SpeechConstant.ACCENT, null);
+                Log.d("en", "en_us");
 
             } else {
                 // 设置语言
@@ -926,6 +928,16 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
             LocalLogin localLogin = new LocalLogin();
             if(localLogin.check()) {
                 update();
+            } else {
+                Intent intent = new Intent(getBaseContext(), WukeCloud.class);
+                startActivity(intent);
+                Toast.makeText(getBaseContext(), getString(R.string.up_login), Toast.LENGTH_SHORT).show();;
+            }
+        } else if (item.getItemId() == R.id.moment) {
+            LocalLogin localLogin = new LocalLogin();
+            if(localLogin.check()) {
+                Intent intent = new Intent(getBaseContext(), Moment.class);
+                startActivity(intent);
             } else {
                 Intent intent = new Intent(getBaseContext(), WukeCloud.class);
                 startActivity(intent);

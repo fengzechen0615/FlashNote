@@ -478,6 +478,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                 deleting.denote(String.valueOf(deletevoice.getUserID()),String.valueOf(deletevoice.getVoiceID()));
             }
             notifyItemRemoved(position);
+            notifyDataSetChanged();
             for (int i = position; i < mList.size(); i++) {
                 if (mList.get(i) instanceof Note) {
                     int id = ((Note) mList.get(i)).getNoteID();

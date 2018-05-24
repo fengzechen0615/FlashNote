@@ -1,6 +1,8 @@
 package com.example.wuke.flashnote.record;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
@@ -11,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.wuke.flashnote.NoteActivity;
 import com.example.wuke.flashnote.R;
+import com.example.wuke.flashnote.setting.RecordSetting;
 import com.example.wuke.flashnote.util.FucUtil;
 import com.example.wuke.flashnote.util.JsonParser;
 import com.iflytek.cloud.ErrorCode;
@@ -27,6 +30,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 
 public class Record {
 
@@ -107,6 +111,42 @@ public class Record {
     public void Convert(Context context, TextView textView, String filename) {
 
         mToast = Toast.makeText(context, "", Toast.LENGTH_SHORT);
+
+        Locale locale = Locale.getDefault();
+        String language = locale.getLanguage();
+
+        SharedPreferences mSharedPreferences = context.getSharedPreferences(RecordSetting.PREFER_NAME, Activity.MODE_PRIVATE);
+
+        if (language.equals("en")) {
+            String lag = mSharedPreferences.getString("language_preference", "en_us");
+            if (lag.equals("en_us")) {
+                // 设置语言
+                mIat.setParameter(SpeechConstant.LANGUAGE, "en_us");
+                mIat.setParameter(SpeechConstant.ACCENT, null);
+                Log.d("en", "en_us");
+
+            } else {
+                // 设置语言
+                mIat.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
+                // 设置语言区域
+                mIat.setParameter(SpeechConstant.ACCENT, lag);
+
+            }
+        } else {
+            String lag = mSharedPreferences.getString("language_preference", "mandarin");
+            if (lag.equals("en_us")) {
+                // 设置语言
+                mIat.setParameter(SpeechConstant.LANGUAGE, "en_us");
+                mIat.setParameter(SpeechConstant.ACCENT, null);
+
+            } else {
+                // 设置语言
+                mIat.setParameter(SpeechConstant.LANGUAGE, "zh_cn");
+                // 设置语言区域
+                mIat.setParameter(SpeechConstant.ACCENT, lag);
+
+            }
+        }
 
         mIat.setParameter(SpeechConstant.VAD_BOS, "5000");
         mIat.setParameter(SpeechConstant.VAD_EOS, "10000");

@@ -9,7 +9,7 @@ import com.example.wuke.flashnote.friends.Friend;
 public class Friends {
     private int userID;
     private int friendsID;
-    private String name;
+
     public Friends (int FID,int UID)
     {
         this.friendsID=FID;
