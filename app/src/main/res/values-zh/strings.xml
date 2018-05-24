@@ -93,5 +93,7 @@
     <string name="add">添加</string>
     <string name="friend">好友</string>
     <string name="no_friend">找不到此好友</string>
+    <!--moment-->
+    <string name="moment">动态</string>
 
 </resources>
