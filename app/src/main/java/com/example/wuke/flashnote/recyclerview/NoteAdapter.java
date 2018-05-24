@@ -44,6 +44,8 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
     private Context mContext;
     private List<Note> Delete_List = new ArrayList<>();
     Note deleteNote;
+    Voice deletevoice;
+    private LocalLogin localLogin=new LocalLogin();
 
     private boolean edit_state = true;
 
@@ -439,8 +441,10 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                     note.getTimestamp(), note.getColor(), note.getPriority(), -1);
             databaseOperator.addGarbage(garbage);
             deleteNote = (Note) mList.remove(position); //移除数据
-            Deleting deleting=new Deleting();
-            deleting.denote(String.valueOf(deleteNote.getUserID()),String.valueOf(deleteNote.getNoteID()));
+            if (localLogin.check()==true && deleteNote.getUserID()!=0){
+                Deleting deleting=new Deleting();
+                deleting.denote(String.valueOf(deleteNote.getUserID()),String.valueOf(deleteNote.getNoteID()));
+            }
             notifyItemRemoved(position);
             notifyDataSetChanged();
             // remove后更改priority
@@ -468,7 +472,11 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
             Garbage garbage = new Garbage(voice.getVoiceID(), voice.getDataType(), voice.getUserID(),voice.getURL(),
                     voice.getTimestamp(), voice.getColor(), voice.getPriority(), voice.getDuration());
             databaseOperator.addGarbage(garbage);
-            mList.remove(position); //移除数据
+            deletevoice = (Voice)mList.remove(position); //移除数据
+            if (localLogin.check()==true && deletevoice.getUserID()!=0){
+                Deleting deleting=new Deleting();
+                deleting.denote(String.valueOf(deletevoice.getUserID()),String.valueOf(deletevoice.getVoiceID()));
+            }
             notifyItemRemoved(position);
             for (int i = position; i < mList.size(); i++) {
                 if (mList.get(i) instanceof Note) {
