@@ -233,13 +233,13 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                 holder.share.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Log.e("share","on click");
+                        Log.e("share","note on click");
                         LocalLogin l=new LocalLogin();
                         if (l.check()==true) {
                             Uploading uploading = new Uploading();
                             uploading.upsharednote(String.valueOf(((Note) mList.get(position)).getUserID()), String.valueOf(((Note) mList.get(position)).getNoteID()));
                             Log.e("share", ((Note) mList.get(position)).getUserID() + " " + ((Note) mList.get(position)).getNoteID());
-                            Toast.makeText(mContext, "click" + position, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, "share" + ((Note) mList.get(position)).getWords()+((Note) mList.get(position)).getNoteID(), Toast.LENGTH_SHORT).show();
                         }
                         else
                         {
@@ -382,6 +382,17 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                 holder.record_share.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        Log.e("share","voice on click");
+                        LocalLogin l=new LocalLogin();
+                        if (l.check()==true) {
+                            Uploading uploading = new Uploading();
+                            uploading.upsharevoice(String.valueOf(((Voice) mList.get(position)).getUserID()), String.valueOf(((Voice) mList.get(position)).getVoiceID()));
+                            Toast.makeText(mContext, "share" + ((Voice) mList.get(position)).getURL()+((Voice) mList.get(position)).getVoiceID(), Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            Toast.makeText(mContext, "click without login" + position, Toast.LENGTH_SHORT).show();
+                        }
 
                     }
                 });

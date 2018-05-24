@@ -16,7 +16,7 @@ import java.util.List;
 
 public class Sync {
 
-    public static HashMap<String,List> CompareTimestamp(String nowTime,List<Note> data)
+    public static HashMap<String,List> CompareTimestamp(String nowTime,List<Storage> data)
     {
         SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date=form.parse(nowTime,new ParsePosition(0));
@@ -26,22 +26,22 @@ public class Sync {
         List afterList =new ArrayList<>();
         while(iterator.hasNext())
         {
-            Note note= (Note) iterator.next();
-            Date d=form.parse(note.getTimestamp(),new ParsePosition(0));
+            Storage storage= (Storage) iterator.next();
+            Date d=form.parse(storage.getTimestamp(),new ParsePosition(0));
             SimpleDateFormat form1=new SimpleDateFormat("yyyy-MM-dd");
             SimpleDateFormat form2=new SimpleDateFormat("HH:mm:ss");
             Log.e("before1",date+""+d);
             if(date.before(d)==true)
             {
-                note.setTimestamp(form1.format(d)+"%20"+form2.format(d));
-                afterList.add(note);
-                note.setTimestamp(form.format(d));
-                Log.e("after",note.getNoteID()+"");
+                storage.setTimestamp(form1.format(d)+"%20"+form2.format(d));
+                afterList.add(storage);
+                storage.setTimestamp(form.format(d));
+                Log.e("after",storage.getDataType()+"");
             }
             else
             {
-                beforeList.add(note);
-                Log.e("before",note.getTimestamp());
+                beforeList.add(storage);
+                Log.e("before",storage.getTimestamp());
             }
         }
         HashMap map=new HashMap();

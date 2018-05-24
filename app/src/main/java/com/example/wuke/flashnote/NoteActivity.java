@@ -941,26 +941,35 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
         if (time!=null && userid!=0) {
             String newtime=time;
             Iterator<Storage> iterator=list.iterator();
-            final List notelist=new ArrayList();
+            final List notelist = new ArrayList();
+            final List voicelist = new ArrayList();
             while(iterator.hasNext()) {
                 Storage storage=(Storage)iterator.next();
                 if (storage instanceof Note && storage.getUserID()==userid) {
                     notelist.add((Note)storage);
                 }
+                else if (storage instanceof Voice && storage.getUserID()==userid){
+                    voicelist.add((Voice)storage);
+                }
             }
             //同步比较时间,准备工作
-            HashMap map = Sync.CompareTimestamp(newtime, notelist);
-            ArrayList before = (ArrayList<Note>) map.get("Before");//verify
-            ArrayList After = (ArrayList<Note>) map.get("After");//new content,upload to server
+            HashMap map1 = Sync.CompareTimestamp(newtime, notelist);
+            HashMap map2 = Sync.CompareTimestamp(newtime,voicelist);
+            ArrayList before = (ArrayList<Note>) map1.get("Before");//verify
+            ArrayList After_note = (ArrayList<Note>) map1.get("After");//new content,upload to server
+            ArrayList After_voice = (ArrayList<Note>) map2.get("After");//new content,upload to server
 
             //Uploading部分
             Uploading uploading=new Uploading();
             notelist.size();
-            uploading.uploadnote(After);
+            uploading.uploadnote(After_note);
+            uploading.uploadnote(After_voice);
 
             //Down部分
             final Downloading dl=new Downloading();
             dl.downnote(String.valueOf(userid));
+            //dl.downnvoice(String.valueOf(userid));
+
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -982,8 +991,6 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                     }
                 }
             },100);
-
-
 
             //最后同步时间
             Timestamp timestamp=new Timestamp(System.currentTimeMillis());

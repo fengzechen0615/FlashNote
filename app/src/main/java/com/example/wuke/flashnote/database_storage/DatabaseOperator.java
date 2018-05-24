@@ -183,6 +183,23 @@ public class DatabaseOperator {
         return (int)VID;
     }
 
+    public int RevertVoice(Voice voice)
+    {
+        ContentValues cValue = new ContentValues();
+        SQLiteDatabase wdb=WriteDatabase;
+        cValue.put(Initial.voice_id,voice.getVoiceID());
+        cValue.put(Initial.voice_file,voice.getURL());
+        cValue.put(Initial.voice_users,voice.getUserID());
+        cValue.put(Initial.voice_color,voice.getColor());
+        cValue.put(Initial.voice_timestamp,voice.getTimestamp());
+        cValue.put(Initial.voice_priority,voice.getPriority());
+        cValue.put(Initial.datatype,voice.getDataType());
+        cValue.put(Initial.voice_duration,voice.getDuration());
+        long VID=wdb.insert(Initial.table_voice,null,cValue);
+        return (int)VID;
+    }
+
+
     public int InsertFriend(Friends f)
     {
         ContentValues cValue = new ContentValues();

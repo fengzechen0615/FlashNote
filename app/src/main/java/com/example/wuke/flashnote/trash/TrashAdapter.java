@@ -222,10 +222,13 @@ public class TrashAdapter extends RecyclerView.Adapter{
                 @Override
                 public void onClick(View view) {
                     Garbage g = mList.get(position);
-                    Voice voice = new Voice(g.getContent_id(),g.getGuser_id(),g.getKeywords(),g.getPrevious_color(),g.getPrevious_timestamp()
+                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                    @SuppressLint("SimpleDateFormat") SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String time = form.format(timestamp);
+                    Voice voice = new Voice(g.getContent_id(),g.getGuser_id(),g.getKeywords(),g.getPrevious_color(),time
                             , g.getPrevious_priority(),g.getDatatype(),g.getExtra());
                     dbo=new DatabaseOperator(mContext);
-                    dbo.InsertVoice(voice);
+                    dbo.RevertVoice(voice);
                     mList.remove(position);
                     dbo.deleteGarbage(g.getLitter_id());
                     notifyItemRemoved(position);

@@ -26,6 +26,7 @@ public class Storage implements Comparator{
     {
         return Timestamp;
     }
+    public void setTimestamp(String timestamp){ this.Timestamp=timestamp; }
     public int getPriority()
     {
         return priority;
