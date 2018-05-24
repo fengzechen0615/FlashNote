@@ -441,7 +441,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                     note.getTimestamp(), note.getColor(), note.getPriority(), -1);
             databaseOperator.addGarbage(garbage);
             deleteNote = (Note) mList.remove(position); //移除数据
-            if (localLogin.check()==true && deleteNote.getUserID()!=0){
+            if (localLogin.check()==true && deleteNote.getUserID()!=0){//判定登陆状态及内容讯息
                 Deleting deleting=new Deleting();
                 deleting.denote(String.valueOf(deleteNote.getUserID()),String.valueOf(deleteNote.getNoteID()));
             }
@@ -473,7 +473,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                     voice.getTimestamp(), voice.getColor(), voice.getPriority(), voice.getDuration());
             databaseOperator.addGarbage(garbage);
             deletevoice = (Voice)mList.remove(position); //移除数据
-            if (localLogin.check()==true && deletevoice.getUserID()!=0){
+            if (localLogin.check()==true && deletevoice.getUserID()!=0){//判定登陆状态及内容讯息
                 Deleting deleting=new Deleting();
                 deleting.denote(String.valueOf(deletevoice.getUserID()),String.valueOf(deletevoice.getVoiceID()));
             }

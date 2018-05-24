@@ -963,12 +963,12 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
             Uploading uploading=new Uploading();
             notelist.size();
             uploading.uploadnote(After_note);
-            uploading.uploadnote(After_voice);
+            uploading.uploadnote(After_voice);//文件上传方法
 
             //Down部分
             final Downloading dl=new Downloading();
             dl.downnote(String.valueOf(userid));
-            //dl.downnvoice(String.valueOf(userid));
+            //dl.downnvoice(String.valueOf(userid)); 等待文件下载方法
 
             new Handler().postDelayed(new Runnable() {
                 @Override

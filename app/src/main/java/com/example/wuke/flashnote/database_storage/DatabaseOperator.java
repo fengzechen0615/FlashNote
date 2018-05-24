@@ -183,7 +183,7 @@ public class DatabaseOperator {
         return (int)VID;
     }
 
-    public int RevertVoice(Voice voice)
+    public int RevertVoice(Voice voice)//还原
     {
         ContentValues cValue = new ContentValues();
         SQLiteDatabase wdb=WriteDatabase;

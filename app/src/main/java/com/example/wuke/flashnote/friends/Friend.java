@@ -59,7 +59,7 @@ public class Friend extends AppCompatActivity {
         if(mList == null){
             mList = new ArrayList<Friends>();
         }
-        final GetFriends g=new GetFriends();
+        final GetFriends gf=new GetFriends();
         pref=getSharedPreferences("info",MODE_PRIVATE);
         userid=pref.getInt("userid",0);
         Log.e("friends1",userid+"");
@@ -70,14 +70,14 @@ public class Friend extends AppCompatActivity {
         } else {
             username = "Flashnote";
         }
-        Log.e("friends2",g.list.size()+"");
-        g.getfriends(username);
-        Log.e("friends2",g.list.size()+"");
+        Log.e("friends2",gf.list.size()+"");
+        gf.getfriends(username);
+        Log.e("friends2",gf.list.size()+"");
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (g.list.size()!=0) {
-                    mList = g.list;
+                if (gf.list.size()!=0) {
+                    mList = gf.list;
                     Log.e("friends3", mList.size() + "");
                     mAdapter = new FriendAdapter(Friend.this, mList);
                     mRecyclerView.setAdapter(mAdapter);
@@ -108,12 +108,11 @@ public class Friend extends AppCompatActivity {
                     }
                 }, 500);
                 LocalLogin localLogin = new LocalLogin();
-
                 if(localLogin.check() == true) {
                     String[] user = localLogin.getaccount();
                     username=user[0];
                 } else {
-                    username="Wuke";
+                    username="Flashnote";
                 }
             }
         });
