@@ -23,10 +23,10 @@ import java.util.List;
  */
 
 public class GetFriends {
-
+    public static ArrayList<String> list = new ArrayList<>();
     private String note = "http://39.106.205.176:8080/artifacts/GetFriends";
-
     ArrayList<String> friends = new ArrayList<>();
+
 
     public void getfriends(String user){
         String s = note + "?username="+ user;
@@ -35,8 +35,10 @@ public class GetFriends {
         connect.setOnAsyncResponse(new AsyncResponse() {
 
             public void onDataReceivedSuccess(List<String> listData) {
+                Log.e("friends","success");
                 friends = (ArrayList) listData;
-                ArrayList<String> list = transfriend(friends);
+                list = transfriend(friends);
+                Log.e("friends3",list.get(0)+"");
             }
 
             public void onDataReceivedFailed() {
@@ -50,6 +52,7 @@ public class GetFriends {
         while (i < a.size()){
             String subs = a.get(i).substring(5);
             friends.add(subs);
+            i++;
         }
         return friends;
     }

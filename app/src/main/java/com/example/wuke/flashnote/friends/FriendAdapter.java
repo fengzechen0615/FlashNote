@@ -22,10 +22,10 @@ import java.util.List;
 
 public class FriendAdapter extends RecyclerView.Adapter implements ItemTouchHelperAdapterFriend {
 
-    private List<Friends> mList;
+    private List<String> mList;
     private Context mContext;
 
-    public FriendAdapter(Context mContext, List<Friends> mList) {
+    public FriendAdapter(Context mContext, List<String> mList) {
         this.mContext = mContext;
         this.mList = mList;
     }
@@ -41,7 +41,7 @@ public class FriendAdapter extends RecyclerView.Adapter implements ItemTouchHelp
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         final FriendViewHolder holder = (FriendViewHolder) viewHolder;
         // 加载用户名字
-        holder.Friend_id.setText(mList.get(position).getFriendsID()+"");
+        holder.Friend_id.setText(mList.get(position)+"");
     }
 
     @Override
