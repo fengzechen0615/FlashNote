@@ -108,11 +108,12 @@ public class Friend extends AppCompatActivity {
                     }
                 }, 500);
                 LocalLogin localLogin = new LocalLogin();
+
                 if(localLogin.check() == true) {
                     String[] user = localLogin.getaccount();
                     username=user[0];
                 } else {
-                    username="Flashnote";
+                    username="Wuke";
                 }
             }
         });
