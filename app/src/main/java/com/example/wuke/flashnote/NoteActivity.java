@@ -167,7 +167,7 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_note);
 
         mIat = SpeechRecognizer.createRecognizer(NoteActivity.this, mInitListener);
 
