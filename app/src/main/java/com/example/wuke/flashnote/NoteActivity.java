@@ -465,7 +465,7 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                     @SuppressLint("SimpleDateFormat") SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm");
                     String time = form.format(timestamp);
-                    Log.e("times",time);
+                    Log.d("PPPP","8");
                     pref = getSharedPreferences("info", MODE_PRIVATE);
                     int userid = pref.getInt("userid", 0);
                     // 插入priority
@@ -473,6 +473,14 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                     int i = dbo.InsertNote(newnote);
                     Log.d("i", String.valueOf(newnote.getDataType()));
                     newnote.setNoteID(i);
+
+                    if (userid !=0) {
+                        ArrayList<Note> al=new ArrayList<>();
+                        Uploading uploading=new Uploading();
+                        al.add(newnote);
+                        uploading.uploadnote(al);
+                        al.clear();
+                    }
                     list.add(newnote);
                     mAdapter.notifyItemInserted(list.size() - 1);
                     mRecyclerView.scrollToPosition(list.size() - 1);
@@ -957,13 +965,28 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
             final List voicelist = new ArrayList();
             while(iterator.hasNext()) {
                 Storage storage=(Storage)iterator.next();
-                if (storage instanceof Note && storage.getUserID()==userid) {
+                if (storage instanceof Note && storage.getUserID()==0) {
+                    ((Note) storage).setUserID(userid);
                     notelist.add((Note)storage);
                 }
-                else if (storage instanceof Voice && storage.getUserID()==userid){
+                else if (storage instanceof Voice && storage.getUserID()==0){
+                    ((Voice) storage).setUserID(userid);
                     voicelist.add((Voice)storage);
                 }
             }
+
+
+            Uploading uploading=new Uploading();
+            uploading.uploadnote((ArrayList<Note>) notelist);
+            uploading.uploadvoice((ArrayList<Voice>) voicelist);
+
+
+
+
+
+
+
+
             //同步比较时间,准备工作
             HashMap map1 = Sync.CompareTimestamp(newtime, notelist);
             HashMap map2 = Sync.CompareTimestamp(newtime,voicelist);
@@ -971,11 +994,11 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
             ArrayList After_note = (ArrayList<Note>) map1.get("After");//new content,upload to server
             ArrayList After_voice = (ArrayList<Note>) map2.get("After");//new content,upload to server
 
-            //Uploading部分
-            Uploading uploading=new Uploading();
-            notelist.size();
-            uploading.uploadnote(After_note);
-            uploading.uploadnote(After_voice);//文件上传方法
+//            //Uploading部分
+//            Uploading uploading=new Uploading();
+//            notelist.size();
+//            uploading.uploadnote(After_note);
+//            uploading.uploadvoice(After_voice);//文件上传方法
 
             //Down部分
             final Downloading dl=new Downloading();
@@ -995,12 +1018,12 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                             Note t=(Note)it.next();
                             dbo.RevertNote(t);
                         }
-                        init_List();
                     }
                     else {
                         mToast = Toast.makeText(NoteActivity.this, "No", Toast.LENGTH_LONG);
                         mToast.show();
                     }
+                    init_List();
                 }
             },100);
 

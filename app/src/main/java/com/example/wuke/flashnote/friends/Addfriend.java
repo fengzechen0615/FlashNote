@@ -1,5 +1,6 @@
 package com.example.wuke.flashnote.friends;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -13,16 +14,23 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Created by kumbaya on 2018/5/22.
  */
 
 public class Addfriend {
     private String url = "http://39.106.205.176:8080/artifacts/AddFriend";
-
+    private boolean Exist=true;
     public void addfriend(String username, String friendname){
         String s = url + "?username=" + username + "&friendname=" + friendname;
         new Addfriend.MyAsyncTask().execute(s);
+    }
+
+    public boolean is_Exist()
+    {
+        return Exist;
     }
 
     public class MyAsyncTask extends AsyncTask<String, Integer, String> {
@@ -68,6 +76,12 @@ public class Addfriend {
 
         protected void onPostExecute(String s) {
             Log.e("result",s);
+            if (s.contains("resCode=102") || s.contains("resCode=201")) {
+                Exist = false;
+            }
+            else if (s.contains("resCode=100")){
+                Exist = true;
+            }
         }
     }
 }

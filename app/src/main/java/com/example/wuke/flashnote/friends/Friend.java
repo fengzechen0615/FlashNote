@@ -62,7 +62,6 @@ public class Friend extends AppCompatActivity {
         final GetFriends gf=new GetFriends();
         pref=getSharedPreferences("info",MODE_PRIVATE);
         userid=pref.getInt("userid",0);
-        Log.e("friends1",userid+"");
         LocalLogin localLogin=new LocalLogin();
         if(localLogin.check() == true) {
             String[] user = localLogin.getaccount();
@@ -70,15 +69,12 @@ public class Friend extends AppCompatActivity {
         } else {
             username = "Flashnote";
         }
-        Log.e("friends2",gf.list.size()+"");
         gf.getfriends(username);
-        Log.e("friends2",gf.list.size()+"");
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 if (gf.list.size()!=0) {
                     mList = gf.list;
-                    Log.e("friends3", mList.size() + "");
                     mAdapter = new FriendAdapter(Friend.this, mList);
                     mRecyclerView.setAdapter(mAdapter);
                 }
@@ -144,9 +140,16 @@ public class Friend extends AppCompatActivity {
                         Log.e("Friends",username+"  "+input);
                         Addfriend af=new Addfriend();
                         af.addfriend(username,input);
-                        mList.add(input);
-                        mAdapter.notifyItemInserted(mList.size() - 1);
-                        mRecyclerView.scrollToPosition(mList.size() - 1);
+                        Log.e("ffff",String.valueOf(af.is_Exist()));
+                        if (af.is_Exist()){
+                            mList.add(input);
+                            mAdapter.notifyItemInserted(mList.size() - 1);
+                            mRecyclerView.scrollToPosition(mList.size() - 1);
+                        }
+                        else {
+                            Toast.makeText(getBaseContext(),"No this friends",Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 })
                 .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {

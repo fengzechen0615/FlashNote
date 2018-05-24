@@ -54,7 +54,7 @@ public class Downloading {
     }
 
     public void downsharednote(String id){
-        String s = sharednote + "?ID="+ id;
+        String s = sharednote + "?id="+ id;
         final MyAsyncTask connect = new MyAsyncTask();
         connect.execute(s);
         connect.setOnAsyncResponse(new AsyncResponse() {
@@ -63,7 +63,6 @@ public class Downloading {
                 subsn = (ArrayList<String>) listData;
                 notes = transnote(subsn);
             }
-
             public void onDataReceivedFailed() {
                 notes = null;
             }
@@ -88,7 +87,7 @@ public class Downloading {
     }
 
     public void downsharedvoice(String id){
-        String s = sharedvoice + "?ID="+ id;
+        String s = sharedvoice + "?id="+ id;
         final MyAsyncTask connect = new MyAsyncTask();
         connect.execute(s);
         connect.setOnAsyncResponse(new AsyncResponse() {

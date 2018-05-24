@@ -49,7 +49,11 @@ public class GetFriends {
     private ArrayList<String> transfriend (ArrayList<String> a){
         ArrayList<String> friends = new ArrayList<>();
         int i = 0;
+        if (a.get(0).contains("resCode")) {
+            return null;
+        }
         while (i < a.size()){
+            Log.e("error",a.size()+"");
             String subs = a.get(i).substring(5);
             friends.add(subs);
             i++;
@@ -107,6 +111,7 @@ public class GetFriends {
         }
         protected void onPostExecute(ArrayList<String> s){
             if(s != null){
+                Log.e("ffff",s.get(0));
                 List<String> listData = new ArrayList<>();
                 listData = s;
                 asyncResponse.onDataReceivedSuccess(listData);
