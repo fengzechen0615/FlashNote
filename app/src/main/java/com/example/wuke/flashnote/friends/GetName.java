@@ -17,36 +17,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by kumbaya on 2018/5/23.
+ * Created by kumbaya on 2018/5/24.
  */
 
-public class GetFriends {
-    public static ArrayList<String> list = new ArrayList<>();
-    private String url = "http://39.106.205.176:8080/artifacts/GetFriends";
-    ArrayList<String> friends = new ArrayList<>();
+public class GetName {
+    private String url = "http://39.106.205.176:8080/artifacts/GetName";
 
+    public static String getname;
 
-    public void getfriends(String user){
-        String s = url + "?username="+ user;
-        final GetFriends.MyAsyncTask connect = new GetFriends.MyAsyncTask();
+    public void getname(String id){
+        String s = url + "?ID="+ id;
+        final GetName.MyAsyncTask connect = new GetName.MyAsyncTask();
         connect.execute(s);
         connect.setOnAsyncResponse(new AsyncResponse() {
 
             public void onDataReceivedSuccess(List<String> listData) {
-                Log.e("friends","success");
-                friends = (ArrayList) listData;
-                list = transfriend(friends);
+                ArrayList a = (ArrayList) listData;
+                getname = a.get(0).toString();
             }
 
             public void onDataReceivedFailed() {
-                Log.e("no_friends","no friends");
             }
+
         });
     }
 
     private ArrayList<String> transfriend (ArrayList<String> a){
         ArrayList<String> friends = new ArrayList<>();
         int i = 0;
+        if (a.get(0).contains("resCode")) {
+            return null;
+        }
         while (i < a.size()){
             Log.e("error",a.size()+"");
             String subs = a.get(i).substring(5);
@@ -56,11 +57,11 @@ public class GetFriends {
         return friends;
     }
 
-    public class MyAsyncTask extends AsyncTask<String, Integer, ArrayList<String>> {
+    public class MyAsyncTask extends AsyncTask<String, Integer, String> {
 
         Log log;
 
-        ArrayList<String> a = new ArrayList<>();
+        String line;
 
         public AsyncResponse asyncResponse;
         public void setOnAsyncResponse(AsyncResponse asyncResponse){
@@ -74,7 +75,7 @@ public class GetFriends {
             log.w("1", "task onPreExecute()");
         }
 
-        protected ArrayList<String> doInBackground(String... params) {
+        protected String doInBackground(String... params) {
             log.w("1", "task DoInBackStage()");
 
             HttpURLConnection connection = null;
@@ -90,11 +91,8 @@ public class GetFriends {
 
                 InputStream input = connection.getInputStream();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    response.append(line);
-                    a.add(line);
-                }
+
+                line = reader.readLine();
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (ProtocolException e) {
@@ -102,17 +100,12 @@ public class GetFriends {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return a;
+            return line;
         }
-        protected void onPostExecute(ArrayList<String> s){
-            if(!s.get(0).contains("resCode")){
-                List<String> listData = new ArrayList<>();
-                listData = s;
-                asyncResponse.onDataReceivedSuccess(listData);
-            }
-            else{
-                asyncResponse.onDataReceivedFailed();
-            }
+        protected void onPostExecute(String s){
+            ArrayList<String> a = new ArrayList<>();
+            a.add(s);
+            asyncResponse.onDataReceivedSuccess(a);
         }
     }
 }
