@@ -441,7 +441,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                     note.getTimestamp(), note.getColor(), note.getPriority(), -1);
             databaseOperator.addGarbage(garbage);
             deleteNote = (Note) mList.remove(position); //移除数据
-            if (localLogin.check()==true && deleteNote.getUserID()!=0){//判定登陆状态及内容讯息
+            if (localLogin.check()==true && deleteNote.getUserID()!=0){//判定登陆状态
                 Deleting deleting=new Deleting();
                 deleting.denote(String.valueOf(deleteNote.getUserID()),String.valueOf(deleteNote.getNoteID()));
             }

@@ -228,7 +228,7 @@ public class TrashAdapter extends RecyclerView.Adapter{
                     Voice voice = new Voice(g.getContent_id(),g.getGuser_id(),g.getKeywords(),g.getPrevious_color(),time
                             , g.getPrevious_priority(),g.getDatatype(),g.getExtra());
                     dbo=new DatabaseOperator(mContext);
-                    dbo.RevertVoice(voice);//还原语音
+                    dbo.RevertVoice(voice);//还原
                     mList.remove(position);
                     dbo.deleteGarbage(g.getLitter_id());
                     notifyItemRemoved(position);

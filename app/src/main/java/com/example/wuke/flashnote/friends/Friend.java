@@ -86,8 +86,7 @@ public class Friend extends AppCompatActivity {
                     Log.e("friends","no");
                 }
             }
-        },100);
-
+        },1000);
         mRecyclerView = (RecyclerView) findViewById(R.id.friend_recycler_view);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);

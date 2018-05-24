@@ -429,7 +429,7 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
 
     private void stop_speak() {
         mIat.stopListening();
-//        showTip("停止听写");
+//
     }
 
     public static boolean isContainChinese(String command) {
