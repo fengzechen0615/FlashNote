@@ -465,7 +465,6 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                     @SuppressLint("SimpleDateFormat") SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm");
                     String time = form.format(timestamp);
-                    Log.d("PPPP","8");
                     pref = getSharedPreferences("info", MODE_PRIVATE);
                     int userid = pref.getInt("userid", 0);
                     // 插入priority
@@ -473,7 +472,6 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                     int i = dbo.InsertNote(newnote);
                     Log.d("i", String.valueOf(newnote.getDataType()));
                     newnote.setNoteID(i);
-
                     if (userid !=0) {
                         ArrayList<Note> al=new ArrayList<>();
                         Uploading uploading=new Uploading();
@@ -935,7 +933,8 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
         } else if (item.getItemId() == R.id.update) {
             LocalLogin localLogin = new LocalLogin();
             if(localLogin.check()) {
-                update();
+                //update();
+                Sync();
             } else {
                 Intent intent = new Intent(getBaseContext(), WukeCloud.class);
                 startActivity(intent);
@@ -974,18 +973,6 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                     voicelist.add((Voice)storage);
                 }
             }
-
-
-            Uploading uploading=new Uploading();
-            uploading.uploadnote((ArrayList<Note>) notelist);
-            uploading.uploadvoice((ArrayList<Voice>) voicelist);
-
-
-
-
-
-
-
 
             //同步比较时间,准备工作
             HashMap map1 = Sync.CompareTimestamp(newtime, notelist);
@@ -1041,4 +1028,107 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
             Log.e("sync", "Empty");
         }
     }
+
+    private void Sync()
+    {
+        if (!list.isEmpty()) {
+            HashMap map = Tear(list);
+            if (list.isEmpty()) {//判断条件的问题
+                Invade(map);
+            }
+        }
+    }
+
+
+
+
+    //List不为空，Tear
+    private HashMap<String,List> Tear(List<Storage> list) {
+        dbo=new DatabaseOperator(this);
+        Iterator<Storage> iterator=list.iterator();
+        final List<Note> notelist = new ArrayList();
+        final List<Voice> voicelist = new ArrayList();
+        int size=list.size();
+        for(int i = 0;i < size;i++) {
+            Storage storage=list.get(i);
+            if (storage instanceof Note && storage.getUserID()==0) {
+                Note note = new Note(storage.getUserID(),((Note) storage).getWords(),storage.getColor(),storage.getTimestamp(),
+                        storage.getPriority(),storage.getDataType());
+                Log.i("PICK",note.getWords()+((Note) storage).getUserID());
+                notelist.add(note);
+                //list.remove(i);
+                Log.i("PICK",note.getWords()+i+""+note.getNoteID());
+                dbo.deleteNote(((Note) storage).getNoteID());
+            }
+            else if (storage instanceof Voice && storage.getUserID()==0){
+               Voice voice = new Voice(storage.getUserID(),((Voice) storage).getURL(),storage.getColor(),
+                       storage.getTimestamp(),storage.getPriority(),storage.getDataType(),
+                       ((Voice) storage).getDuration());
+               Log.i("info",voice.getURL()+((Voice) storage).getUserID());
+               voicelist.add(voice);
+               //list.remove(i);
+               dbo.deleteVoice(((Voice) storage).getVoiceID());
+            }
+        }
+        HashMap map = new HashMap();
+        Log.i("PICK",notelist.size()+"");
+        map.clear();
+        map.put("Note",notelist);
+        map.put("Voice",voicelist);
+        return map;
+    }
+    //list为空，则Invade
+    private void Invade(final HashMap<String,List> map) {
+        final Downloading dl=new Downloading();
+        dl.downnote(String.valueOf(userid));
+        dl.downnvoice(String.valueOf(userid));
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Iterator it1=dl.notes.iterator();
+                while(it1.hasNext()){
+                    Note n=(Note)it1.next();
+                    dbo.RevertNote(n);
+                    list.add(n);
+                }
+                Iterator it2=dl.voices.iterator();
+                while(it2.hasNext()){
+                    Voice v=(Voice)it1.next();
+                    dbo.RevertVoice(v);
+                    list.add(v);
+                }
+                Reunion(map);
+                init_List();
+                map.clear();
+            }
+        },1000);
+    }
+
+    //无论如何，REUNION,将无user信息增至尾部
+    private void Reunion(HashMap<String,List> map)
+    {
+        dbo = new DatabaseOperator(this);
+        final List<Note> note_union = map.get("Note");
+        final List<Voice> voice_union = map.get("Voice");
+        Iterator it1 = note_union.iterator();
+        while(it1.hasNext()){
+            Note note = (Note)it1.next();
+            int nid = dbo.InsertNote(note);
+            note.setNoteID(nid);
+            list.add(note);
+        }
+
+        Iterator it2 = note_union.iterator();
+        while(it2.hasNext()){
+            Voice voice = (Voice)it2.next();
+            int vid = dbo.InsertVoice(voice);
+            voice.setVoiceID(vid);
+            list.add(voice);
+        }
+
+
+    }
+
+
+
 }

@@ -25,6 +25,7 @@ public class DatabaseOperator {
 
     }
 
+
     public int Register(User user)//insert user
     {
         ContentValues cValue = new ContentValues();
@@ -96,12 +97,32 @@ public class DatabaseOperator {
         return true;
     }
 
+    public boolean UpdateNoteUser(int noteid, int userID) {
+        ContentValues cValue = new ContentValues();
+        SQLiteDatabase wdb = WriteDatabase;
+        cValue.put(Initial.note_priority,userID);
+        String sql = "Update "+Initial.table_note+" set "+Initial.note_user+"= "+
+                userID+" where "+Initial.note_id+"="+noteid;
+        wdb.execSQL(sql);
+        return true;
+    }
+
     public boolean UpdateVoicePriority(int voiceid, int priority) {
         ContentValues cValue = new ContentValues();
         SQLiteDatabase wdb = WriteDatabase;
         cValue.put(Initial.voice_priority,priority);
         String sql = "Update "+Initial.table_voice+" set "+Initial.voice_priority+"= "+
                 priority+" where "+Initial.voice_id+"="+voiceid;
+        wdb.execSQL(sql);
+        return true;
+    }
+
+    public boolean UpdateVoiceUser(int voiceid, int userID) {
+        ContentValues cValue = new ContentValues();
+        SQLiteDatabase wdb = WriteDatabase;
+        cValue.put(Initial.voice_priority,userID);
+        String sql = "Update "+Initial.table_voice+" set "+Initial.voice_users+"= "+
+                userID+" where "+Initial.voice_id+"="+voiceid;
         wdb.execSQL(sql);
         return true;
     }

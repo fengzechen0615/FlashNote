@@ -38,7 +38,7 @@ public class GetFriends {
                 Log.e("friends","success");
                 friends = (ArrayList) listData;
                 list = transfriend(friends);
-                Log.e("friends3",list.get(0)+"");
+//                Log.e("friends3",list.get(0)+"");
             }
 
             public void onDataReceivedFailed() {

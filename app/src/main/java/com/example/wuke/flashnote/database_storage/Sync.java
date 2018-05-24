@@ -2,6 +2,9 @@ package com.example.wuke.flashnote.database_storage;
 
 import android.util.Log;
 
+import com.example.wuke.flashnote.NoteActivity;
+import com.example.wuke.flashnote.download_upload.Downloading;
+
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,6 +18,7 @@ import java.util.List;
  */
 
 public class Sync {
+    DatabaseOperator dbo;
 
     public static HashMap<String,List> CompareTimestamp(String nowTime,List<Storage> data)
     {
@@ -51,23 +55,4 @@ public class Sync {
         return map;
     }
 
-
-    public List<Note> VerifyList(List LocalList,List ServerList)
-    {
-        List Verified =new ArrayList<>();
-        Iterator itl=LocalList.iterator();
-        Iterator its=LocalList.iterator();
-        while(itl.hasNext())
-        {
-            int i=((Note)itl.next()).getNoteID();
-            while(its.hasNext())
-            {
-                if(((Note)its.next()).getNoteID()!=i)
-                {
-                    its.remove();
-                }
-            }
-        }
-        return Verified;
-    }
 }
