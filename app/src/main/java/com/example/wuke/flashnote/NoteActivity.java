@@ -953,13 +953,10 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
             ArrayList before = (ArrayList<Note>) map.get("Before");//verify
             ArrayList After = (ArrayList<Note>) map.get("After");//new content,upload to server
 
-            //delete 部分
-            Deleting d=new Deleting();
-            d.deletenote((ArrayList<Note>) before);
-
             //Uploading部分
             Uploading uploading=new Uploading();
-            uploading.uploadnote((ArrayList<Note>) notelist);
+            notelist.size();
+            uploading.uploadnote(After);
 
             //Down部分
             final Downloading dl=new Downloading();
@@ -972,11 +969,12 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                     if(dl.notes != null) {
                         test = dl.notes;
                         Iterator it = test.iterator();
+                        notelist.clear();
                         while (it.hasNext()){
                             Note t=(Note)it.next();
-                            dbo.InsertNote(t);
+                            dbo.RevertNote(t);
                         }
-                        notelist.clear();
+                        init_List();
                     }
                     else {
                         mToast = Toast.makeText(NoteActivity.this, "No", Toast.LENGTH_LONG);
@@ -984,7 +982,7 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                     }
                 }
             },100);
-            init_List_again();
+
 
 
             //最后同步时间
