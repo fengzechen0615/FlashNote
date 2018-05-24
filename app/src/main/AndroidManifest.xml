@@ -36,10 +36,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppCompat">
         <activity android:name=".NoteActivity" />
-
         <activity
             android:name=".setting.RecordSetting"
-            android:theme="@style/dialogstyle"/>
+            android:theme="@style/dialogstyle" />
 
         <meta-data
             android:name="IFLYTEK_APPKEY"
@@ -50,24 +49,19 @@
 
         <activity android:name=".function.TaoBaoView" />
         <activity android:name=".friends.Friend" />
-
         <activity
             android:name=".setting.WukeCloud"
-            android:windowSoftInputMode="adjustPan|stateHidden"
-            android:theme="@style/dialogstyle" />
-
+            android:theme="@style/dialogstyle"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".setting.Setting"
             android:theme="@style/dialogstyle" />
-
         <activity
             android:name=".setting.About"
-            android:theme="@style/dialogstyle"/>
-
+            android:theme="@style/dialogstyle" />
         <activity
             android:name=".setting.Command"
-            android:theme="@style/dialogstyle"/>
-
+            android:theme="@style/dialogstyle" />
         <activity android:name=".Welcome">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -77,6 +71,7 @@
         </activity>
         <activity android:name=".guide.Guide" />
         <activity android:name=".trash.Trash" />
+        <activity android:name=".moment.Moment"></activity>
     </application>
 
 </manifest>

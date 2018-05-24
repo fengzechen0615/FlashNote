@@ -25,7 +25,6 @@ import com.example.wuke.flashnote.NoteActivity;
 import com.example.wuke.flashnote.R;
 import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Friends;
-import com.example.wuke.flashnote.download_upload.Downloading;
 import com.example.wuke.flashnote.download_upload.Uploading;
 import com.example.wuke.flashnote.function.Datatransformer;
 import com.example.wuke.flashnote.function.StringRecognizer;
@@ -46,12 +45,12 @@ public class Friend extends AppCompatActivity {
     private android.support.design.widget.FloatingActionButton floatingActionButton;
     private TextView done;
     private String username;
-    private int userid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
+
         init_List();
     }
 
@@ -59,39 +58,11 @@ public class Friend extends AppCompatActivity {
         if(mList == null){
             mList = new ArrayList<Friends>();
         }
-        final GetFriends g=new GetFriends();
-        pref=getSharedPreferences("info",MODE_PRIVATE);
-        userid=pref.getInt("userid",0);
-        Log.e("friends1",userid+"");
-        LocalLogin localLogin=new LocalLogin();
-        if(localLogin.check() == true) {
-            String[] user = localLogin.getaccount();
-            username = user[0];
-        } else {
-            username = "Flashnote";
-        }
-        Log.e("friends2",g.list.size()+"");
-        g.getfriends(username);
-        Log.e("friends2",g.list.size()+"");
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (g.list.size()!=0) {
-                    mList = g.list;
-                    Log.e("friends3", mList.size() + "");
-                    mAdapter = new FriendAdapter(Friend.this, mList);
-                    mRecyclerView.setAdapter(mAdapter);
-                }
-                else {
-                    Log.e("friends","no");
-                }
-            }
-        },100);
-
         mRecyclerView = (RecyclerView) findViewById(R.id.friend_recycler_view);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(linearLayoutManager);
-
+        mAdapter = new FriendAdapter(this, mList);
+        mRecyclerView.setAdapter(mAdapter);
 
         floatingActionButton = (android.support.design.widget.FloatingActionButton) findViewById(R.id.add_friends);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {

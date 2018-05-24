@@ -18,6 +18,11 @@
             android:title="@string/trash" />
 
         <item
+            android:id="@+id/moment"
+            android:icon="@drawable/moment"
+            android:title="@string/moment" />
+
+        <item
             android:id="@+id/setting"
             android:icon="@drawable/setting"
             android:title="@string/setting" />

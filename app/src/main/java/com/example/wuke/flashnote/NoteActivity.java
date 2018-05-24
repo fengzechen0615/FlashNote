@@ -131,7 +131,7 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
     // 引擎类型
     private String mEngineType = SpeechConstant.TYPE_CLOUD;
     private int dt=-1;
-    private ArrayList test = new ArrayList();
+
     int ret = 0;
 
     private RecyclerView mRecyclerView;
@@ -167,7 +167,7 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_note);
 
         mIat = SpeechRecognizer.createRecognizer(NoteActivity.this, mInitListener);
 
@@ -179,14 +179,9 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
 
         Timestamp timestamp=new Timestamp(System.currentTimeMillis());
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd%20HH:mm:ss");
         pref=getSharedPreferences("info",MODE_PRIVATE);
-        time = pref.getString("time",formatter.format(timestamp));
+        time = pref.getString(time,formatter.format(timestamp));
         userid=pref.getInt("userid",0);
-        pref=getSharedPreferences("info",MODE_PRIVATE);
-        SharedPreferences.Editor editor=pref.edit();
-        editor.putString("time",time);
-        editor.commit();
         Log.e("gtime1",time);//程序启动时间
 
         // 初始化列表
@@ -493,6 +488,7 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                     @SuppressLint("SimpleDateFormat") SimpleDateFormat form = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     @SuppressLint("SimpleDateFormat") SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm");
                     String time = form.format(timestamp);
+                    Log.e("times",time);
                     pref = getSharedPreferences("info", MODE_PRIVATE);
                     int userid = pref.getInt("userid", 0);
                     // 插入priority
@@ -823,6 +819,7 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
         if( null != mIat ){
             // 退出时释放连接
             mIat.cancel();
@@ -846,11 +843,11 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
         super.onPause();
     }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        init_List_again();
-    }
+//    @Override
+//    protected void onRestart() {
+//        super.onRestart();
+//        init_List_again();
+//    }
 
     private void init_List_again() {
         list.clear();
@@ -941,66 +938,47 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
         if (time!=null && userid!=0) {
             String newtime=time;
             Iterator<Storage> iterator=list.iterator();
-            final List notelist = new ArrayList();
-            final List voicelist = new ArrayList();
+            List notelist=new ArrayList();
             while(iterator.hasNext()) {
                 Storage storage=(Storage)iterator.next();
-                if (storage instanceof Note && storage.getUserID()==userid) {
+                if (storage instanceof Note) {
                     notelist.add((Note)storage);
                 }
-                else if (storage instanceof Voice && storage.getUserID()==userid){
-                    voicelist.add((Voice)storage);
-                }
             }
-            //同步比较时间,准备工作
-            HashMap map1 = Sync.CompareTimestamp(newtime, notelist);
-            HashMap map2 = Sync.CompareTimestamp(newtime,voicelist);
-            ArrayList before = (ArrayList<Note>) map1.get("Before");//verify
-            ArrayList After_note = (ArrayList<Note>) map1.get("After");//new content,upload to server
-            ArrayList After_voice = (ArrayList<Note>) map2.get("After");//new content,upload to server
-
-            //Uploading部分
+            //同步比较时间
+            HashMap map = Sync.CompareTimestamp(newtime, notelist);
+            ArrayList before = (ArrayList<Note>) map.get("Before");//verify
+            ArrayList After = (ArrayList<Note>) map.get("After");//new content,upload to server
+            ArrayList Delete= (ArrayList) mAdapter.getDelete_List();
             Uploading uploading=new Uploading();
-            notelist.size();
-            uploading.uploadnote(After_note);
-            uploading.uploadnote(After_voice);
-
-            //Down部分
+            Deleting d=new Deleting();
+            uploading.uploadnote(After);
+            d.deletenote(Delete);
             final Downloading dl=new Downloading();
-            dl.downnote(String.valueOf(userid));
-            //dl.downnvoice(String.valueOf(userid));
-
+            LocalLogin localLogin = new LocalLogin();
+            String[] user = localLogin.getaccount();
+            Username=user[0];
+            dl.downnote(String.valueOf(Username));
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    dbo=new DatabaseOperator(NoteActivity.this);
-                    dbo.deleteAllNote(userid);
-                    if(dl.notes != null) {
-                        test = dl.notes;
-                        Iterator it = test.iterator();
-                        notelist.clear();
-                        while (it.hasNext()){
-                            Note t=(Note)it.next();
-                            dbo.RevertNote(t);
-                        }
-                        init_List();
+                    if(dl.notes!=null) {
+                        ArrayList<Note> test=dl.notes;
                     }
                     else {
                         mToast = Toast.makeText(NoteActivity.this, "No", Toast.LENGTH_LONG);
                         mToast.show();
                     }
                 }
-            },100);
-
+            },1000);
             //最后同步时间
             Timestamp timestamp=new Timestamp(System.currentTimeMillis());
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String retime = formatter.format(timestamp);
             time=retime;
-            pref=getSharedPreferences("info",MODE_PRIVATE);
-            SharedPreferences.Editor editor=pref.edit();
-            editor.putString("time",retime);
-            editor.commit();
+//                pref=getSharedPreferences("info",MODE_PRIVATE);
+//                SharedPreferences.Editor editor=pref.edit();
+//                editor.putString("time",retime);
         }
         else {
             Log.e("sync", "Empty");
