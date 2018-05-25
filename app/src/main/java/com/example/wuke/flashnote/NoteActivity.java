@@ -41,6 +41,7 @@ import android.widget.Toast;
 import com.example.wuke.flashnote.database_storage.Storage;
 import com.example.wuke.flashnote.database_storage.Voice;
 import com.example.wuke.flashnote.download_upload.Deleting;
+import com.example.wuke.flashnote.download_upload_file.D_U_manager;
 import com.example.wuke.flashnote.friends.Friend;
 import com.example.wuke.flashnote.function.Datatransformer;
 import com.example.wuke.flashnote.function.StringRecognizer;
@@ -556,6 +557,9 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                             Uploading uploading=new Uploading();
                             al.add(voice);
                             uploading.uploadvoice(al);
+                            D_U_manager dumanager= new D_U_manager();
+                            Log.e("VOICE",voice.getURL());
+                            dumanager.uploadfile(voice.getURL());
                             al.clear();
                         }
                         list.add(voice);
@@ -588,6 +592,9 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                             Uploading uploading=new Uploading();
                             al.add(voice);
                             uploading.uploadvoice(al);
+                            D_U_manager dumanager= new D_U_manager();
+                            Log.e("VOICE",voice.getURL());
+                            dumanager.uploadfile(voice.getURL());
                             al.clear();
                         }
                         list.add(voice);
@@ -1081,6 +1088,9 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                        storage.getTimestamp(),storage.getPriority(),storage.getDataType(),
                        ((Voice) storage).getDuration());
                Log.i("info",voice.getURL()+((Voice) storage).getUserID());
+               D_U_manager dumanager= new D_U_manager();
+               Log.e("VOICE",voice.getURL());
+               dumanager.uploadfile(voice.getURL());
                voicelist.add(voice);
                //list.remove(i);
                dbo.deleteVoice(((Voice) storage).getVoiceID());
@@ -1124,6 +1134,8 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                     if (v.getVoiceID() != 0) {
                         dbo.RevertVoice(v);
                         list.add(v);
+                        D_U_manager dumanager= new D_U_manager();
+                        dumanager.downloadfile(v.getURL());
                     }
                 }
                 if (map != null) {

@@ -22,7 +22,6 @@ public class D_U_manager {
     private OnStateListener downloadFileFileStateListener;
 
 
-    /** 停止录音后上传 */
     public void Upload(String s) {
         new UpLoadrecordFile(s).execute();// 调用异步任务
     }
@@ -73,7 +72,7 @@ public class D_U_manager {
             // TODO Auto-generated method stub11
             try {
                 String filename = "iat.wav";
-                return DownloadFile.DownloadFromUrlToData("http://10.0.1.47:8080/DownloadFile?filename="
+                return DownloadFile.DownloadFromUrlToData("http://39.106.205.176:8080/artifacts/DownloadFile?filename="
                         + parameters[0], filename, context);
             } catch (Exception e) {
                 // TODO Auto-generated catch block
