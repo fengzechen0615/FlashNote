@@ -73,7 +73,7 @@ public class ChangeNote {
             return line;
         }
         protected void onPostExecute(String s){
-            Log.w("changeresult",s);
+            //Log.w("changeresult",s);
         }
     }
 }

@@ -22,8 +22,11 @@ import com.example.wuke.flashnote.database_storage.Garbage;
 import com.example.wuke.flashnote.database_storage.Note;
 import com.example.wuke.flashnote.database_storage.Storage;
 import com.example.wuke.flashnote.database_storage.Voice;
+import com.example.wuke.flashnote.download_upload.ChangeNote;
 import com.example.wuke.flashnote.download_upload.Deleting;
 import com.example.wuke.flashnote.download_upload.Uploading;
+import com.example.wuke.flashnote.function.Wechat;
+import com.example.wuke.flashnote.function.wechatShare;
 import com.example.wuke.flashnote.login.LocalLogin;
 import com.example.wuke.flashnote.record.Record;
 import com.iflytek.cloud.SpeechRecognizer;
@@ -212,8 +215,10 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                             edit_state = edit_down;
                         } else if (edit_down == false) {
                             databaseOperator = new DatabaseOperator(mContext);
+                            ChangeNote editor=new ChangeNote();
                             databaseOperator.EditWord(((Note) mList.get(position)).getNoteID(), holder.note_content.getText().toString());
                             ((Note) mList.get(position)).setWords(holder.note_content.getText().toString());
+                            editor.getname(String.valueOf(((Note) mList.get(position)).getNoteID()),holder.note_content.getText().toString());
                             holder.edit.setBackgroundResource(R.drawable.edit);
                             holder.note_content.setFocusable(false);
                             holder.note_content.setFocusableInTouchMode(false);
@@ -254,8 +259,8 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                 holder.wechat_share.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        NoteActivity noteActivity = new NoteActivity();
-                        noteActivity.WechatDialog(((Note) mList.get(position)).getWords(), mContext);
+                        wechatShare wechatShare = new wechatShare();
+                        wechatShare.shareInwechat(mContext,Wechat.wordstoShare(((Note)mList.get(position)).getWords()));
                     }
                 });
             }

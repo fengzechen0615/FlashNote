@@ -505,9 +505,16 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                     int userid = pref.getInt("userid", 0);
                     // 插入priority
                     Note newnote = new Note(userid, note, 0, time, list.size(), 0);
-                    int nid = dbo.InsertNote(newnote);
+                    int i = dbo.InsertNote(newnote);
                     Log.d("i", String.valueOf(newnote.getDataType()));
-                    newnote.setNoteID(nid);
+                    newnote.setNoteID(i);
+                    if (userid != 0) {
+                        ArrayList<Note> al=new ArrayList<>();
+                        Uploading uploading=new Uploading();
+                        al.add(newnote);
+                        uploading.uploadnote(al);
+                        al.clear();
+                    }
                     list.add(newnote);
                     mAdapter.notifyItemInserted(list.size() - 1);
                     mRecyclerView.scrollToPosition(list.size() - 1);
@@ -540,12 +547,17 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                         int user_id = pref.getInt("userid", 0);
                         // 插入priority list.size
                         int time = (int)((end_time - start_time) /1000);
-                        Log.e("TIMEz", time_record);
                         Voice voice = new Voice(user_id, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), 0, time_stamp, list.size(), 1, time);
-
                         dbo = new DatabaseOperator(NoteActivity.this);
                         int vid=dbo.InsertVoice(voice);
                         voice.setVoiceID(vid);
+                        if (userid != 0) {
+                            ArrayList<Voice> al=new ArrayList<>();
+                            Uploading uploading=new Uploading();
+                            al.add(voice);
+                            uploading.uploadvoice(al);
+                            al.clear();
+                        }
                         list.add(voice);
                         mAdapter.notifyItemInserted(list.size() - 1);
                         mRecyclerView.scrollToPosition(list.size() - 1);
@@ -567,11 +579,17 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                         int user_id = pref.getInt("userid", 0);
                         // 插入priority list.size
                         int time = (int)((end_time - start_time) /1000);
-                        Log.e("TIMEz", time_record);
                         Voice voice = new Voice(user_id, new File(Environment.getExternalStorageDirectory() + "/msc/" + time_record + ".wav").getAbsolutePath(), 0, time_stamp, list.size(), 1, time);
                         dbo = new DatabaseOperator(NoteActivity.this);
                         int vid=dbo.InsertVoice(voice);
                         voice.setVoiceID(vid);
+                        if (userid != 0) {
+                            ArrayList<Voice> al=new ArrayList<>();
+                            Uploading uploading=new Uploading();
+                            al.add(voice);
+                            uploading.uploadvoice(al);
+                            al.clear();
+                        }
                         list.add(voice);
                         mAdapter.notifyItemInserted(list.size() - 1);
                         mRecyclerView.scrollToPosition(list.size() - 1);
@@ -636,7 +654,7 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
     public void WechatDialog(String note, final Context context) {
         final EditText editText = new EditText(context);
         editText.setText(Wechat.wordstoShare(note));
-        new AlertDialog.Builder(NoteActivity.this)
+        new AlertDialog.Builder(context)
                 .setTitle(getString(R.string.wechat))
                 .setView(editText)
                 .setPositiveButton(getString(R.string.send), new DialogInterface.OnClickListener() {
@@ -935,8 +953,8 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
         } else if (item.getItemId() == R.id.update) {
             LocalLogin localLogin = new LocalLogin();
             if(localLogin.check()) {
-                //update();
                 Sync();
+
             } else {
                 Intent intent = new Intent(getBaseContext(), WukeCloud.class);
                 startActivity(intent);
@@ -957,7 +975,7 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
-
+/*
     private void update() {
         if (time!=null && userid!=0) {
             String newtime=time;
@@ -1030,15 +1048,11 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
             Log.e("sync", "Empty");
         }
     }
-
+*/
     private void Sync()
     {
-        if (!list.isEmpty()) {
-            HashMap map = Tear(list);
-            if (list.isEmpty()) {//判断条件的问题
-                Invade(map);
-            }
-        }
+        HashMap map = Tear(list);
+        Invade(map);
     }
 
 
@@ -1054,7 +1068,7 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
         for(int i = 0;i < size;i++) {
             Storage storage=list.get(i);
             if (storage instanceof Note && storage.getUserID()==0) {
-                Note note = new Note(storage.getUserID(),((Note) storage).getWords(),storage.getColor(),storage.getTimestamp(),
+                Note note = new Note(userid,((Note) storage).getWords(),storage.getColor(),storage.getTimestamp(),
                         storage.getPriority(),storage.getDataType());
                 Log.i("PICK",note.getWords()+((Note) storage).getUserID());
                 notelist.add(note);
@@ -1063,7 +1077,7 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                 dbo.deleteNote(((Note) storage).getNoteID());
             }
             else if (storage instanceof Voice && storage.getUserID()==0){
-               Voice voice = new Voice(storage.getUserID(),((Voice) storage).getURL(),storage.getColor(),
+               Voice voice = new Voice(userid,((Voice) storage).getURL(),storage.getColor(),
                        storage.getTimestamp(),storage.getPriority(),storage.getDataType(),
                        ((Voice) storage).getDuration());
                Log.i("info",voice.getURL()+((Voice) storage).getUserID());
@@ -1072,36 +1086,50 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                dbo.deleteVoice(((Voice) storage).getVoiceID());
             }
         }
+        if (notelist.size() == 0 && voicelist.size()==0){
+            return null;
+        }
+        else  {
         HashMap map = new HashMap();
-        Log.i("PICK",notelist.size()+"");
         map.clear();
         map.put("Note",notelist);
         map.put("Voice",voicelist);
         return map;
+        }
+
     }
     //list为空，则Invade
     private void Invade(final HashMap<String,List> map) {
         final Downloading dl=new Downloading();
+        dbo=new DatabaseOperator(this);
         dl.downnote(String.valueOf(userid));
         dl.downnvoice(String.valueOf(userid));
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                list.clear();
+                mAdapter.notifyDataSetChanged();
                 Iterator it1=dl.notes.iterator();
                 while(it1.hasNext()){
                     Note n=(Note)it1.next();
-                    dbo.RevertNote(n);
-                    list.add(n);
+                    if (n.getNoteID() != 0) {
+                        Log.e("sync",n.getNoteID()+"");
+                        dbo.RevertNote(n);
+                        list.add(n);
+                    }
                 }
                 Iterator it2=dl.voices.iterator();
                 while(it2.hasNext()){
-                    Voice v=(Voice)it1.next();
-                    dbo.RevertVoice(v);
-                    list.add(v);
+                    Voice v=(Voice)it2.next();
+                    if (v.getVoiceID() != 0) {
+                        dbo.RevertVoice(v);
+                        list.add(v);
+                    }
                 }
-                Reunion(map);
-                init_List();
-                map.clear();
+                if (map != null) {
+                    Reunion(map);
+                    map.clear();
+                }
             }
         },1000);
     }
@@ -1109,25 +1137,32 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
     //无论如何，REUNION,将无user信息增至尾部
     private void Reunion(HashMap<String,List> map)
     {
-        dbo = new DatabaseOperator(this);
-        final List<Note> note_union = map.get("Note");
-        final List<Voice> voice_union = map.get("Voice");
-        Iterator it1 = note_union.iterator();
-        while(it1.hasNext()){
-            Note note = (Note)it1.next();
-            int nid = dbo.InsertNote(note);
-            note.setNoteID(nid);
-            list.add(note);
-        }
+        if (map!=null) {
+            dbo = new DatabaseOperator(this);
+            Uploading uploading = new Uploading();
+            final List<Note> note_union = map.get("Note");
+            final List<Voice> voice_union = map.get("Voice");
+            Log.i("PICK", note_union.size() + "");
+            Iterator it1 = note_union.iterator();
+            while (it1.hasNext()) {
+                Note note = (Note) it1.next();
+                int nid = dbo.InsertNote(note);
+                note.setNoteID(nid);
+                uploading.uploadnote((ArrayList<Note>) note_union);
+                list.add(note);
+                mAdapter.notifyDataSetChanged();
+            }
 
-        Iterator it2 = note_union.iterator();
-        while(it2.hasNext()){
-            Voice voice = (Voice)it2.next();
-            int vid = dbo.InsertVoice(voice);
-            voice.setVoiceID(vid);
-            list.add(voice);
+            Iterator it2 = voice_union.iterator();
+            while (it2.hasNext()) {
+                Voice voice = (Voice) it2.next();
+                int vid = dbo.InsertVoice(voice);
+                voice.setVoiceID(vid);
+                uploading.uploadvoice((ArrayList<Voice>) voice_union);
+                list.add(voice);
+                mAdapter.notifyDataSetChanged();
+            }
         }
-
 
     }
 

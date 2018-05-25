@@ -16,11 +16,13 @@ import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Garbage;
 import com.example.wuke.flashnote.database_storage.Note;
 import com.example.wuke.flashnote.database_storage.Voice;
+import com.example.wuke.flashnote.download_upload.Uploading;
 import com.example.wuke.flashnote.record.Record;
 
 import java.io.File;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -150,6 +152,13 @@ public class TrashAdapter extends RecyclerView.Adapter{
                     , g.getPrevious_priority(),g.getDatatype());
                     dbo=new DatabaseOperator(mContext);
                     dbo.RevertNote(note);
+                    if (g.getGuser_id() != 0) {
+                        Uploading uploading=new Uploading();
+                        ArrayList<Note> al=new ArrayList<>();
+                        al.add(note);
+                        uploading.uploadnote(al);
+                        al.clear();
+                    }
                     mList.remove(position);
                     dbo.deleteGarbage(g.getLitter_id());
                     notifyItemRemoved(position);
@@ -229,8 +238,16 @@ public class TrashAdapter extends RecyclerView.Adapter{
                             , g.getPrevious_priority(),g.getDatatype(),g.getExtra());
                     dbo=new DatabaseOperator(mContext);
                     dbo.RevertVoice(voice);//还原
+                    if (g.getGuser_id() != 0) {
+                        Uploading uploading=new Uploading();
+                        ArrayList<Voice> al=new ArrayList<>();
+                        al.add(voice);
+                        uploading.uploadvoice(al);
+                        al.clear();
+                    }
                     mList.remove(position);
                     dbo.deleteGarbage(g.getLitter_id());
+
                     notifyItemRemoved(position);
                     notifyDataSetChanged();
                 }
