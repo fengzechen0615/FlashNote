@@ -40,9 +40,9 @@ public class Uploading {
         new Uploading.MyAsyncTask().execute(s);
     }//单条上传的方法
 
-    public void upvoice(String id, String content, String user, String time, String color, String priority){
+    public void upvoice(String id, String content, String user, String time, String color, String priority,String duration){
         String s = voice + "?ID="+ id + "&content=" + content +"&user=" + user + "&time=" + time + "&color="
-                + color + "&priority=" + priority;
+                + color + "&priority=" + priority + "&duration=" + duration;
         new Uploading.MyAsyncTask().execute(s);
     }//单条上传的方法
 
@@ -92,8 +92,8 @@ public class Uploading {
             String time = voice.getTimestamp();
             String color = Integer.toString(voice.getColor());
             String priority = Integer.toString(voice.getPriority());
-
-            upvoice(id,content,userid,time,color,priority);  //upload one piece
+            String duration = Integer.toString(voice.getDuration());
+            upvoice(id,content,userid,time,color,priority,duration);  //upload one piece
             i++;
         }
     }
