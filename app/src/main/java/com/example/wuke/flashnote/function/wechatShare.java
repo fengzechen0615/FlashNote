@@ -25,11 +25,11 @@ public class wechatShare {
 
     private void SMTOWX(String word){
         WXTextObject wxTextObject = new WXTextObject();
-        wxTextObject.text = "hello";
+        wxTextObject.text = word;
 
         WXMediaMessage mediaMessage = new WXMediaMessage();
         mediaMessage.mediaObject = wxTextObject;
-        mediaMessage.description = "hello";
+        mediaMessage.description = word;
 
         SendMessageToWX.Req req = new SendMessageToWX.Req();
         req.transaction = String.valueOf(System.currentTimeMillis());

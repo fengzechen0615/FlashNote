@@ -485,14 +485,15 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                 }
             }
             else{
-                if (note.contains("in Taobao")) {
+                note.toLowerCase();
+                if (note.contains("in taobao")) {
                     TaobaoDialog(note,NoteActivity.this);
                 }
                 // 触发日历条件
-                else if (note.contains("calendar") && note.contains("Create")) {
+                else if (note.contains("calendar") && note.contains("create")) {
                     CalendarDialog(note,NoteActivity.this);
                 }
-                else if (note.contains("in Wechat")) {
+                else if (note.contains("in wechat") && note.contains("share")) {
                     WechatDialog(note,NoteActivity.this);
                 }
                 else {
@@ -550,14 +551,15 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                         mRecyclerView.scrollToPosition(list.size() - 1);
                     }
                 }else{
-                    if (note.contains("in Taobao")) {
+                    note.toLowerCase();
+                    if (note.contains("in taobao")) {
                         TaobaoDialog(note,NoteActivity.this);
                     }
                     // 触发日历条件
-                    else if (note.contains("calendar") && note.contains("Create")) {
+                    else if (note.contains("calendar") && note.contains("create")) {
                         CalendarDialog(note,NoteActivity.this);
                     }
-                    else if (note.contains("in Wechat")) {
+                    else if (note.contains("in wechat")) {
                         WechatDialog(note,NoteActivity.this);
                     }
                     else {
@@ -633,7 +635,7 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
 
     public void WechatDialog(String note, final Context context) {
         final EditText editText = new EditText(context);
-        editText.setText(Wechat.wordsToshare(note));
+        editText.setText(Wechat.wordstoShare(note));
         new AlertDialog.Builder(NoteActivity.this)
                 .setTitle(getString(R.string.wechat))
                 .setView(editText)
