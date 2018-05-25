@@ -209,6 +209,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                             holder.note_content.setFocusable(true);
                             holder.note_content.setFocusableInTouchMode(true);
                             holder.note_content.setCursorVisible(true);
+                            holder.note_content.setSelection(((Note) mList.get(position)).getWords().length());
                             holder.note_content.setSingleLine(false);
                             holder.delete_text.setEnabled(false);
                             edit_down = false;
@@ -260,7 +261,7 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                     @Override
                     public void onClick(View view) {
                         wechatShare wechatShare = new wechatShare();
-                        wechatShare.shareInwechat(mContext,Wechat.wordstoShare(((Note)mList.get(position)).getWords()));
+                        wechatShare.shareInwechat(mContext, Wechat.wordstoShare(((Note)mList.get(position)).getWords()));
                     }
                 });
             }
