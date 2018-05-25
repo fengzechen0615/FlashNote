@@ -150,7 +150,7 @@ public class Record {
 
         mIat.setParameter(SpeechConstant.VAD_BOS, "5000");
         mIat.setParameter(SpeechConstant.VAD_EOS, "10000");
-        mIat.setParameter(SpeechConstant.ASR_PTT,  "1");
+        mIat.setParameter(SpeechConstant.ASR_PTT,  mSharedPreferences.getString("punc_preference", "1"));
 
         this.textView = textView;
 

@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.wuke.flashnote.NoteActivity;
 import com.example.wuke.flashnote.R;
 import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Garbage;
@@ -247,6 +248,14 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                         {
                             Toast.makeText(mContext, "click without login" + position, Toast.LENGTH_SHORT).show();
                         }
+                    }
+                });
+
+                holder.wechat_share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        NoteActivity noteActivity = new NoteActivity();
+                        noteActivity.WechatDialog(((Note) mList.get(position)).getWords(), mContext);
                     }
                 });
             }

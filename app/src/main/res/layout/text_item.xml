@@ -92,6 +92,14 @@
                 android:adjustViewBounds="true" />
 
             <ImageButton
+                android:id="@+id/share_wechat"
+                android:background="@drawable/wechat_share"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="5dp"
+                android:adjustViewBounds="true" />
+
+            <ImageButton
                 android:id="@+id/delete_text"
                 android:background="@drawable/trash"
                 android:layout_width="20dp"

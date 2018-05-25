@@ -578,8 +578,8 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
         }
     }
 
-    private void TaobaoDialog(String note, final Context context) {
-        final EditText editText = new EditText(this);
+    public void TaobaoDialog(String note, final Context context) {
+        final EditText editText = new EditText(context);
         editText.setText(Taobao.Object(note));
         new AlertDialog.Builder(NoteActivity.this)
                 .setTitle(getString(R.string.taobao))
@@ -602,7 +602,7 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                 }).show();
     }
 
-    private void CalendarDialog(String note, final Context context) {
+    public void CalendarDialog(String note, final Context context) {
         StringRecognizer stringRecognizer = new StringRecognizer();
         stringRecognizer.Recognizer(note);
         final EditText editText = new EditText(this);
@@ -625,8 +625,8 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                 }).show();
     }
 
-    private void WechatDialog(String note, final Context context) {
-        final EditText editText = new EditText(this);
+    public void WechatDialog(String note, final Context context) {
+        final EditText editText = new EditText(context);
         editText.setText(Wechat.wordsToshare(note));
         new AlertDialog.Builder(NoteActivity.this)
                 .setTitle(getString(R.string.wechat))

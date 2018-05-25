@@ -23,6 +23,7 @@ public class TextViewHolder extends RecyclerView.ViewHolder {
     public ImageButton edit;
     public ImageView color_text;
     public ImageButton delete_text;
+    public ImageButton wechat_share;
 
     public TextViewHolder(View itemView) {
         super(itemView);
@@ -36,5 +37,6 @@ public class TextViewHolder extends RecyclerView.ViewHolder {
         function= (LinearLayout) itemView.findViewById(R.id.function);
         color_text = (ImageView) itemView.findViewById(R.id.color_note);
         delete_text = (ImageButton) itemView.findViewById(R.id.delete_text);
+        wechat_share = (ImageButton) itemView.findViewById(R.id.share_wechat);
     }
 }
