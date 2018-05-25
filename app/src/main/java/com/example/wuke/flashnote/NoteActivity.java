@@ -280,6 +280,7 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
             public void onClick(View v) {
                 Add_text_note();
                 add.close(true);
+                recording.setVisibility(View.INVISIBLE);
             }
         });
         add_voice.setOnClickListener(new View.OnClickListener() {
@@ -374,7 +375,13 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                         float y = Math.abs(MoveY - DownY);
                         if (y > 300) {
                             stop_speak();
-                            createVoice(mResultVoice.getText().toString(), 1);
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    createVoice(mResultVoice.getText().toString(), 1);
+                                }
+                            }, 1000);
                             Log.d("Delete_record", "you cancel this message");
                         } else {
                             Log.d("add_message", "you add this message");
@@ -396,7 +403,6 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                         if (event.getY() < 0) {
                             recordingHint.setText(getString(R.string.loose));
                             recordingHint.setBackgroundResource(R.drawable.ease_recording_text_hint_bg);
-                            stop_speak();
                             MoveY = event.getY();
                             Log.d("MoveY", String.valueOf(MoveY));
                         } else {
