@@ -17,6 +17,7 @@ import com.example.wuke.flashnote.database_storage.MomentDetail;
 import com.example.wuke.flashnote.database_storage.Note;
 import com.example.wuke.flashnote.database_storage.Storage;
 import com.example.wuke.flashnote.download_upload.Downloading;
+import com.example.wuke.flashnote.record.Record;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -80,7 +81,7 @@ public class Moment extends AppCompatActivity {
                 Iterator iterator=test.iterator();
                 while(iterator.hasNext()) {
                     Note note = (Note)iterator.next();
-                    MomentDetail m=new MomentDetail(note.getNoteID()+"",note.getWords(),note.getTimestamp());
+                    MomentDetail m=new MomentDetail(note.getNoteID()+"", note.getWords(), note.getTimestamp(), note.getDataType());
                     mList.add(m);
                 }
                 mAdapter = new MomentAdapter(Moment.this, mList);
@@ -93,15 +94,6 @@ public class Moment extends AppCompatActivity {
         if (mList.size() != 0) {
             mRecyclerView.smoothScrollToPosition(0);
         }
-    }
-
-    private void init_data() {
-        MomentDetail momentDetail_0 = new MomentDetail("Feng Zechen", "Have launch with WeiYuan", "2015-4-27 12:00:00");
-        mList.add(momentDetail_0);
-        MomentDetail momentDetail_1 = new MomentDetail("Wang Yikai", "I Love WeiYuan", "2015-4-27 13:00:00");
-        mList.add(momentDetail_1);
-        MomentDetail momentDetail_2 = new MomentDetail("Gong Linghua", "I fall in Love with WeiYuan", "2015-4-27 13:00:00");
-        mList.add(momentDetail_2);
     }
 
     private void refresh_list() {
@@ -129,7 +121,7 @@ public class Moment extends AppCompatActivity {
                                 Iterator iterator=test.iterator();
                                 while(iterator.hasNext()) {
                                     Note note = (Note)iterator.next();
-                                    MomentDetail m=new MomentDetail(note.getNoteID()+"",note.getWords(),note.getTimestamp());
+                                    MomentDetail m=new MomentDetail(note.getNoteID()+"", note.getWords(), note.getTimestamp(), note.getDataType());
                                     mList.add(m);
                                 }
                                 mAdapter = new MomentAdapter(Moment.this, mList);
@@ -150,5 +142,12 @@ public class Moment extends AppCompatActivity {
         if(keyCode== KeyEvent.KEYCODE_BACK)
             return true;//不执行父类点击事件
         return super.onKeyDown(keyCode, event);//继续执行父类其他点击事件
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Record record = new Record(Moment.this);
+        record.destory();
     }
 }

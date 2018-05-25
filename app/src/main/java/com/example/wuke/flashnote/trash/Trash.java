@@ -16,6 +16,8 @@ import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Friends;
 import com.example.wuke.flashnote.database_storage.Garbage;
 import com.example.wuke.flashnote.friends.FriendAdapter;
+import com.example.wuke.flashnote.moment.Moment;
+import com.example.wuke.flashnote.record.Record;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +75,13 @@ public class Trash extends AppCompatActivity {
         if(keyCode== KeyEvent.KEYCODE_BACK)
             return true;//不执行父类点击事件
         return super.onKeyDown(keyCode, event);//继续执行父类其他点击事件
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Record record = new Record(Trash.this);
+        record.destory();
     }
 
 }

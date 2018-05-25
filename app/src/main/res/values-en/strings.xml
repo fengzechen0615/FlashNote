@@ -95,5 +95,7 @@
     <string name="no_friend">Cannot find this friend</string>
     <!--moment-->
     <string name="moment">Moment</string>
+    <!--trash-->
+    <string name="voice_trash">Record Note</string>
 
 </resources>

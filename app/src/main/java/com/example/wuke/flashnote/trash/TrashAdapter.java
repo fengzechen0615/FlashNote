@@ -170,7 +170,7 @@ public class TrashAdapter extends RecyclerView.Adapter{
         if (viewholder instanceof TrashVoiceViewHolder) {
             final TrashVoiceViewHolder holder = (TrashVoiceViewHolder) viewholder;
 
-            holder.trash_record_content.setText(mList.get(position).getKeywords());
+            holder.trash_record_content.setText(mContext.getString(R.string.voice_trash));
             holder.trash_record_time.setText(mList.get(position).getPrevious_timestamp());
 
             holder.trash_record_function.setVisibility(View.INVISIBLE);

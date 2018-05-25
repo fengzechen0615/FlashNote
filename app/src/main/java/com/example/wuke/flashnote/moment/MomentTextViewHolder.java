@@ -6,13 +6,13 @@ import android.widget.TextView;
 
 import com.example.wuke.flashnote.R;
 
-public class MomentViewHolder extends RecyclerView.ViewHolder{
+public class MomentTextViewHolder extends RecyclerView.ViewHolder{
 
     public TextView moment_username;
     public TextView moment_content;
     public TextView moment_time;
 
-    public MomentViewHolder(View itemView) {
+    public MomentTextViewHolder(View itemView) {
         super(itemView);
         moment_username = (TextView) itemView.findViewById(R.id.moment_user_name);
         moment_content = (TextView) itemView.findViewById(R.id.moment_content);

@@ -10,11 +10,23 @@ public class MomentDetail implements Comparator{
     private String moment_username;
     private String moment_content;
     private String moment_time;
+    private int data_type;
+    private String URL;
 
-    public MomentDetail(String moment_username, String moment_content, String moment_time) {
+    // text
+    public MomentDetail(String moment_username, String moment_content, String moment_time, int data_type) {
         this.moment_username = moment_username;
         this.moment_content = moment_content;
         this.moment_time = moment_time;
+        this.data_type = data_type;
+    }
+
+    // voice
+    public MomentDetail(String moment_username, String URL, int data_type, String moment_time) {
+        this.moment_username = moment_username;
+        this.URL = URL;
+        this.moment_time = moment_time;
+        this.data_type = data_type;
     }
 
     public String getMoment_content() {
@@ -27,6 +39,14 @@ public class MomentDetail implements Comparator{
 
     public String getMoment_username() {
         return moment_username;
+    }
+
+    public int getData_type() {
+        return data_type;
+    }
+
+    public String getURL() {
+        return URL;
     }
 
     @Override

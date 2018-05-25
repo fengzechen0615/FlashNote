@@ -95,5 +95,7 @@
     <string name="no_friend">找不到此好友</string>
     <!--moment-->
     <string name="moment">动态</string>
+    <!--trash-->
+    <string name="voice_trash">录音笔记</string>
 
 </resources>
