@@ -239,6 +239,16 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                     }
                 });
 
+                LocalLogin localLogin = new LocalLogin();
+
+                if(localLogin.check() == true) {
+                    holder.share.setVisibility(View.VISIBLE);
+                } else {
+                    holder.share.setVisibility(View.GONE);
+                    holder.share.setVisibility(View.INVISIBLE);
+                }
+
+
                 holder.share.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -248,11 +258,11 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                             Uploading uploading = new Uploading();
                             uploading.upsharednote(String.valueOf(((Note) mList.get(position)).getUserID()), String.valueOf(((Note) mList.get(position)).getNoteID()));
                             Log.e("share", ((Note) mList.get(position)).getUserID() + " " + ((Note) mList.get(position)).getNoteID());
-                            Toast.makeText(mContext, "share" + ((Note) mList.get(position)).getWords()+((Note) mList.get(position)).getNoteID(), Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(mContext, "share" + ((Note) mList.get(position)).getWords()+((Note) mList.get(position)).getNoteID(), Toast.LENGTH_SHORT).show();
                         }
                         else
                         {
-                            Toast.makeText(mContext, "click without login" + position, Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(mContext, "click without login" + position, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -396,6 +406,15 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                     }
                 });
 
+                LocalLogin localLogin = new LocalLogin();
+
+                if(localLogin.check() == true) {
+                    holder.record_share.setVisibility(View.VISIBLE);
+                } else {
+                    holder.record_share.setVisibility(View.GONE);
+                    holder.record_share.setVisibility(View.INVISIBLE);
+                }
+
                 holder.record_share.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -404,11 +423,11 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                         if (l.check()==true) {
                             Uploading uploading = new Uploading();
                             uploading.upsharevoice(String.valueOf(((Voice) mList.get(position)).getUserID()), String.valueOf(((Voice) mList.get(position)).getVoiceID()));
-                            Toast.makeText(mContext, "share" + ((Voice) mList.get(position)).getURL()+((Voice) mList.get(position)).getVoiceID(), Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(mContext, "share" + ((Voice) mList.get(position)).getURL()+((Voice) mList.get(position)).getVoiceID(), Toast.LENGTH_SHORT).show();
                         }
                         else
                         {
-                            Toast.makeText(mContext, "click without login" + position, Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(mContext, "click without login" + position, Toast.LENGTH_SHORT).show();
                         }
 
                     }

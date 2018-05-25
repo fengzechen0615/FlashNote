@@ -1,5 +1,6 @@
 package com.example.wuke.flashnote.recyclerview;
 
+import android.media.Image;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;

@@ -7,6 +7,8 @@ package com.example.wuke.flashnote.download_upload_file;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.util.Log;
+import android.widget.LinearLayout;
 
 import java.io.File;
 
@@ -29,17 +31,16 @@ public class D_U_manager {
     /** 异步任务-录音上传 */
     public class UpLoadrecordFile extends AsyncTask<String, Integer, String> {
 
-
         String s;
 
         public UpLoadrecordFile(String s) {
             this.s = s;
         }
 
-        File f = new File(Environment.getExternalStorageDirectory() + "/msc/" + s);
         @Override
         protected String doInBackground(String... parameters) {
             // TODO Auto-generated method stub11
+            File f = new File(Environment.getExternalStorageDirectory() + "/msc/" + s);
             return UploadFile.uploadFile(f);
 
         }
