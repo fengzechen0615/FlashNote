@@ -38,6 +38,7 @@ public class Note extends Storage implements Serializable {
         this.dataType = dataType;
     }
 
+
     public Note(){
 
     }
