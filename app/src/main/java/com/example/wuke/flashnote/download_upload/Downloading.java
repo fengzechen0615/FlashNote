@@ -174,6 +174,10 @@ public class Downloading {
                     content = sub.substring(9);
                     int id = Integer.parseInt(content);
                     voice.setPriority(id);
+                } else if (sub.contains("duration=") == true) {
+                    content = sub.substring(9);
+                    int id = Integer.parseInt(content);
+                    voice.setDuration(id);
                     voices.add(voice);
                 }
                 i++;
