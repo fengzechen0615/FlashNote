@@ -63,12 +63,12 @@ public class MomentAdapter extends RecyclerView.Adapter {
             MomentVoiceViewHolder holder = (MomentVoiceViewHolder) viewholder;
             holder.moment_username_voice.setText(mList.get(position).getMoment_username());
             holder.moment_time_voice.setText(mList.get(position).getMoment_time());
-            holder.moment_content_voice.setText(mList.get(position).getURL());
+            holder.moment_content_voice.setText(mList.get(position).getMoment_content());
             holder.moment_play.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Record record = new Record(mContext);
-                    record.startPlay(mList.get(position).getURL());
+                    record.startPlay(mList.get(position).getMoment_content());
                 }
             });
         }

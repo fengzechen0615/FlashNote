@@ -16,8 +16,10 @@ import com.example.wuke.flashnote.R;
 import com.example.wuke.flashnote.database_storage.MomentDetail;
 import com.example.wuke.flashnote.database_storage.Note;
 import com.example.wuke.flashnote.database_storage.Storage;
+import com.example.wuke.flashnote.database_storage.Voice;
 import com.example.wuke.flashnote.download_upload.Downloading;
 import com.example.wuke.flashnote.record.Record;
+import com.example.wuke.flashnote.friends.GetName;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -71,18 +73,38 @@ public class Moment extends AppCompatActivity {
         userid=pref.getInt("userid",0);
         final Downloading dl=new Downloading();
         dl.downsharednote(String.valueOf(userid));
-        Log.e("share",userid+"");
-        Log.e("share",dl.notes.size()+"");
+        dl.downsharedvoice(String.valueOf(userid));
         swipeRefreshLayout.setRefreshing(true);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                Log.e("moment",dl.notes.size()+""+dl.voices.size());
                 test=dl.notes;
+                test.addAll(dl.voices);
                 Iterator iterator=test.iterator();
                 while(iterator.hasNext()) {
-                    Note note = (Note)iterator.next();
-                    MomentDetail m=new MomentDetail(note.getNoteID()+"", note.getWords(), note.getTimestamp(), note.getDataType());
+                    Storage s = (Storage) iterator.next();
+                    GetName getname=new GetName();
+                    if (s instanceof Note){
+                        String str = String.valueOf(((Note)s).getUserID());
+                        getname.getname(str);
+                        Log.e("moment",((Note)s).getWords());
+                        MomentDetail m=new MomentDetail(getname.getname,
+                            ((Note)s).getWords(),
+                            ((Note)s).getTimestamp(),0);
+                        Log.e("moment",m.getMoment_content());
                     mList.add(m);
+                    }
+                    else if (s instanceof Voice){
+                        String str = String.valueOf(((Voice)s).getUserID());
+                        getname.getname(str);
+                        Log.e("moment",((Voice)s).getURL());
+                        MomentDetail m=new MomentDetail(getname.getname,
+                                "语音信息，点击收听",
+                                ((Voice)s).getTimestamp(),1);
+                        Log.e("moment",m.getMoment_content());
+                        mList.add(m);
+                    }
                 }
                 mAdapter = new MomentAdapter(Moment.this, mList);
                 mRecyclerView.setAdapter(mAdapter);
@@ -111,23 +133,37 @@ public class Moment extends AppCompatActivity {
                     public void run() {
                         final Downloading dl=new Downloading();
                         dl.downsharednote(String.valueOf(userid));
-                        Log.e("share",userid+"");
-                        Log.e("share",dl.notes.size()+"");
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 mList.clear();
                                 test=dl.notes;
+                                test.addAll(dl.voices);
                                 Iterator iterator=test.iterator();
                                 while(iterator.hasNext()) {
-                                    Note note = (Note)iterator.next();
-                                    MomentDetail m=new MomentDetail(note.getNoteID()+"", note.getWords(), note.getTimestamp(), note.getDataType());
-                                    mList.add(m);
+                                    Storage s = (Storage) iterator.next();
+                                    GetName getname=new GetName();
+                                    if (s instanceof Note){
+                                        String str = String.valueOf(((Note)s).getUserID());
+                                        getname.getname(str);
+                                        MomentDetail m=new MomentDetail(getname.getname,
+                                                ((Note)s).getWords(),
+                                                ((Note)s).getTimestamp(),0);
+                                        mList.add(m);
+                                    }
+                                    else if (s instanceof Voice){
+                                        String str = String.valueOf(((Voice)s).getUserID());
+                                        getname.getname(str);
+                                        MomentDetail m=new MomentDetail(getname.getname,
+                                                "语音信息，点击收听",
+                                                ((Voice)s).getTimestamp(),1);
+                                        mList.add(m);
+                                    }
                                 }
                                 mAdapter = new MomentAdapter(Moment.this, mList);
                                 mRecyclerView.setAdapter(mAdapter);
                             }
-                        },1000);
+                        },500);
                         mAdapter.notifyDataSetChanged();
                         swipeRefreshLayout.setRefreshing(false);
                     }

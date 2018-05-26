@@ -75,12 +75,19 @@ public class Addfriend {
         }
 
         protected void onPostExecute(String s) {
+            Log.e("ffff",s);
             Log.e("result",s);
-            if (s.contains("resCode=102") || s.contains("resCode=201")) {
-                Exist = false;
+            if (s.contains("resCode=201")) {
+                Friend.exist=true;
+                Friend.repeat=true;
             }
             else if (s.contains("resCode=100")){
-                Exist = true;
+                Friend.repeat=false;
+                Friend.exist=true;
+            }
+            else if (s.contains("resCode=102")){
+                Friend.exist=false;
+                Friend.repeat=false;
             }
         }
     }
