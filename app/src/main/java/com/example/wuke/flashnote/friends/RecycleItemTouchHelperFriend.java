@@ -2,6 +2,7 @@ package com.example.wuke.flashnote.friends;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 
 import com.example.wuke.flashnote.recyclerview.ItemTouchHelperAdapter;
 
@@ -40,7 +41,7 @@ public class RecycleItemTouchHelperFriend extends ItemTouchHelper.Callback {
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
         // 移动删除回调
-        mAdapter.onItemDissmiss(viewHolder.getAdapterPosition());
+        mAdapter.onItemDissmiss(viewHolder);
     }
 
     @Override

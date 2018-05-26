@@ -118,4 +118,6 @@ public class Voice extends Storage implements Serializable{
     public void setDuration(int duration) {
         this.Duration = duration;
     }
+
+    public void setDataType(int dataType){ this.dataType = dataType; }
 }

@@ -84,16 +84,16 @@ public class Moment extends AppCompatActivity {
                 Iterator iterator=test.iterator();
                 while(iterator.hasNext()) {
                     Storage s = (Storage) iterator.next();
-                    GetName getname=new GetName();
+                    final GetName getname=new GetName();
                     if (s instanceof Note){
                         String str = String.valueOf(((Note)s).getUserID());
                         getname.getname(str);
                         Log.e("moment",((Note)s).getWords());
                         MomentDetail m=new MomentDetail(getname.getname,
-                            ((Note)s).getWords(),
-                            ((Note)s).getTimestamp(),0);
+                                ((Note)s).getWords(),
+                                ((Note)s).getTimestamp(),0);
                         Log.e("moment",m.getMoment_content());
-                    mList.add(m);
+                        mList.add(m);
                     }
                     else if (s instanceof Voice){
                         String str = String.valueOf(((Voice)s).getUserID());
@@ -105,6 +105,7 @@ public class Moment extends AppCompatActivity {
                         Log.e("moment",m.getMoment_content());
                         mList.add(m);
                     }
+
                 }
                 mAdapter = new MomentAdapter(Moment.this, mList);
                 mRecyclerView.setAdapter(mAdapter);

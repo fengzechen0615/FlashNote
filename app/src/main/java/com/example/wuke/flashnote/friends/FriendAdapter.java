@@ -1,15 +1,18 @@
 package com.example.wuke.flashnote.friends;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.wuke.flashnote.NoteActivity;
 import com.example.wuke.flashnote.R;
 import com.example.wuke.flashnote.database_storage.DatabaseOperator;
 import com.example.wuke.flashnote.database_storage.Friends;
+import com.example.wuke.flashnote.login.LocalLogin;
 import com.example.wuke.flashnote.recyclerview.ItemTouchHelperAdapter;
 
 import java.io.IOException;
@@ -24,6 +27,8 @@ public class FriendAdapter extends RecyclerView.Adapter implements ItemTouchHelp
 
     private List<String> mList;
     private Context mContext;
+    private SharedPreferences pref;
+    public  String userid;
 
     public FriendAdapter(Context mContext, List<String> mList) {
         this.mContext = mContext;
@@ -65,16 +70,14 @@ public class FriendAdapter extends RecyclerView.Adapter implements ItemTouchHelp
     }
 
     @Override
-    public void onItemDissmiss(int position_swipe) {
-        DatabaseOperator databaseOperator = new DatabaseOperator(mContext);
-
+    public void onItemDissmiss(RecyclerView.ViewHolder source) {
         // 删除数据库
-//        databaseOperator
-
-        mList.remove(position_swipe);
+        DeFriend deFriend=new DeFriend();
+        deFriend.delete(userid,mList.get(source.getAdapterPosition()));
+        mList.remove(source.getAdapterPosition());
 
         // 刷新数据
-        notifyItemRemoved(position_swipe);
+        notifyItemRemoved(source.getAdapterPosition());
     }
 
     @Override

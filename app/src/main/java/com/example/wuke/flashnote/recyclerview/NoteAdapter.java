@@ -22,6 +22,7 @@ import com.example.wuke.flashnote.database_storage.Garbage;
 import com.example.wuke.flashnote.database_storage.Note;
 import com.example.wuke.flashnote.database_storage.Storage;
 import com.example.wuke.flashnote.database_storage.Voice;
+import com.example.wuke.flashnote.download_upload.ChangeColor;
 import com.example.wuke.flashnote.download_upload.ChangeNote;
 import com.example.wuke.flashnote.download_upload.Deleting;
 import com.example.wuke.flashnote.download_upload.Uploading;
@@ -164,25 +165,31 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int colorPosition, long id) {
                         String[] color = view.getResources().getStringArray(R.array.note_color);
+                        ChangeColor cc = new ChangeColor();
                         databaseOperator = new DatabaseOperator(mContext);
                         if (color[colorPosition].equals("White")) {
                             holder.color_text.setImageDrawable(ColorImages[0]);
+                            cc.getname("note",String.valueOf(((Note) mList.get(position)).getNoteID()),String.valueOf(0));
                             databaseOperator.UpdateNoteColor(((Note) mList.get(position)).getNoteID(), 0);
                             ((Note) mList.get(position)).setColor(0);
                         } else if (color[colorPosition].equals("Blue")) {
                             holder.color_text.setImageDrawable(ColorImages[1]);
+                            cc.getname("note",String.valueOf(((Note) mList.get(position)).getNoteID()),String.valueOf(1));
                             databaseOperator.UpdateNoteColor(((Note) mList.get(position)).getNoteID(), 1);
                             ((Note) mList.get(position)).setColor(1);
                         } else if (color[colorPosition].equals("Red")) {
                             holder.color_text.setImageDrawable(ColorImages[2]);
+                            cc.getname("note",String.valueOf(((Note) mList.get(position)).getNoteID()),String.valueOf(2));
                             databaseOperator.UpdateNoteColor(((Note) mList.get(position)).getNoteID(), 2);
                             ((Note) mList.get(position)).setColor(2);
                         } else if (color[colorPosition].equals("Orange")) {
                             holder.color_text.setImageDrawable(ColorImages[3]);
+                            cc.getname("note",String.valueOf(((Note) mList.get(position)).getNoteID()),String.valueOf(3));
                             databaseOperator.UpdateNoteColor(((Note) mList.get(position)).getNoteID(), 3);
                             ((Note) mList.get(position)).setColor(3);
                         } else if (color[colorPosition].equals("Green")) {
                             holder.color_text.setImageDrawable(ColorImages[4]);
+                            cc.getname("note",String.valueOf(((Note) mList.get(position)).getNoteID()),String.valueOf(4));
                             databaseOperator.UpdateNoteColor(((Note) mList.get(position)).getNoteID(), 4);
                             ((Note) mList.get(position)).setColor(4);
                         }
@@ -326,25 +333,31 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int colorPosition, long id) {
                         String[] color = view.getResources().getStringArray(R.array.note_color);
+                        ChangeColor cc=new ChangeColor();
                         databaseOperator = new DatabaseOperator(mContext);
                         if (color[colorPosition].equals("White")) {
                             holder.color_voice.setImageDrawable(ColorImages[0]);
+                            cc.getname("voice",String.valueOf(((Voice) mList.get(position)).getVoiceID()),"0");
                             databaseOperator.UpdateVoiceColor(((Voice) mList.get(position)).getVoiceID(), 0);
                             ((Voice) mList.get(position)).setColor(0);;
                         } else if (color[colorPosition].equals("Blue")) {
                             holder.color_voice.setImageDrawable(ColorImages[1]);
+                            cc.getname("voice",String.valueOf(((Voice) mList.get(position)).getVoiceID()),"1");
                             databaseOperator.UpdateVoiceColor(((Voice) mList.get(position)).getVoiceID(), 1);
                             ((Voice) mList.get(position)).setColor(1);
                         } else if (color[colorPosition].equals("Red")) {
                             holder.color_voice.setImageDrawable(ColorImages[2]);
+                            cc.getname("voice",String.valueOf(((Voice) mList.get(position)).getVoiceID()),"2");
                             databaseOperator.UpdateVoiceColor(((Voice) mList.get(position)).getVoiceID(), 2);
                             ((Voice) mList.get(position)).setColor(2);
                         } else if (color[colorPosition].equals("Orange")) {
                             holder.color_voice.setImageDrawable(ColorImages[3]);
+                            cc.getname("voice",String.valueOf(((Voice) mList.get(position)).getVoiceID()),"3");
                             databaseOperator.UpdateVoiceColor(((Voice) mList.get(position)).getVoiceID(), 3);
                             ((Voice) mList.get(position)).setColor(3);
                         } else if (color[colorPosition].equals("Green")) {
                             holder.color_voice.setImageDrawable(ColorImages[4]);
+                            cc.getname("voice",String.valueOf(((Voice) mList.get(position)).getVoiceID()),"4");
                             databaseOperator.UpdateVoiceColor(((Voice) mList.get(position)).getVoiceID(), 4);
                             ((Voice) mList.get(position)).setColor(4);
                         }

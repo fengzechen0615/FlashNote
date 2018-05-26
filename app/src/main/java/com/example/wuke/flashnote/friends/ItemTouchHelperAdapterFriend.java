@@ -7,7 +7,7 @@ public interface ItemTouchHelperAdapterFriend {
     void onItemMove(RecyclerView.ViewHolder source, RecyclerView.ViewHolder target);
 
     // 数据删除
-    void onItemDissmiss(int position_swipe);
+    void onItemDissmiss(RecyclerView.ViewHolder source);
 
     // drag或者swipe选中
     void onItemSelect(RecyclerView.ViewHolder source);

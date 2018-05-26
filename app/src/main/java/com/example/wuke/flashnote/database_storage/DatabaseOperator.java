@@ -214,7 +214,7 @@ public class DatabaseOperator {
         cValue.put(Initial.voice_color,voice.getColor());
         cValue.put(Initial.voice_timestamp,voice.getTimestamp());
         cValue.put(Initial.voice_priority,voice.getPriority());
-        cValue.put(Initial.datatype,voice.getDataType());
+        cValue.put(Initial.datatype,1);
         cValue.put(Initial.voice_duration,voice.getDuration());
         long VID=wdb.insert(Initial.table_voice,null,cValue);
         return (int)VID;

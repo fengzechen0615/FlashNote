@@ -61,18 +61,22 @@ public class D_U_manager {
     }
 
     /** 下载后播放 */
-    public void downloadFileAndPlay(String uploadFilename) {
-        new DownloadRecordFile().execute(uploadFilename);
+    public void downloadFileAndPlay(String s,String uploadFilename) {
+        new DownloadRecordFile(s).execute(uploadFilename);
     }
 
     /** 异步任务-下载后播放 */
     public class DownloadRecordFile extends AsyncTask<String, Integer, File> {
+        String s;
+        public DownloadRecordFile(String s) {
+            this.s = s;
+        }
 
         @Override
         protected File doInBackground(String... parameters) {
             // TODO Auto-generated method stub11
             try {
-                String filename = "iat.wav";
+                String filename = s;
                 return DownloadFile.DownloadFromUrlToData("http://39.106.205.176:8080/artifacts/DownloadFile?filename="
                         + parameters[0], filename, context);
             } catch (Exception e) {
@@ -95,7 +99,7 @@ public class D_U_manager {
 
     public void downloadfile(String s){
         D_U_manager m =new D_U_manager();
-        m.downloadFileAndPlay(s);
+        m.downloadFileAndPlay(s,s);
     }
 
 

@@ -956,6 +956,9 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
             LocalLogin localLogin = new LocalLogin();
             if(localLogin.check()) {
                 Intent intent = new Intent(NoteActivity.this, Friend.class);
+                pref=getSharedPreferences("info",MODE_PRIVATE);
+                userid=pref.getInt("userid",0);
+                intent.putExtra("userid",String.valueOf(userid));
                 startActivity(intent);
             } else {
                 Intent intent = new Intent(getBaseContext(), WukeCloud.class);
@@ -1132,6 +1135,7 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                         Log.e("sync",n.getNoteID()+"");
                         dbo.RevertNote(n);
                         list.add(n);
+                        mAdapter.notifyDataSetChanged();
                     }
                 }
                 Iterator it2=dl.voices.iterator();
@@ -1139,9 +1143,14 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                 while(it2.hasNext()){
                     Voice v=(Voice)it2.next();
                     if (v.getVoiceID() != 0) {
-                        Log.e("revert",v.getVoiceID()+"");
+                        String pos = v.getURL().substring(24);
+                        v.setDataType(1);
+                        Log.e("revert",pos);
+                        D_U_manager d_u_manager=new D_U_manager();
+                        d_u_manager.downloadfile(pos);
                         dbo.RevertVoice(v);
                         list.add(v);
+                        mAdapter.notifyDataSetChanged();
                     }
                 }
                 if (map != null) {

@@ -19,8 +19,8 @@ import java.net.URL;
 public class DeFriend {
     private String url = "http://39.106.205.176:8080/artifacts/DEFriend";
     private boolean Exist=true;
-    public void addfriend(String userID, String friendID){
-        String s = url + "?userID=" + userID + "&friendID=" + friendID;
+    public void delete(String userID, String friendID){
+        String s = url + "?userID=" + userID + "&friendname=" + friendID;
         new MyAsyncTask().execute(s);
     }
 

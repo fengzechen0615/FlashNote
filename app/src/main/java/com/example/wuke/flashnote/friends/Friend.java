@@ -48,15 +48,16 @@ public class Friend extends AppCompatActivity {
     private android.support.design.widget.FloatingActionButton floatingActionButton;
     private TextView done;
     private String username;
-    private int userid;
     private String input;
     public static boolean repeat=false;
     private SwipeRefreshLayout swipeRefreshLayout;
-
+    private int userid;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
+        pref=getSharedPreferences("info",MODE_PRIVATE);
+        userid=pref.getInt("userid",0);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_f_refresh);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -91,6 +92,7 @@ public class Friend extends AppCompatActivity {
                                 if (getf.list.size()!=0) {
                                     mList = getf.list;
                                     mAdapter = new FriendAdapter(Friend.this, mList);
+                                    mAdapter.userid=String.valueOf(userid);
                                     mRecyclerView.setAdapter(mAdapter);
                                     swipeRefreshLayout.setRefreshing(false);
                                 }
@@ -108,9 +110,8 @@ public class Friend extends AppCompatActivity {
 
 
     private void init_List() {
-        if(mList == null){
-            mList = new ArrayList<Friends>();
-        }
+        mList = new ArrayList<Friends>();
+
         final GetFriends gf=new GetFriends();
         pref=getSharedPreferences("info",MODE_PRIVATE);
         userid=pref.getInt("userid",0);
@@ -128,8 +129,14 @@ public class Friend extends AppCompatActivity {
             public void run() {
                 if (gf.list.size()!=0) {
                     mList = gf.list;
+                    mRecyclerView = (RecyclerView) findViewById(R.id.friend_recycler_view);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(Friend.this);
+                    mRecyclerView.setLayoutManager(linearLayoutManager);
                     mAdapter = new FriendAdapter(Friend.this, mList);
                     mRecyclerView.setAdapter(mAdapter);
+                    ItemTouchHelper.Callback callback = new RecycleItemTouchHelperFriend(mAdapter);
+                    ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+                    touchHelper.attachToRecyclerView(mRecyclerView);
                     swipeRefreshLayout.setRefreshing(false);
                 }
                 else {
@@ -137,10 +144,6 @@ public class Friend extends AppCompatActivity {
                 }
             }
         },1000);
-        mRecyclerView = (RecyclerView) findViewById(R.id.friend_recycler_view);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
-
 
         floatingActionButton = (android.support.design.widget.FloatingActionButton) findViewById(R.id.add_friends);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -174,11 +177,6 @@ public class Friend extends AppCompatActivity {
                 finish();
             }
         });
-
-        ItemTouchHelper.Callback callback = new RecycleItemTouchHelperFriend(mAdapter);
-        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
-        touchHelper.attachToRecyclerView(mRecyclerView);
-
     }
 
     private void Add_friend() {

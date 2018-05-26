@@ -149,7 +149,7 @@ public class Downloading {
         while (i < a.size()){
             int m = 0;
             Voice voice = new Voice();
-            while(m < 6) {
+            while(m < 7) {
                 String sub = a.get(i);
                 String content = null;
                 if (sub.contains("userID=") == true) {
