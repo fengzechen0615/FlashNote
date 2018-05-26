@@ -73,7 +73,7 @@ public class D_U_manager {
             // TODO Auto-generated method stub11
             try {
                 String filename = "iat.wav";
-                return DownloadFile.DownloadFromUrlToData("http://10.0.1.47:8080/DownloadFile?filename="
+                return DownloadFile.DownloadFromUrlToData("http://39.106.205.176:8080/artifacts/DownloadFile?filename="
                         + parameters[0], filename, context);
             } catch (Exception e) {
                 // TODO Auto-generated catch block

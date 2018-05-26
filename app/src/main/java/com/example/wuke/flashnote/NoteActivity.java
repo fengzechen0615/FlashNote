@@ -1135,9 +1135,11 @@ public class NoteActivity extends Activity implements NavigationView.OnNavigatio
                     }
                 }
                 Iterator it2=dl.voices.iterator();
+                Log.e("revert",dl.voices.size()+"");
                 while(it2.hasNext()){
                     Voice v=(Voice)it2.next();
                     if (v.getVoiceID() != 0) {
+                        Log.e("revert",v.getVoiceID()+"");
                         dbo.RevertVoice(v);
                         list.add(v);
                     }

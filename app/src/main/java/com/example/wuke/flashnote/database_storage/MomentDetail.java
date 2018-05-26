@@ -11,7 +11,7 @@ public class MomentDetail implements Comparator{
     private String moment_content;
     private String moment_time;
     private int data_type;
-    private String URL;
+//    private String URL;
 
     // text
     public MomentDetail(String moment_username, String moment_content, String moment_time, int data_type) {
@@ -22,12 +22,12 @@ public class MomentDetail implements Comparator{
     }
 
     // voice
-    public MomentDetail(String moment_username, String URL, int data_type, String moment_time) {
-        this.moment_username = moment_username;
-        this.URL = URL;
-        this.moment_time = moment_time;
-        this.data_type = data_type;
-    }
+//    public MomentDetail(String moment_username, String URL, int data_type, String moment_time) {
+//        this.moment_username = moment_username;
+//        this.URL = URL;
+//        this.moment_time = moment_time;
+//        this.data_type = data_type;
+//    }
 
     public String getMoment_content() {
         return moment_content;
@@ -45,9 +45,9 @@ public class MomentDetail implements Comparator{
         return data_type;
     }
 
-    public String getURL() {
-        return URL;
-    }
+//    public String getURL() {
+//        return URL;
+//    }
 
     @Override
     public int compare(Object o1, Object o2) {

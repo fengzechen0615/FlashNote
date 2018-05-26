@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -39,6 +40,7 @@ public class Friend extends AppCompatActivity {
 
     private List mList;
     private static String TAG = FragmentActivity.class.getSimpleName();
+    public static boolean exist=false;
     private DatabaseOperator dbo;
     private RecyclerView mRecyclerView;
     private FriendAdapter mAdapter;
@@ -47,13 +49,63 @@ public class Friend extends AppCompatActivity {
     private TextView done;
     private String username;
     private int userid;
+    private String input;
+    public static boolean repeat=false;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_f_refresh);
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
         init_List();
     }
+
+
+    private void refresh_list() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Thread.sleep(1000);
+                }
+                catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final GetFriends getf=new GetFriends();
+                        getf.getfriends(username);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mList.clear();
+                                if (getf.list.size()!=0) {
+                                    mList = getf.list;
+                                    mAdapter = new FriendAdapter(Friend.this, mList);
+                                    mRecyclerView.setAdapter(mAdapter);
+                                    swipeRefreshLayout.setRefreshing(false);
+                                }
+                                else {
+                                    Log.e("friends","no");
+                                }
+                            }
+                        },100);
+                    }
+                });
+            }
+        }).start();
+    }
+
+
 
     private void init_List() {
         if(mList == null){
@@ -70,6 +122,7 @@ public class Friend extends AppCompatActivity {
             username = "Flashnote";
         }
         gf.getfriends(username);
+        swipeRefreshLayout.setRefreshing(true);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -77,6 +130,7 @@ public class Friend extends AppCompatActivity {
                     mList = gf.list;
                     mAdapter = new FriendAdapter(Friend.this, mList);
                     mRecyclerView.setAdapter(mAdapter);
+                    swipeRefreshLayout.setRefreshing(false);
                 }
                 else {
                     Log.e("friends","no");
@@ -136,20 +190,27 @@ public class Friend extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // input 为创建的内容
-                        String input = editText.getText().toString();
+                        input = editText.getText().toString();
                         Log.e("Friends",username+"  "+input);
                         Addfriend af=new Addfriend();
                         af.addfriend(username,input);
-                        Log.e("ffff",String.valueOf(af.is_Exist()));
-                        if (af.is_Exist()){
-                            mList.add(input);
-                            mAdapter.notifyItemInserted(mList.size() - 1);
-                            mRecyclerView.scrollToPosition(mList.size() - 1);
-                        }
-                        else {
-                            Toast.makeText(getBaseContext(),"No this friends",Toast.LENGTH_SHORT).show();
-                        }
-
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.e("ffff",String.valueOf(exist));
+                                if (exist && !repeat){
+                                    mList.add(input);
+                                    mAdapter.notifyItemInserted(mList.size() - 1);
+                                    mRecyclerView.scrollToPosition(mList.size() - 1);
+                                }
+                                else if(exist && repeat){
+                                    Toast.makeText(getBaseContext(),"已添加",Toast.LENGTH_SHORT).show();
+                                }
+                                else {
+                                    Toast.makeText(getBaseContext(),"No this friends",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        },100);
                     }
                 })
                 .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {

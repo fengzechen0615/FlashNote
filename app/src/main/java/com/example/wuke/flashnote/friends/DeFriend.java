@@ -1,6 +1,5 @@
 package com.example.wuke.flashnote.friends;
 
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -12,20 +11,17 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.util.ArrayList;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
- * Created by kumbaya on 2018/5/22.
+ * Created by kumbaya on 2018/5/26.
  */
 
-public class Addfriend {
-    private String url = "http://39.106.205.176:8080/artifacts/AddFriend";
+public class DeFriend {
+    private String url = "http://39.106.205.176:8080/artifacts/DEFriend";
     private boolean Exist=true;
-    public void addfriend(String username, String friendname){
-        String s = url + "?username=" + username + "&friendname=" + friendname;
-        new Addfriend.MyAsyncTask().execute(s);
+    public void addfriend(String userID, String friendID){
+        String s = url + "?userID=" + userID + "&friendID=" + friendID;
+        new MyAsyncTask().execute(s);
     }
 
     public boolean is_Exist()
@@ -75,20 +71,6 @@ public class Addfriend {
         }
 
         protected void onPostExecute(String s) {
-            Log.e("ffff",s);
-            Log.e("result",s);
-            if (s.contains("resCode=201")) {
-                Friend.exist=true;
-                Friend.repeat=true;
-            }
-            else if (s.contains("resCode=100")){
-                Friend.repeat=false;
-                Friend.exist=true;
-            }
-            else if (s.contains("resCode=102")){
-                Friend.exist=false;
-                Friend.repeat=false;
-            }
         }
     }
 }

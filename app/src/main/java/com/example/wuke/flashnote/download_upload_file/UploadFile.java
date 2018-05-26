@@ -35,7 +35,7 @@ public class UploadFile {
         String CONTENT_TYPE = "multipart/form-data";   //内容类型
 
         try {
-            URL url = new URL("http://10.0.1.47:8080/UploadServlet?");
+            URL url = new URL("http://39.106.205.176:8080/artifacts/UploadServlet?");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setReadTimeout(TIME_OUT);
             conn.setConnectTimeout(TIME_OUT);

@@ -1,6 +1,5 @@
-package com.example.wuke.flashnote.friends;
+package com.example.wuke.flashnote.download_upload;
 
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -12,32 +11,32 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.util.ArrayList;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
- * Created by kumbaya on 2018/5/22.
+ * Created by kumbaya on 2018/5/26.
  */
 
-public class Addfriend {
-    private String url = "http://39.106.205.176:8080/artifacts/AddFriend";
-    private boolean Exist=true;
-    public void addfriend(String username, String friendname){
-        String s = url + "?username=" + username + "&friendname=" + friendname;
-        new Addfriend.MyAsyncTask().execute(s);
-    }
+public class ChangeColor {
+    private String url = "http://39.106.205.176:8080/artifacts/ChangeColor";
 
-    public boolean is_Exist()
-    {
-        return Exist;
+
+    public void getname(String cate, String ID, String color){
+        String s = url + "?cate=" + cate + "&ID=" + ID + "&color" + color;
+        new MyAsyncTask().execute(s);
     }
 
     public class MyAsyncTask extends AsyncTask<String, Integer, String> {
+
         Log log;
 
-        public MyAsyncTask() {
+        String line;
 
+        public AsyncResponse asyncResponse;
+        public void setOnAsyncResponse(AsyncResponse asyncResponse){
+            this.asyncResponse = asyncResponse;
+        }
+
+        public MyAsyncTask() {
         }
 
         protected void onPreExecute() {
@@ -60,10 +59,11 @@ public class Addfriend {
 
                 InputStream input = connection.getInputStream();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-                String line;
+
                 while ((line = reader.readLine()) != null) {
                     response.append(line);
                 }
+
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (ProtocolException e) {
@@ -71,24 +71,10 @@ public class Addfriend {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return response.toString();
+            return line;
         }
-
-        protected void onPostExecute(String s) {
-            Log.e("ffff",s);
-            Log.e("result",s);
-            if (s.contains("resCode=201")) {
-                Friend.exist=true;
-                Friend.repeat=true;
-            }
-            else if (s.contains("resCode=100")){
-                Friend.repeat=false;
-                Friend.exist=true;
-            }
-            else if (s.contains("resCode=102")){
-                Friend.exist=false;
-                Friend.repeat=false;
-            }
+        protected void onPostExecute(String s){
+            //Log.w("changeresult",s);
         }
     }
 }
