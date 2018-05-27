@@ -43,7 +43,7 @@ public class About extends AppCompatActivity {
             }
         });
 
-        back = (TextView) findViewById(R.id.about_done);
+        back = (TextView) findViewById(R.id.about_back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
