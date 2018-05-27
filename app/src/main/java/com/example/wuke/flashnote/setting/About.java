@@ -31,7 +31,6 @@ public class About extends AppCompatActivity {
         getWindow().setAttributes(p);
 
         done = (TextView) findViewById(R.id.about_done);
-        done = (TextView) findViewById(R.id.done);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
