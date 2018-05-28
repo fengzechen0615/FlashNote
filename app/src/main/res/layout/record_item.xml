@@ -95,13 +95,6 @@
                 tools:ignore="RtlHardcoded">
 
                 <ImageButton
-                    android:id="@+id/record_share"
-                    android:background="@drawable/share"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:adjustViewBounds="true" />
-
-                <ImageButton
                     android:id="@+id/convert"
                     android:background="@drawable/convert"
                     android:layout_width="20dp"

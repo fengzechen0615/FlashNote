@@ -421,30 +421,6 @@ public class NoteAdapter extends RecyclerView.Adapter implements ItemTouchHelper
 
                 LocalLogin localLogin = new LocalLogin();
 
-                if(localLogin.check() == true) {
-                    holder.record_share.setVisibility(View.VISIBLE);
-                } else {
-                    holder.record_share.setVisibility(View.GONE);
-                    holder.record_share.setVisibility(View.INVISIBLE);
-                }
-
-                holder.record_share.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Log.e("share","voice on click");
-                        LocalLogin l=new LocalLogin();
-                        if (l.check()==true) {
-                            Uploading uploading = new Uploading();
-                            uploading.upsharevoice(String.valueOf(((Voice) mList.get(position)).getUserID()), String.valueOf(((Voice) mList.get(position)).getVoiceID()));
-//                            Toast.makeText(mContext, "share" + ((Voice) mList.get(position)).getURL()+((Voice) mList.get(position)).getVoiceID(), Toast.LENGTH_SHORT).show();
-                        }
-                        else
-                        {
-//                            Toast.makeText(mContext, "click without login" + position, Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                });
             }
         }
     }

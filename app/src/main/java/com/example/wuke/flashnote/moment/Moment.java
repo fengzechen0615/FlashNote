@@ -59,7 +59,20 @@ public class Moment extends AppCompatActivity {
             }
         });
 
-        init_list();
+        init_list_1();
+    }
+
+    private void init_list_1() {
+        mList = new ArrayList<Moment>();
+        MomentDetail detail_2 = new MomentDetail("Vincent Van Gogh", "Welcome to FlashNote!", "2018-5-27 19:49:24", 0);
+        mList.add(detail_2);
+        MomentDetail detail_3 = new MomentDetail("Pablo Picasso", "Welcome to FlashNote!!!", "2018-5-27 19:53:35", 0);
+        mList.add(detail_3);
+        mRecyclerView = (RecyclerView) findViewById(R.id.moment_recycler_view);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        mAdapter = new MomentAdapter(Moment.this, mList);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     private void init_list() {
